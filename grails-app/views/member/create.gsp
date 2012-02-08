@@ -10,6 +10,13 @@
         <form class="form-horizontal">
 
           <div class="control-group">
+            <label for="id-number" class="control-label">Identification Number</label>
+            <div class="controls">
+              <input id="first-name" type="text" placeholder="Personal Id" class="span5">
+            </div>
+          </div>
+
+          <div class="control-group">
             <label for="first-name" class="control-label">First Name</label>
             <div class="controls">
               <input id="first-name" type="text" placeholder="First Name" class="span5">
