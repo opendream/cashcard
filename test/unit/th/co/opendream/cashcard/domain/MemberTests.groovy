@@ -26,7 +26,7 @@ class MemberTests {
 
     void testValidateIdentificationNumber() { 
       def field = 'identificationNumber'  
-      def existingMember = new Member(identificationNumber:'1234567890', 
+      def existingMember = new Member(identificationNumber:'1234567890123', 
                                       firstname:'firstname',
                                       lastname:'lastname',
                                       gender:Gender.MALE)      
@@ -38,11 +38,15 @@ class MemberTests {
       assertFalse member.validate([field])
       assert "nullable" == member.errors[field]
       
-      member.identificationNumber = '1234567890'
+      member.identificationNumber = '1234567890123'
       assertFalse member.validate([field])
       assert "unique" == member.errors[field]
       
-      member.identificationNumber = '12345v67890'
+      member.identificationNumber = '12345ก67890'
+      assertFalse member.validate([field])
+      assert "matches" == member.errors[field]
+
+      member.identificationNumber = '1234556789012'
       assertTrue member.validate([field])
     }
 

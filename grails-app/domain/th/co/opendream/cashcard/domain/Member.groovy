@@ -12,12 +12,12 @@ class Member {
    		MALE,
    		FEMALE
    		static list() {
-			[MALE, FEMALE]
-		}
+			 [MALE, FEMALE]
+		  }
    	}
 
     static constraints = {
-    	identificationNumber(blank: false, unique: true)
+    	identificationNumber(blank: false, unique: true, matches: /\d{13}/)
     	firstname(blank: false)
     	lastname(blank: false)
     }
