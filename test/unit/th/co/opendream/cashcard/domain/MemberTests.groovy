@@ -25,33 +25,47 @@ class MemberTests {
 	}
 
     void testValidateIdentificationNumber() { 
-       def member = new Member()   
-       mockForConstraintsTests(Member, [member]) 
-         
-       assertFalse member.validate(['identificationNumber'])
-       assert "nullable" == member.errors["identificationNumber"]
-       member.identificationNumber = '12345v67890'
-       assertTrue member.validate(['identificationNumber'])
+      def field = 'identificationNumber'  
+      def member = new Member()        
+      mockForConstraintsTests(Member, [member]) 
+        
+      assert field == member.hasProperty(field)?.name
+      assertFalse member.validate([field])
+      assert "nullable" == member.errors[field]
+      member.identificationNumber = '12345v67890'
+      assertTrue member.validate([field])
     }
 
     void testValidateFirstname() {
+      def field = 'firstname'  
     	def member = new Member()
-    	assertFalse member.validate(['firstname'])
+      mockForConstraintsTests(Member, [member]) 
+
+      assert field == member.hasProperty(field)?.name
+    	assertFalse member.validate([field])
     	member.firstname = 'firstname'
-    	assertTrue member.validate(['firstname'])
+    	assertTrue member.validate([field])
     }
 
     void testValidateLastname() {
+      def field = 'lastname'  
     	def member = new Member()
-    	assertFalse member.validate(['lastname'])
+      mockForConstraintsTests(Member, [member]) 
+      
+      assert field == member.hasProperty(field)?.name
+    	assertFalse member.validate([field])
     	member.lastname = 'lastname'
-    	assertTrue member.validate(['lastname'])
+    	assertTrue member.validate([field])
     }
 
     void testValidateGender() {
+      def field = 'gender'  
     	def member = new Member()
-    	assertFalse member.validate(['gender'])
+      mockForConstraintsTests(Member, [member]) 
+      
+      assert field == member.hasProperty(field)?.name
+    	assertFalse member.validate([field])
     	member.gender = Member.Gender.MALE
-    	assertTrue member.validate(['gender'])
+    	assertTrue member.validate([field])
     }
 }
