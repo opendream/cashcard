@@ -1,6 +1,6 @@
 package th.co.opendream.cashcard.domain
 
-
+import th.co.opendream.cashcard.domain.Member.Gender
 
 import grails.test.mixin.*
 import org.junit.*
@@ -26,12 +26,22 @@ class MemberTests {
 
     void testValidateIdentificationNumber() { 
       def field = 'identificationNumber'  
-      def member = new Member()        
-      mockForConstraintsTests(Member, [member]) 
-        
+      def existingMember = new Member(identificationNumber:'1234567890', 
+                                      firstname:'firstname',
+                                      lastname:'lastname',
+                                      gender:Gender.MALE)      
+      mockForConstraintsTests(Member, [existingMember])
+
+      def member = new Member()
       assert field == member.hasProperty(field)?.name
+      
       assertFalse member.validate([field])
       assert "nullable" == member.errors[field]
+      
+      member.identificationNumber = '1234567890'
+      assertFalse member.validate([field])
+      assert "unique" == member.errors[field]
+      
       member.identificationNumber = '12345v67890'
       assertTrue member.validate([field])
     }

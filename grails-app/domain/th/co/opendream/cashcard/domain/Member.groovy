@@ -6,7 +6,7 @@ class Member {
 	String lastname
 	Gender gender
 	Date dateCreated
-   	Date lastUpdated
+  Date lastUpdated
 
    	public enum Gender {
    		MALE,
