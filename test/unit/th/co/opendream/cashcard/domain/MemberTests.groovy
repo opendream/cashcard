@@ -18,10 +18,10 @@ class MemberTests {
 		def memberProps = ['identificationNumber', 'firstname', 'lastname', 'dateCreated', 'lastUpdated', 'gender', 'telNo', 'address']
 
 		def instanceProperties = Member.metaClass.properties*.name
+
 		instanceProperties -= defaultProps
 		
-		assertEquals 0 , (instanceProperties - memberProps).size()
-		assertEquals 0 , (memberProps - instanceProperties).size()		
+		assert 0 == (memberProps - instanceProperties).size()		
 	}
 
     void testValidateIdentificationNumber() { 

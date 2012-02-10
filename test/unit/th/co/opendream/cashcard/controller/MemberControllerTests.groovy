@@ -28,15 +28,14 @@ class MemberControllerTests {
     }
 
     void testSaveValidMember() {
-    	params.identificationNumber = '1234567890'
+    	params.identificationNumber = '1234567890123'
     	params.firstname = "The Stand"
         params.lastname = "500"
-        params.gender = Gender.MALE
+        params.gender = "MALE"
 
         controller.save()
 
         assert response.redirectedUrl == '/member/show/1'
-        assert flash.message != null
         assert Member.count() == 1
     }
 
