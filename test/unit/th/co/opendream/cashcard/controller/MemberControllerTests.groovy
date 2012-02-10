@@ -39,4 +39,9 @@ class MemberControllerTests {
         assert flash.message != null
         assert Member.count() == 1
     }
+
+    void testListMember() {
+        controller.list()
+        assert view == '/member/list'
+    }
 }
