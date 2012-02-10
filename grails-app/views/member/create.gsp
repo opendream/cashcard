@@ -4,68 +4,64 @@
     <title>Register Member</title>
   </head>
   <body> 
+    <g:hasErrors bean="${memberInstance}">
+      <div id="errors" class="alert alert-error">
+          <g:renderErrors bean="${memberInstance}" as="list"></g:renderErrors>
+      </div><!-- /errors -->
+    </g:hasErrors>
     <div class="container" >
-      
-      
-        <form class="form-horizontal">
+      <g:form action="save" class="form-horizontal">
+        <div class="control-group ${hasErrors(bean: memberInstance, field: 'identificationNumber', 'error')}">
+          <label for="id-number" class="control-label">Identification Number</label>
+          <div class="controls">
+            <input id="id-number" name="identificationNumber" type="text" placeholder="Personal Id" class="span5">
+          </div>
+        </div>
 
-          <div class="control-group">
-            <label for="id-number" class="control-label">Identification Number</label>
-            <div class="controls">
-              <input id="first-name" type="text" placeholder="Personal Id" class="span5">
+        <div class="control-group ${hasErrors(bean: memberInstance, field: 'firstname', 'error')}">
+          <label for="first-name" class="control-label">First Name</label>
+          <div class="controls">
+            <input id="first-name" name="firstname" type="text" placeholder="First Name" class="span5">
+          </div>
+        </div>
+
+        <div class="control-group  ${hasErrors(bean: memberInstance, field: 'lastname', 'error')}">
+          <label class="control-label" for="last-name">Last Name</label>
+          <div class="controls">
+            <input id="last-name" name="lastname" type="text" placeholder="Last Name">
+          </div>
+        </div>
+
+        <div class="control-group ${hasErrors(bean: memberInstance, field: 'telNo', 'error')}">
+          <label class="control-label" for="tel">Tel.</label>
+          <div class="controls">
+            <input id="tel" name="telNo" type="text" placeholder="Tel.">
+          </div>
+        </div>
+
+        <div class="control-group ${hasErrors(bean: memberInstance, field: 'gender', 'error')}">
+          <label class="control-label">Gender</label>
+          <div class="controls">
+            <div class="btn-group" data-toggle="buttons-radio">
+              <label class="btn">Male <input type="radio" name="gender" value="MALE"/> </label>
+              <label class="btn">Female <input type="radio" name="gender" value="FEMALE"/> </label>
             </div>
           </div>
+        </div>
 
-          <div class="control-group">
-            <label for="first-name" class="control-label">First Name</label>
-            <div class="controls">
-              <input id="first-name" type="text" placeholder="First Name" class="span5">
-            </div>
+        <div class="control-group ${hasErrors(bean: memberInstance, field: 'address', 'error')}">
+          <label class="control-label" for="address">Address</label>
+          <div class="controls">
+            <textarea id="address" name="address" type="text" placeholder="Address"> </textarea>
           </div>
-
-          <div class="control-group">
-            <label class="control-label" for="last-name">Last Name</label>
-            <div class="controls">
-              <input id="last-name" type="text" placeholder="Last Name">
-            </div>
-          </div>
-
-          <div class="control-group">
-            <label class="control-label" for="tel">Tel.</label>
-            <div class="controls">
-              <input id="tel" type="text" placeholder="Tel.">
-            </div>
-          </div>
-
-          <div class="control-group">
-            <label class="control-label">Gender</label>
-            <div class="controls">
-              <div class="btn-group" data-toggle="buttons-radio">
-                <label class="btn">Male <input type="radio" name="gender" value="male"/> </label>
-                <label class="btn">Female <input type="radio" name="gender" value="female"/> </label>
-              </div>
-            </div>
-          </div>
-
-          <div class="control-group">
-            <label class="control-label" for="address">Address</label>
-            <div class="controls">
-              <textarea id="address" type="text" placeholder="Address"> </textarea>
-            </div>
-          </div>
+        </div>
 
 
-          <div class="form-actions">
-            <button class="btn btn-primary" type="submit"><i class="icon-ok icon-white"></i> Register</button>
-          </div>
-
-       </form>
-      
+        <div class="form-actions">
+          <button class="btn btn-primary" type="submit"><i class="icon-ok icon-white"></i> Register</button>
+        </div>
+      </g:form>
     </div>
-    <script type="text/javascript" charset="utf-8">
-      $(function() {
-        $('.tabs').button();
-      })
-    </script>
+
   </body>
 </html>
