@@ -5,6 +5,8 @@ class Member {
 	String firstname
 	String lastname
 	Gender gender
+  String address
+  String telNo
 	Date dateCreated
   Date lastUpdated
 
@@ -20,6 +22,8 @@ class Member {
     	identificationNumber(blank: false, unique: true, matches: /\d{13}/)
     	firstname(blank: false)
     	lastname(blank: false)
+      address(blank: false)
+      telNo(nullable:true, matches: /\d{9,11}/)
     }
 
     static mapping = {
