@@ -22,6 +22,11 @@ class MemberController {
     }
 
     def show() {
-    	
+      
+    }
+
+    def list() {
+        def memberList = Member.list()
+        render (view: 'list', model:[memberList: memberList])
     }
 }
