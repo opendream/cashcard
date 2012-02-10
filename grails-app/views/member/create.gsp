@@ -14,14 +14,14 @@
         <div class="control-group ${hasErrors(bean: memberInstance, field: 'identificationNumber', 'error')}">
           <label for="id-number" class="control-label">Identification Number</label>
           <div class="controls">
-            <input id="id-number" name="identificationNumber" type="text" placeholder="Personal Id" class="span5">
+            <input id="id-number" name="identificationNumber" type="text" placeholder="Personal Id">
           </div>
         </div>
 
         <div class="control-group ${hasErrors(bean: memberInstance, field: 'firstname', 'error')}">
           <label for="first-name" class="control-label">First Name</label>
           <div class="controls">
-            <input id="first-name" name="firstname" type="text" placeholder="First Name" class="span5">
+            <input id="first-name" name="firstname" type="text" placeholder="First Name">
           </div>
         </div>
 
