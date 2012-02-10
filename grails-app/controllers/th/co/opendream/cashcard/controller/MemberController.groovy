@@ -12,7 +12,13 @@ class MemberController {
     }
 
     def save() {
-    	
+        def memberInstance = new Member(params)
+        if ( memberInstance.save() ) {
+          redirect(action: "show", id: memberInstance.id)
+        }
+        else {
+          render(view:'create', model:[memberInstance: memberInstance])
+        }
     }
 
     def show() {
