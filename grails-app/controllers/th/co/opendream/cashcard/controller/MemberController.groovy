@@ -7,8 +7,8 @@ class MemberController {
     def index() { }
 
     def create() { 
-    	def memberInstance = new Member()
-    	render(view:'create', model:[memberInstance:'asdf'])
+        def memberInstance = new Member()
+        render(view:'create', model:[memberInstance: memberInstance])
     }
 
     def save() {
