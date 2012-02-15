@@ -32,6 +32,8 @@ class MemberControllerTests {
     	params.firstname = "The Stand"
         params.lastname = "500"
         params.gender = "MALE"
+        params.telNo = '0891278551'
+        params.address = "Opendream" 
 
         controller.save()
 
@@ -41,6 +43,25 @@ class MemberControllerTests {
 
     void testListMember() {
         controller.list()
+        assert Member.list().size() == model.memberList.size()
         assert view == '/member/list'
+    }
+
+    void testShowMemberWithId() {
+        mockDomain(Member, [
+            [id: 1, identificationNumber: "1111111111111", firstname: "Nat", lastname: "Weerawan", telNo: "0891278552", gender: "MALE", address: "11223445"]
+        ])
+        assert 1 == Member.count()
+        params.id = 1
+        controller.show()
+        assert view == '/member/show'
+        assert model.memberInstance != null
+    }
+
+    void testShowMemberWithoutId() {
+
+        controller.show()
+
+        assert response.redirectedUrl == '/error'
     }
 }

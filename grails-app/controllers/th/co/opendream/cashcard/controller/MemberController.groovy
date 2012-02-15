@@ -22,6 +22,14 @@ class MemberController {
     }
 
     def show() {
+        if (params.id) {
+            def memberInstance = Member.get(params.id)
+            render(view:'show', model:[memberInstance: memberInstance])
+        }
+        else {
+            redirect(uri: '/error')
+        }
+
       
     }
 
