@@ -20,3 +20,7 @@ target
 
 # project release file
 *.war
+
+# kate file
+*.*~
+*.kate-swp
