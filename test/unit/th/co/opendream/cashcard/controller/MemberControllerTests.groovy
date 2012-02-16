@@ -59,9 +59,38 @@ class MemberControllerTests {
     }
 
     void testShowMemberWithoutId() {
-
         controller.show()
-
         assert response.redirectedUrl == '/error'
+    }
+
+    void testVerifyMemberWithValidCardId() {
+        mockDomain(Member, [
+            [id: 1, identificationNumber: "1111111111111", firstname: "Nat", lastname: "Weerawan", telNo: "0891278552", gender: "MALE", address: "11223445"],
+            [id: 2, identificationNumber: "2222222222222", firstname: "Noomz", lastname: "Siriwat", telNo: "0811111111", gender: "MALE", address: "2222222"]
+        ])
+
+        params.cardId = "1111111111111"
+        controller.verifyCard()
+
+        assert response.redirectedUrl == '/member/show/1'
+    }
+
+    void testVerifyMemberWithInvalidCardId() {
+        mockDomain(Member, [
+            [id: 1, identificationNumber: "1111111111111", firstname: "Nat", lastname: "Weerawan", telNo: "0891278552", gender: "MALE", address: "11223445"],
+            [id: 2, identificationNumber: "2222222222222", firstname: "Noomz", lastname: "Siriwat", telNo: "0811111111", gender: "MALE", address: "2222222"]
+        ])
+
+        params.cardId = "9999999999"
+        controller.verifyCard()
+
+        assert view == '/member/verifyCard'
+        assert flash.error != null
+    }
+
+    void testVerifyMemberWithoutCardId() {
+        controller.verifyCard()
+
+        assert view == '/member/verifyCard'
     }
 }

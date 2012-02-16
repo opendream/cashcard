@@ -29,12 +29,25 @@ class MemberController {
         else {
             redirect(uri: '/error')
         }
-
-      
     }
 
     def list() {
         def memberList = Member.list()
         render (view: 'list', model:[memberList: memberList])
     }
+    
+    def verifyCard(String cardId) {
+        def memberInstance = Member.findAllByIdentificationNumber(cardId)
+        if (memberInstance) {
+            redirect(action: "show", id: memberInstance.id)
+        }
+        else if (cardId != null) {
+            flash.error = "${cardId} not found"
+            render(view: 'verifyCard')
+        }
+        else {
+            render(view: 'verifyCard')
+        }
+    }
+
 }
