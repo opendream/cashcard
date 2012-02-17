@@ -4,7 +4,12 @@
     <meta name="layout" content="main" />
     <title>Register Member</title>
   </head>
-  <body> 
+  <body>
+		<div class="container">
+			<header class="page-header">
+				<h1>Register Member</h1>
+			</header>
+		</div>
     <g:hasErrors bean="${memberInstance}">
       <div id="errors" class="alert alert-error">
           <g:renderErrors bean="${memberInstance}" as="list"></g:renderErrors>
@@ -45,8 +50,8 @@
           <div class="controls">
             <div class="btn-group" data-toggle="buttons-radio">
               
-              <label class="btn">Male <input type="radio" name="gender" ${memberInstance?.gender == Gender?.MALE? 'checked': null} value="MALE"/> </label>
-              <label class="btn">Female <input type="radio" name="gender" ${memberInstance?.gender == Gender?.FEMALE? 'checked': null} value="FEMALE"/> </label>
+              <label class="btn">Male <input style="display:none;" type="radio" name="gender" ${memberInstance?.gender == Gender?.MALE? 'checked': null} value="MALE"/> </label>
+              <label class="btn">Female <input style="display:none;" type="radio" name="gender" ${memberInstance?.gender == Gender?.FEMALE? 'checked': null} value="FEMALE"/> </label>
             </div>
           </div>
         </div>

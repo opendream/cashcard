@@ -3,7 +3,13 @@
     <meta name="layout" content="main" />
     <title>List All Member</title>
   </head>
-  <body> 
+  <body>
+		<div class="container">
+			<header class="page-header">
+				<h1>Verify Card</h1>
+			</header>
+		</div>
+		
 	  <div class="container">
       <g:form action="verifyCard" class="form-horizontal">
 
