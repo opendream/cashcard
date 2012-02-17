@@ -15,7 +15,7 @@ class MemberTests {
 		def defaultProps = ["validationSkipMap", "gormPersistentEntity", "properties","id", 
 							"gormDynamicFinders", "all", "attached", "class", "constraints", "version", 
 							"validationErrorsMap", "errors", "mapping", "metaClass", "count"]
-		def memberProps = ['identificationNumber', 'firstname', 'lastname', 'dateCreated', 'lastUpdated', 'gender', 'telNo', 'address']
+		def memberProps = ['identificationNumber', 'firstname', 'lastname', 'dateCreated', 'lastUpdated', 'gender', 'telNo', 'address', 'balance']
 
 		def instanceProperties = Member.metaClass.properties*.name
 
@@ -108,5 +108,16 @@ class MemberTests {
 
       member.telNo = '1234567890'
       assertTrue member.validate([field])
+    }
+
+    void testInitialBalance() {
+			def field = 'balance'
+			def member = new Member()
+			mockForConstraintsTests(Member, [member])
+
+			assert field == member.hasProperty(field)?.name
+			assert 2000.00 == member.balance
+			assert java.lang.Float == member.balance.class
+			assertTrue member.validate([field])
     }
 }

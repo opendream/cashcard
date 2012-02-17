@@ -7,6 +7,7 @@ class Member {
 	Gender gender
   String address
   String telNo
+  Float balance = 2000.00
 	Date dateCreated
   Date lastUpdated
 
@@ -23,7 +24,8 @@ class Member {
     	firstname(blank: false)
     	lastname(blank: false)
       address(blank: false)
-      telNo(nullable:true, matches: /\d{9,11}/)
+			telNo(nullable:true, matches: /\d{9,11}/)
+			balance(blank: true, nullable: true)
     }
 
     static mapping = {
