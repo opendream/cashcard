@@ -37,11 +37,13 @@ class MemberController {
     }
     
     def verifyCard(String cardId) {
-        def memberInstance = Member.findAllByIdentificationNumber(cardId)
+				flash.error = null // Clear flash
+				
+        def memberInstance = Member.findByIdentificationNumber("${cardId}")
         if (memberInstance) {
             redirect(action: "show", id: memberInstance.id)
         }
-        else if (cardId != null) {
+        else if (cardId != null && cardId != '') {
             flash.error = "${cardId} not found"
             render(view: 'verifyCard')
         }

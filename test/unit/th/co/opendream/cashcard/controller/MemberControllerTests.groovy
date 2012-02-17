@@ -81,11 +81,24 @@ class MemberControllerTests {
             [id: 2, identificationNumber: "2222222222222", firstname: "Noomz", lastname: "Siriwat", telNo: "0811111111", gender: "MALE", address: "2222222"]
         ])
 
+				// First submit
         params.cardId = "9999999999"
         controller.verifyCard()
-
         assert view == '/member/verifyCard'
         assert flash.error != null
+
+        // Second submit without cardId must have no error message.
+        // (prevent flash scope variable stuck in session.)
+        params.cardId = ""
+        controller.verifyCard()
+        assert view == '/member/verifyCard'
+        assert flash.error == null
+
+        // Third submit, everything will be in normal state(no errors)
+        params.cardId = ""
+        controller.verifyCard()
+        assert view == '/member/verifyCard'
+        assert flash.error == null
     }
 
     void testVerifyMemberWithoutCardId() {
