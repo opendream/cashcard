@@ -37,10 +37,10 @@ class MemberController {
         def memberList = Member.list()
         render (view: 'list', model:[memberList: memberList])
     }
-    
+
     def verifyCard(String cardId) {
-				flash.error = null // Clear flash
-				
+		flash.error = null // Clear flash
+
         def memberInstance = Member.findByIdentificationNumber("${cardId}")
         if (memberInstance) {
             redirect(action: "show", id: memberInstance.id)
