@@ -16,7 +16,7 @@
     		<div class="control-group ${flash.error? 'error' : ''}">
           <label for="id-number" class="control-label">Identification Number</label>
           <div class="controls">
-            <input id="id-number" name="identificationNumber" type="text" placeholder="Card ID" />
+            <input id="id-number" name="cardId" type="text" placeholder="Card ID" />
           </div>
         </div>
         
