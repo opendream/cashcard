@@ -1,12 +1,14 @@
 package th.co.opendream.cashcard.controller
 
 import th.co.opendream.cashcard.domain.Member
+import th.co.opendream.cashcard.service.AccountService
 
 class MemberController {
+    def accountService
 
     def index() { }
 
-    def create() { 
+    def create() {
         def memberInstance = new Member()
         render(view:'create', model:[memberInstance: memberInstance])
     }
@@ -49,6 +51,33 @@ class MemberController {
         }
         else {
             render(view: 'verifyCard')
+        }
+    }
+
+    def withdraw() {
+
+        def filterUid = { it? it : 0 }
+        def uid = filterUid(params.uid)
+        def memberInstance = Member.get(uid)
+        println "UID: ${params.uid}, UID2: ${uid}"
+
+        flash.error = null
+
+        if (memberInstance) {
+            if (!params.amount) {
+                render(view: 'withdraw', model: [memberInstance: memberInstance])
+            }
+            else if (accountService.canWithdraw(memberInstance, params.amount)) {
+                accountService.withdraw(memberInstance, params.amount)
+                redirect(action: "show", id: memberInstance.id)
+            }
+            else {
+                flash.error = "Can't withdraw. Invalid amount"
+                render(view: 'withdraw', model: [memberInstance: memberInstance])
+            }
+        }
+        else {
+            redirect(uri: '/error')
         }
     }
 

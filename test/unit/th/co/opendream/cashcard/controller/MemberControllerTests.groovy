@@ -2,7 +2,7 @@ package th.co.opendream.cashcard.controller
 
 import th.co.opendream.cashcard.domain.Member
 import th.co.opendream.cashcard.domain.Member.Gender
-
+import th.co.opendream.cashcard.service.AccountService
 import grails.test.mixin.*
 import org.junit.*
 
@@ -13,9 +13,25 @@ import org.junit.*
 @Mock(Member)
 class MemberControllerTests {
 
+    def accountControl
+
+    @Before
+    void setUp() {
+        mockDomain(Member, [
+            [id: 1, identificationNumber: "1111111111111", firstname: "Nat", lastname: "Weerawan", telNo: "0891278552", gender: "MALE", address: "11223445"],
+            [id: 2, identificationNumber: "2222222222222", firstname: "Noomz", lastname: "Siriwat", telNo: "0811111111", gender: "MALE", address: "2222222"]
+        ])
+
+        accountControl = mockFor(AccountService)
+    }
+
+    @After
+    void tearDown() {
+    }
+
     void testCreate() {
     	controller.create()
-    	
+
     	assert model.memberInstance != null
     	assert view == '/member/create'
     }
@@ -33,12 +49,12 @@ class MemberControllerTests {
         params.lastname = "500"
         params.gender = "MALE"
         params.telNo = '0891278551'
-        params.address = "Opendream" 
+        params.address = "Opendream"
 
         controller.save()
 
-        assert response.redirectedUrl == '/member/show/1'
-        assert Member.count() == 1
+        assert Member.count() == 3
+        assert response.redirectedUrl == '/member/show/3'
     }
 
     void testListMember() {
@@ -48,10 +64,7 @@ class MemberControllerTests {
     }
 
     void testShowMemberWithId() {
-        mockDomain(Member, [
-            [id: 1, identificationNumber: "1111111111111", firstname: "Nat", lastname: "Weerawan", telNo: "0891278552", gender: "MALE", address: "11223445"]
-        ])
-        assert 1 == Member.count()
+        assert 2 == Member.count()
         params.id = 1
         controller.show()
         assert view == '/member/show'
@@ -64,11 +77,6 @@ class MemberControllerTests {
     }
 
     void testVerifyMemberWithValidCardId() {
-        mockDomain(Member, [
-            [id: 1, identificationNumber: "1111111111111", firstname: "Nat", lastname: "Weerawan", telNo: "0891278552", gender: "MALE", address: "11223445"],
-            [id: 2, identificationNumber: "2222222222222", firstname: "Noomz", lastname: "Siriwat", telNo: "0811111111", gender: "MALE", address: "2222222"]
-        ])
-
         params.cardId = "1111111111111"
         controller.verifyCard()
 
@@ -76,12 +84,7 @@ class MemberControllerTests {
     }
 
     void testVerifyMemberWithInvalidCardId() {
-        mockDomain(Member, [
-            [id: 1, identificationNumber: "1111111111111", firstname: "Nat", lastname: "Weerawan", telNo: "0891278552", gender: "MALE", address: "11223445"],
-            [id: 2, identificationNumber: "2222222222222", firstname: "Noomz", lastname: "Siriwat", telNo: "0811111111", gender: "MALE", address: "2222222"]
-        ])
-
-				// First submit
+		// First submit
         params.cardId = "9999999999"
         controller.verifyCard()
         assert view == '/member/verifyCard'
@@ -105,5 +108,45 @@ class MemberControllerTests {
         controller.verifyCard()
 
         assert view == '/member/verifyCard'
+    }
+
+    void testMemberWithdrawValidUid() {
+        accountControl.demand.canWithdraw(1..1) { Member member, amount -> true }
+        accountControl.demand.withdraw(1..1) { Member member, amount -> true }
+        controller.accountService = accountControl.createMock()
+
+        params.amount = 100.00
+        params.uid = 1
+
+        controller.withdraw()
+        accountControl.verify()
+
+        assert response.redirectedUrl == '/member/show/1'
+    }
+
+    void testMemberWithdrawWithInvalidUid() {
+        params.amount = 200.00
+        params.uid = 999999999
+
+        controller.withdraw()
+
+        assert response.redirectedUrl == '/error'
+    }
+
+    void testMemberInvalidWithdrawAmount() {
+        accountControl.demand.canWithdraw(1..1) { Member member, amount -> false }
+        accountControl.demand.withdraw(0..0) { Member member, amount -> true }
+        controller.accountService = accountControl.createMock()
+
+        params.amount = 10000
+        params.uid = 1
+
+        controller.withdraw()
+
+        accountControl.verify()
+
+        assert flash.error != null
+        assert view == '/member/withdraw'
+
     }
 }
