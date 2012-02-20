@@ -59,8 +59,6 @@ class MemberController {
         def filterUid = { it? it : 0 }
         def uid = filterUid(params.uid)
         def memberInstance = Member.get(uid)
-        println "UID: ${params.uid}, UID2: ${uid}"
-
         flash.error = null
 
         if (memberInstance) {
