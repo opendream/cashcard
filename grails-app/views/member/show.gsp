@@ -11,10 +11,10 @@
 		</div>
 
 		<div class="container">
-				<div class="control-label span2"><strong>Identification Number</strong></div>
-				<div class="offset2">
-					${memberInstance?.identificationNumber}
-				</div>
+					<div class="btn-group">
+					  <a class="btn" href="#">Deposit</a>
+					  <a class="btn" href="${createLink(controller:'member', action:'withdraw', params:[uid:memberInstance.id])}">Withdraw</a>
+					</div>
 
 				<div class="control-label span2"><strong>First Name</strong></div>
 				<div class="offset2">
@@ -45,6 +45,11 @@
 						${memberInstance.address}
 					</g:if>
 					<g:else>-</g:else>
+				</div>
+
+				<div class="control-label span2"><strong>Balance</strong></div>
+				<div class="offset2">
+					<g:formatNumber number="${memberInstance?.balance}" type="currency" currencyCode="THB" />
 				</div>
 
 		</div>
