@@ -12,36 +12,36 @@ import org.junit.*
 class MemberTests {
 
 	void testProperties() {
-		def defaultProps = ["validationSkipMap", "gormPersistentEntity", "properties","id", 
-							"gormDynamicFinders", "all", "attached", "class", "constraints", "version", 
+		def defaultProps = ["validationSkipMap", "gormPersistentEntity", "properties","id",
+							"gormDynamicFinders", "all", "attached", "class", "constraints", "version",
 							"validationErrorsMap", "errors", "mapping", "metaClass", "count"]
 		def memberProps = ['identificationNumber', 'firstname', 'lastname', 'dateCreated', 'lastUpdated', 'gender', 'telNo', 'address', 'balance']
 
 		def instanceProperties = Member.metaClass.properties*.name
 
 		instanceProperties -= defaultProps
-		
-		assert 0 == (memberProps - instanceProperties).size()		
+
+		assert 0 == (memberProps - instanceProperties).size()
 	}
 
-    void testValidateIdentificationNumber() { 
-      def field = 'identificationNumber'  
-      def existingMember = new Member(identificationNumber:'1234567890123', 
+    void testValidateIdentificationNumber() {
+      def field = 'identificationNumber'
+      def existingMember = new Member(identificationNumber:'1234567890123',
                                       firstname:'firstname',
                                       lastname:'lastname',
-                                      gender:Gender.MALE)      
+                                      gender:Gender.MALE)
       mockForConstraintsTests(Member, [existingMember])
 
       def member = new Member()
       assert field == member.hasProperty(field)?.name
-      
+
       assertFalse member.validate([field])
       assert "nullable" == member.errors[field]
-      
+
       member.identificationNumber = '1234567890123'
       assertFalse member.validate([field])
       assert "unique" == member.errors[field]
-      
+
       member.identificationNumber = '12345ก67890'
       assertFalse member.validate([field])
       assert "matches" == member.errors[field]
@@ -51,9 +51,9 @@ class MemberTests {
     }
 
     void testValidateFirstname() {
-      def field = 'firstname'  
+      def field = 'firstname'
     	def member = new Member()
-      mockForConstraintsTests(Member, [member]) 
+      mockForConstraintsTests(Member, [member])
 
       assert field == member.hasProperty(field)?.name
     	assertFalse member.validate([field])
@@ -62,10 +62,10 @@ class MemberTests {
     }
 
     void testValidateLastname() {
-      def field = 'lastname'  
+      def field = 'lastname'
     	def member = new Member()
-      mockForConstraintsTests(Member, [member]) 
-      
+      mockForConstraintsTests(Member, [member])
+
       assert field == member.hasProperty(field)?.name
     	assertFalse member.validate([field])
     	member.lastname = 'lastname'
@@ -73,10 +73,10 @@ class MemberTests {
     }
 
     void testValidateGender() {
-      def field = 'gender'  
+      def field = 'gender'
     	def member = new Member()
-      mockForConstraintsTests(Member, [member]) 
-      
+      mockForConstraintsTests(Member, [member])
+
       assert field == member.hasProperty(field)?.name
     	assertFalse member.validate([field])
     	member.gender = Member.Gender.MALE
@@ -84,10 +84,10 @@ class MemberTests {
     }
 
     void testValidateAddress() {
-      def field = 'address'  
+      def field = 'address'
       def member = new Member()
-      mockForConstraintsTests(Member, [member]) 
-      
+      mockForConstraintsTests(Member, [member])
+
       assert field == member.hasProperty(field)?.name
       assertFalse member.validate([field])
       member.address = 'address'
@@ -95,10 +95,10 @@ class MemberTests {
     }
 
     void testValidateTelNo() {
-      def field = 'telNo'  
+      def field = 'telNo'
       def member = new Member()
-      mockForConstraintsTests(Member, [member]) 
-      
+      mockForConstraintsTests(Member, [member])
+
       assert field == member.hasProperty(field)?.name
       assertTrue member.validate([field])
 

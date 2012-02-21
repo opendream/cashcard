@@ -11,17 +11,17 @@ import org.junit.*
 @TestFor(AccountService)
 @Mock(Member)
 class AccountServiceTests {
-		@Before
-		void setUp() {
-				mockDomain(Member, [
+        @Before
+        void setUp() {
+                mockDomain(Member, [
             [id: 1, identificationNumber: "1111111111111", firstname: "Nat", lastname: "Weerawan", telNo: "0891278552", gender: "MALE", address: "11223445"],
             [id: 2, identificationNumber: "2222222222222", firstname: "Noomz", lastname: "Siriwat", telNo: "0811111111", gender: "MALE", address: "2222222"]
         ])
-		}
+        }
 
-		@After
-		void tearDown() {
-		}
+        @After
+        void tearDown() {
+        }
 
     void testGetInitialBalance() {
         assert service.getBalance(Member.get(1)) == 2000.00
@@ -36,46 +36,46 @@ class AccountServiceTests {
     }
 
     void testValidWithdraw() {
-				def m1 = Member.get(1)
+        def m1 = Member.get(1)
         assert service.getBalance(m1) == 2000.00
         service.withdraw(m1, 100.00)
         assert service.getBalance(m1) == 1900.00
 
-				service.withdraw(m1, 100)
-				assert service.getBalance(m1) == 1800.00
+        service.withdraw(m1, 100)
+        assert service.getBalance(m1) == 1800.00
     }
 
     void testWithdrawWithNegativeAmount() {
-				def m1 = Member.get(1)
-				shouldFail(RuntimeException) {
-						service.withdraw(m1, -100.00)
-				}
+        def m1 = Member.get(1)
+        shouldFail(RuntimeException) {
+                service.withdraw(m1, -100.00)
+        }
     }
 
     void testWithdrawWithString() {
-				def m1 = Member.get(1)
-				service.withdraw(m1, "100.00")
-				assert service.getBalance(m1) == 1900.00
+        def m1 = Member.get(1)
+        service.withdraw(m1, "100.00")
+        assert service.getBalance(m1) == 1900.00
     }
 
     void testWithdrawWithZeroAmount() {
-				shouldFail(RuntimeException) {
-						service.withdraw(m1, 0)
-				}
+        shouldFail(RuntimeException) {
+            service.withdraw(m1, 0)
+        }
     }
 
     void testCanWithdraw() {
-				def m1 = Member.get(1)
-				assert service.canWithdraw(m1, 100.00) == true
+        def m1 = Member.get(1)
+        assert service.canWithdraw(m1, 100.00) == true
     }
 
     void testCanWithdrawWithExceedBalance() {
-				def m1 = Member.get(1)
-				assert service.canWithdraw(m1, 3000.00) == false
+        def m1 = Member.get(1)
+        assert service.canWithdraw(m1, 3000.00) == false
     }
 
     void testCanWithdrawWithNegativeAmount() {
-				def m1 = Member.get(1)
-				assert service.canWithdraw(m1, -100.00) == false
+        def m1 = Member.get(1)
+        assert service.canWithdraw(m1, -100.00) == false
     }
 }
