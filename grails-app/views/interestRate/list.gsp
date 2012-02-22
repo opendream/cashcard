@@ -15,7 +15,7 @@
     <body>
         <div class="container">
             <header class="page-header">
-                <h1>Interate Rate</h1>
+                <h1>Interest Rate</h1>
             </header>
         </div>
 
