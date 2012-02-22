@@ -1,16 +1,24 @@
 package th.co.opendream.cashcard.service
 
+import java.text.SimpleDateFormat
+
+
 description "Request an interest rate from interest service"
 
 before "prepare helper functions", {
     inject "interestService"
+    def df = new SimpleDateFormat("yyyy-MM-dd", Locale.US)
 
     prepareRate = { params->
-    
+        def from = date(params.from)
+        def to = date(params.to)
+        
+        new th.co.opendream.cashcard.domain.InterestRate(
+            startDate: from, endDate: to, rate: params.rate).save(flush: true)
     }
 
     date = { str ->
-    
+        df.parse(str)
     }
 }
 
