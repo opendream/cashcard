@@ -9,7 +9,7 @@
 	<body>
 		<div class="container">
 			<header class="page-header">
-				<h1>Create</h1>
+				<h1>Interest Rate: New</h1>
 			</header>
 		</div>
 		<g:render template="toolbar"/>
