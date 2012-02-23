@@ -1,32 +1,36 @@
 package th.co.opendream.cashcard
 
 import th.co.opendream.cashcard.Member
+import th.co.opendream.cashcard.PolicyService
 
 class AccountService {
     static transactional = true
+    def policyService
 
-    Float getBalance(Member member) {
-        return member.balance
+    BigDecimal getBalance(Member member) {
+        member.balance
     }
 
     void withdraw(Member member, amount) {
-        amount = new Float(amount)
+        amount = amount as BigDecimal
         if (amount <= 0) {
            throw new RuntimeException(message: "Withdraw amount is less than or equal 0 : ${amount}")
         }
-        member.balance -= amount
+        member.balance += amount
         member.save()
     }
 
     def canWithdraw(Member member, amount) {
-        amount = new Float(amount)
-        if (amount > member.balance) {
+        def limit = policyService.getGlobalFinancialAmountLimit()
+        amount = amount as BigDecimal
+
+        if (limit < amount + member.balance) {
             return false
         }
         else if (amount <= 0) {
             return false
         }
-        else if (amount <= member.balance) {
+        else if (limit >= amount + member.balance) {
             return true
         }
         else {
