@@ -1,6 +1,7 @@
 package th.co.opendream.cashcard.controller
 
-import th.co.opendream.cashcard.domain.InterestRate
+import th.co.opendream.cashcard.InterestRate
+import th.co.opendream.cashcard.InterestRateController
 import org.junit.*
 import grails.test.mixin.*
 import groovy.time.*

@@ -1,5 +1,4 @@
-
-<%@ page import="th.co.opendream.cashcard.domain.InterestRate" %>
+<%@ page import="th.co.opendream.cashcard.InterestRate" %>
 <!doctype html>
 <html>
     <head>

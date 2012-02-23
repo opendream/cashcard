@@ -1,7 +1,7 @@
-package th.co.opendream.cashcard.controller
+package th.co.opendream.cashcard
 
-import th.co.opendream.cashcard.domain.Member
-import th.co.opendream.cashcard.service.AccountService
+import th.co.opendream.cashcard.Member
+import th.co.opendream.cashcard.AccountService
 
 class MemberController {
     def accountService

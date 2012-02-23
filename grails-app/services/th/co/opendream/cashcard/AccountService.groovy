@@ -1,6 +1,6 @@
-package th.co.opendream.cashcard.service
+package th.co.opendream.cashcard
 
-import th.co.opendream.cashcard.domain.Member
+import th.co.opendream.cashcard.Member
 
 class AccountService {
     static transactional = true
@@ -33,11 +33,11 @@ class AccountService {
             return false
         }
     }
-    
+
     def getBalanceList() {
         Member.findAllByBalanceGreaterThan(0.00).collect {
             [ accountId: it.id, balance: it.balance ]
         }
     }
-    
+
 }

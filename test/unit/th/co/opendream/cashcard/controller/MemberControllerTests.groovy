@@ -1,8 +1,9 @@
 package th.co.opendream.cashcard.controller
 
-import th.co.opendream.cashcard.domain.Member
-import th.co.opendream.cashcard.domain.Member.Gender
-import th.co.opendream.cashcard.service.AccountService
+import th.co.opendream.cashcard.Member
+import th.co.opendream.cashcard.MemberController
+import th.co.opendream.cashcard.Member.Gender
+import th.co.opendream.cashcard.AccountService
 import grails.test.mixin.*
 import org.junit.*
 

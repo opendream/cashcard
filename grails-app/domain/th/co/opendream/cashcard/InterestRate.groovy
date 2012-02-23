@@ -1,4 +1,4 @@
-package th.co.opendream.cashcard.domain
+package th.co.opendream.cashcard
 
 class InterestRate {
     Date startDate

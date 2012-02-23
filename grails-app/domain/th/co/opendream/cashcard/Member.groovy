@@ -1,4 +1,4 @@
-package th.co.opendream.cashcard.domain
+package th.co.opendream.cashcard
 
 class Member {
 	String identificationNumber
@@ -31,6 +31,6 @@ class Member {
     }
 
     static mapping = {
-    	
+
     }
 }
