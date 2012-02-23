@@ -117,8 +117,8 @@ class MemberTests {
 			mockForConstraintsTests(Member, [member])
 
 			assert field == member.hasProperty(field)?.name
-			assert 2000.00 == member.balance
-			assert java.lang.Float == member.balance.class
+			assert 0.00 == member.balance
+			assert BigDecimal == member.balance.class
 			assertTrue member.validate([field])
     }
 }
