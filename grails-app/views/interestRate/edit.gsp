@@ -26,7 +26,7 @@
 			</ul>
 			</g:hasErrors>
 			<div class="container">
-				<g:form method="post" class="form-horizontal">
+				<g:form method="post" action="update" class="form-horizontal">
 					<g:hiddenField name="id" value="${interestRateInstance?.id}" />
 					<g:hiddenField name="version" value="${interestRateInstance?.version}" />
 					<g:render template="form"/>
