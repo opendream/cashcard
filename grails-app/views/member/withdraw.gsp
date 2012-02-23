@@ -20,7 +20,7 @@
     		<div class="control-group ${flash.error? 'error' : ''}">
           <label for="amount" class="control-label">Amount</label>
           <div class="controls">
-            <input id="amount" name="amount" type="text" placeholder="Amount to withdraw" />
+              <g:field type="text" id="amount" name="amount" pattern="\\d*(\\.\\d\\d)?" required="" value="" />
           </div>
         </div>
 
