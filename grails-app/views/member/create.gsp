@@ -1,4 +1,4 @@
-<%@ page import="th.co.opendream.cashcard.domain.Member.Gender" %>
+<%@ page import="th.co.opendream.cashcard.Member.Gender" %>
 <html>
   <head>
     <meta name="layout" content="main" />
@@ -49,7 +49,7 @@
           <label class="control-label">Gender</label>
           <div class="controls">
             <div class="btn-group" data-toggle="buttons-radio">
-              
+
               <label class="btn">Male <input style="display:none;" type="radio" name="gender" ${memberInstance?.gender == Gender?.MALE? 'checked': null} value="MALE"/> </label>
               <label class="btn">Female <input style="display:none;" type="radio" name="gender" ${memberInstance?.gender == Gender?.FEMALE? 'checked': null} value="FEMALE"/> </label>
             </div>

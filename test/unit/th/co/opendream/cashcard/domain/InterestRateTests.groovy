@@ -1,7 +1,6 @@
 package th.co.opendream.cashcard.domain
 
-
-
+import th.co.opendream.cashcard.InterestRate
 import grails.test.mixin.*
 import org.junit.*
 import org.codehaus.groovy.runtime.typehandling.GroovyCastException

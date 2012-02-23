@@ -1,4 +1,4 @@
-<%@ page import="th.co.opendream.cashcard.domain.InterestRate" %>
+<%@ page import="th.co.opendream.cashcard.InterestRate" %>
 	<div class="control-group ${hasErrors(bean: interestRateInstance, field: 'startDate', 'error')} required">
 		<label for="startDate" class="control-label">
 			<g:message code="interestRate.startDate.label" default="Start Date" />

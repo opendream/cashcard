@@ -1,7 +1,7 @@
-package th.co.opendream.cashcard.controller
+package th.co.opendream.cashcard
 
 import org.springframework.dao.DataIntegrityViolationException
-import th.co.opendream.cashcard.domain.InterestRate
+import th.co.opendream.cashcard.InterestRate
 
 class InterestRateController {
 
