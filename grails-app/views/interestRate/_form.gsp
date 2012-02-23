@@ -9,16 +9,6 @@
 		</div>
 	</div>
 
-	<div class="control-group ${hasErrors(bean: interestRateInstance, field: 'endDate', 'error')} required">
-		<label for="endDate" class="control-label">
-			<g:message code="interestRate.endDate.label" default="End Date" />
-			<span class="required-indicator">*</span>
-		</label>
-		<div class="controls">
-			<g:datePicker name="endDate" precision="day"  value="${interestRateInstance?.endDate}"  />
-		</div>
-	</div>
-
 	<div class="control-group ${hasErrors(bean: interestRateInstance, field: 'rate', 'error')} required">
 		<label for="rate" class="control-label">
 			<g:message code="interestRate.rate.label" default="Rate" />

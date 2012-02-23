@@ -24,14 +24,12 @@
         <div id="list-interestRate" class="content scaffold-list" role="main">
             <g:if test="${flash.message}">
                 <div class="message alert alert-success" role="status">${flash.message} <a class="close" data-dismiss="alert">×</a></div>
-
             </g:if>
             <div class="container">
             <table class="table table-striped table-bordered table-condensed">
                 <thead>
                     <tr>
                         <th class="date">${message(code: 'interestRate.startDate.label', default: 'Start Date')}</th>
-                        <th class="date"> ${message(code: 'interestRate.endDate.label', default: 'End Date')}</th>
                         <th class="number"> ${message(code: 'interestRate.rate.label', default: 'Rate (%)')}</th>
                         <th class="date"> ${message(code: 'interestRate.dateCreated.label', default: 'Date Created')}</th>
                         <th class="date"> ${message(code: 'interestRate.lastUpdated.label', default: 'Last Updated')}</th>
@@ -42,7 +40,6 @@
                 <g:each in="${interestRateInstanceList}" status="i" var="interestRateInstance">
                     <tr class="${(i % 2) == 0 ? 'even' : 'odd'}">
                         <td class="date"><g:formatDate format="yyyy-MM-dd" date="${interestRateInstance.startDate}" /></td>
-                        <td class="date"><g:formatDate format="yyyy-MM-dd" date="${interestRateInstance.endDate}" /></td>
                         <td class="number"><g:formatNumber type="number" number="${interestRateInstance.rate}" maxFractionDigits="2" minFractionDigits="2" /></td>
                         <td class="date"><g:formatDate format="yyyy-MM-dd HH:mm" date="${interestRateInstance.dateCreated}" /></td>
                         <td class="date"><g:formatDate format="yyyy-MM-dd HH:mm" date="${interestRateInstance.lastUpdated}" /></td>

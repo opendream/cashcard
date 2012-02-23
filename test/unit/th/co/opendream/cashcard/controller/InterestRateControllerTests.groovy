@@ -18,10 +18,9 @@ class InterestRateControllerTests {
     }
 
     def populateValidParams(params) {
-      assert params != null
-      params["startDate"] = today
-      params["endDate"] = today.plus(5)
-      params["rate"] = 7
+        assert params != null
+        params["startDate"] = today
+        params["rate"] = 7
     }
 
     void testIndex() {
@@ -88,11 +87,8 @@ class InterestRateControllerTests {
 
 
     void testSaveWithNotUniqueStartDate() {
-
         populateValidParams(params)
         mockDomain(InterestRate, [params])
-
-        params.endDate = params.endDate.plus(10)
 
         controller.save()
         assert model.interestRateInstance.errors.getFieldError('startDate')
@@ -100,64 +96,13 @@ class InterestRateControllerTests {
 
 
     void testSaveWithUniqueStartDate() {
-
         populateValidParams(params)
         mockDomain(InterestRate, [params])
 
         params.startDate = params.startDate.plus(8)
-        params.endDate = params.endDate.plus(10)
 
         controller.save()
         assert flash.message != null
-    }
-
-    void testSaveWithEmptyEndDate() {
-        populateValidParams(params)
-        params.endDate = ""
-
-        controller.save()
-        assert model.interestRateInstance.errors.getFieldError('endDate')
-    }
-
-
-    void testSaveWithNullEndDate() {
-        populateValidParams(params)
-        params.endDate = null
-
-        controller.save()
-        assert model.interestRateInstance.errors.getFieldError('endDate')
-    }
-
-
-    void testSaveWithNotUniqueEndDate() {
-
-        populateValidParams(params)
-        mockDomain(InterestRate, [params])
-
-        params.startDate = params.startDate.minus(1)
-
-        controller.save()
-        assert model.interestRateInstance.errors.getFieldError('endDate')
-    }
-
-    void testSaveWithUniqueEndDate() {
-
-        populateValidParams(params)
-        mockDomain(InterestRate, [params])
-
-        params.startDate = params.startDate.minus(1)
-        params.endDate = params.endDate.plus(10)
-
-        controller.save()
-        assert flash.message != null
-    }
-
-    void testSaveWithInvalidDateRange() {
-        populateValidParams(params)
-        params.endDate = params.endDate.minus(10)
-
-        controller.save()
-        assert model.interestRateInstance.errors.getFieldError('endDate')
     }
 
     void testSaveWithEmptyRate() {
@@ -203,50 +148,66 @@ class InterestRateControllerTests {
         assert model.interestRateInstance == interestRate
     }
 
-    void testUpdate() {
+    void testUpdateWithInvalidId() {
+        populateValidParams(params)
+        mockDomain(InterestRate)
+        assert InterestRate.count() == 0
+        params.id = 1
+        controller.update()
+        assert flash.message != null
+        response.redirectedUrl == '/interestRate/list'
+    }
+
+    void testUpdateWithOutdatedVersionNumber() {
+        populateValidParams(params)
+        mockDomain(InterestRate, [params])
+        assert InterestRate.count() == 1
+
+        params.version = -2
+        params.id = 1
+
         controller.update()
 
-        assert flash.message != null
-        assert response.redirectedUrl == '/interestRate/list'
+        assert view == '/interestRate/edit'
+        assert model.interestRateInstance != null
+        assert model.interestRateInstance.errors.getFieldError('version')
+    }
 
-        response.reset()
-
-
+    void testUpdateWithInvalidParams() {
         populateValidParams(params)
+        mockDomain(InterestRate)
         def interestRate = new InterestRate(params)
 
         assert interestRate.save() != null
 
         // test invalid parameters in update
         params.id = interestRate.id
-        params.startDate = today
-        params.endDate = today
-
+        params.startDate = null
         controller.update()
 
         assert view == "/interestRate/edit"
         assert model.interestRateInstance != null
+    }
 
-        interestRate.clearErrors()
+    void testUpdateWithEmptyParams() {
+        controller.update()
+
+        assert flash.message != null
+        assert response.redirectedUrl == '/interestRate/list'
+    }
+
+    void testValidUpdate() {
+        mockDomain(InterestRate)
 
         populateValidParams(params)
+        def interestRate = new InterestRate(params)
+
+        assert interestRate.save() != null
+
+        params.id = interestRate.id
         controller.update()
 
         assert response.redirectedUrl == "/interestRate/list"
-        assert flash.message != null
-
-        //test outdated version number
-        response.reset()
-        interestRate.clearErrors()
-
-        populateValidParams(params)
-        params.id = interestRate.id
-        params.version = -1
-        controller.update()
-
-        assert view == "/interestRate/edit"
-        assert model.interestRateInstance != null
-        assert model.interestRateInstance.errors.getFieldError('version')
         assert flash.message != null
     }
 

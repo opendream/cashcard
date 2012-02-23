@@ -21,7 +21,7 @@ class InterestRateTests {
     }
 
     void testProperties() {
-        def memberProps = ['startDate', 'endDate', 'rate', 'dateCreated', 'lastUpdated']
+        def memberProps = ['startDate', 'rate', 'dateCreated', 'lastUpdated']
         def instanceProperties = InterestRate.metaClass.properties*.name
         assert 0 == (memberProps - instanceProperties).size()
     }
@@ -68,18 +68,6 @@ class InterestRateTests {
         assertFalse rate.validate([field])
     }
 
-    void testInterestRateEmptyEndDate() {
-        def field = 'endDate'
-        mockForConstraintsTests(InterestRate)
-        def rate = new InterestRate()
-
-        assertFalse rate.validate([field])
-        shouldFail(GroovyCastException) {
-            rate.endDate = ''
-        }
-        assertFalse rate.validate([field])
-    }
-
     void testStartDateUnique() {
         def field = 'startDate'
         def currentDate = today
@@ -96,56 +84,4 @@ class InterestRateTests {
         assert "unique" == rate.errors[field]
     }
 
-    void testEndDateUnique() {
-        def field = 'endDate'
-        def currentDate = today
-        def endDate = currentDate.plus(10)
-        def existingRate = new InterestRate(
-            startDate: currentDate,
-            endDate: endDate,
-            rate: 5.00F
-        )
-        mockForConstraintsTests(InterestRate, [existingRate])
-
-        def rate = new InterestRate()
-        rate.endDate = endDate
-        assertFalse rate.validate([field])
-        assert "unique" == rate.errors[field]
-    }
-
-    void testValidDateRange() {
-        def currentDate = today
-        def endDate = currentDate.plus(10)
-        mockForConstraintsTests(InterestRate)
-        def rate = new InterestRate()
-
-        rate.startDate = currentDate
-        rate.endDate = endDate
-
-        assertTrue rate.validate(['startDate', 'endDate'])
-    }
-
-    void testInvalidDateRangeStartExceedEnd() {
-        def currentDate = today
-        def endDate = currentDate.minus(10)
-        mockForConstraintsTests(InterestRate)
-        def rate = new InterestRate()
-
-        rate.startDate = currentDate
-        rate.endDate = endDate
-
-        assertFalse rate.validate(['startDate', 'endDate'])
-    }
-
-    void testInvalidDateRangeSameDate() {
-        def currentDate = today
-        def endDate = currentDate
-        mockForConstraintsTests(InterestRate)
-        def rate = new InterestRate()
-
-        rate.startDate = currentDate
-        rate.endDate = endDate
-
-        assertFalse rate.validate(['startDate', 'endDate'])
-    }
 }
