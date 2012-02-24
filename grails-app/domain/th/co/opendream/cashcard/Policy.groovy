@@ -7,6 +7,7 @@ class Policy {
     static String CREDIT_LINE = 'CreditLine'
     
     static constraints = {
+        key(unique: true) 
     }
 
     static mapping = {
