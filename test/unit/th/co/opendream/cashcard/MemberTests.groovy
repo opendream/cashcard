@@ -1,8 +1,6 @@
-package th.co.opendream.cashcard.domain
+package th.co.opendream.cashcard
 
 import th.co.opendream.cashcard.Member.Gender
-import th.co.opendream.cashcard.Member
-
 import grails.test.mixin.*
 import org.junit.*
 

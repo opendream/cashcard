@@ -24,3 +24,6 @@ target
 # kate file
 *.*~
 *.kate-swp
+
+
+.DS_Store

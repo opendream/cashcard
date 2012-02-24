@@ -1,7 +1,5 @@
 package th.co.opendream.cashcard
 
-
-
 import grails.test.mixin.*
 import org.junit.*
 

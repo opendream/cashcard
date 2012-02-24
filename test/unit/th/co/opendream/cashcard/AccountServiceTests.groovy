@@ -1,8 +1,5 @@
-package th.co.opendream.cashcard.service
+package th.co.opendream.cashcard
 
-import th.co.opendream.cashcard.Member
-import th.co.opendream.cashcard.AccountService
-import th.co.opendream.cashcard.PolicyService
 import grails.test.mixin.*
 import org.junit.*
 
