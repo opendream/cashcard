@@ -21,7 +21,12 @@ class InterestService {
         def isLeap = cal.isLeapYear(date.year + 1900)
         def yearDivider = isLeap ? 366 : 365
 
-        (rate * balance / 100.00) / yearDivider
+        def unscaled = (rate * balance / 100.00) / yearDivider
+        
+        // TODO... do we need policy on rounding interest decimal digit? 
+        // such as rounding -> up/down/half-up/half-down
+        // always return decimal with 2 digits
+        unscaled.setScale(2, BigDecimal.ROUND_HALF_UP);
     }
 
     def update(accountId, interest) {
