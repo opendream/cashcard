@@ -115,7 +115,7 @@ class MemberControllerTests {
         controller.accountService = accountControl.createMock()
 
         params.amount = 100.00
-        params.uid = 1
+        params.id = 1
 
         controller.withdraw()
         accountControl.verify()
@@ -125,7 +125,7 @@ class MemberControllerTests {
 
     void testMemberWithdrawWithInvalidUid() {
         params.amount = 200.00
-        params.uid = 999999999
+        params.id = 999999999
 
         controller.withdraw()
 
@@ -138,7 +138,7 @@ class MemberControllerTests {
         controller.accountService = accountControl.createMock()
 
         params.amount = 10000
-        params.uid = 1
+        params.id = 1
 
         controller.withdraw()
 
@@ -148,4 +148,45 @@ class MemberControllerTests {
         assert view == '/member/withdraw'
 
     }
+
+    void testMemberPaymentEmptyId() {
+        def model = controller.payment()
+
+        assert response.redirectedUrl == '/error'
+    }
+
+    void testMemberPayment() {
+        params.id = 1
+        def model = controller.payment()
+
+        assert model.memberInstance != null
+    }
+
+    void testMemberValidPayWithNoChange() {
+        accountControl.demand.pay(1..1) { Member member, amount -> [:] }
+        controller.accountService = accountControl.createMock()
+
+        params.id = 1
+        params.amount = 200.00
+        def model = controller.pay()
+
+        accountControl.verify()
+        assert flash.message != null
+        assert response.redirectedUrl == '/member/show/1'
+
+    }
+
+    void testMemberInvalidPay() {
+        accountControl.demand.pay(1..1) { Member member, amount -> [errors:["Can't pay."]] }
+        controller.accountService = accountControl.createMock()
+
+        params.id = 1
+        def model = controller.pay()
+
+        accountControl.verify()
+        assert flash.message != null
+        assert response.redirectedUrl == '/member/payment/1'
+
+    }
+
 }

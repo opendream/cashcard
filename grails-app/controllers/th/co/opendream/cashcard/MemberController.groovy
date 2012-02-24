@@ -55,10 +55,7 @@ class MemberController {
     }
 
     def withdraw() {
-
-        def filterUid = { it? it : 0 }
-        def uid = filterUid(params.uid)
-        def memberInstance = Member.get(uid)
+        def memberInstance = Member.get(params.id)
         flash.error = null
 
         if (memberInstance) {
@@ -76,6 +73,33 @@ class MemberController {
         }
         else {
             redirect(uri: '/error')
+        }
+    }
+
+    def payment() {
+        def memberInstance = Member.get(params.id)
+
+        if (memberInstance) {
+            [memberInstance: memberInstance]
+        }
+        else {
+            redirect(uri: '/error')
+        }
+    }
+
+    def pay() {
+        def memberInstance = Member.get(params.id)
+
+        if (memberInstance) {
+            def result = accountService.pay(memberInstance, params.amount)
+            if (!result.errors) {
+                flash.message = "Pay success."
+                redirect(action: "show", id: memberInstance.id)
+            }
+            else {
+                flash.message = result.errors.getAt(0)
+                redirect(action: "payment", id: memberInstance.id)
+            }
         }
     }
 

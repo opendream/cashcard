@@ -20,6 +20,10 @@ class Member {
       }
     }
 
+    String toString() {
+        "${firstname} ${lastname}"
+    }
+
     static constraints = {
         identificationNumber(blank: false, unique: true, matches: /\d{13}/)
         firstname(blank: false)
