@@ -27,4 +27,14 @@ class PolicyTests {
         assert "unique" == policy.errors["key"]
     }
     
+    void testFindPolicyValueByKey() {
+        mockDomain(Policy, [
+            [ 
+                key: Policy.KEY_INTEREST_METHOD, 
+                value: Policy.VALUE_COMPOUND
+            ]
+        ])
+        
+        assert Policy.VALUE_COMPOUND == Policy.valueOf(Policy.KEY_INTEREST_METHOD)
+    }
 }
