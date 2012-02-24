@@ -1,12 +1,12 @@
 <html>
   <head>
     <meta name="layout" content="main" />
-    <title>Withdraw</title>
+    <title>${memberInstance} : Withdraw</title>
   </head>
   <body>
 		<div class="container">
 			<header class="page-header">
-				<h1>Withdraw</h1>
+				<h1>${memberInstance} : Withdraw</h1>
 			</header>
 		</div>
     <g:if test="${flash.error}">
@@ -16,7 +16,7 @@
     </g:if>
 	  <div class="container">
       <g:form action="withdraw" class="form-horizontal">
-        <g:hiddenField name="uid" value="${memberInstance?.id}" />
+        <g:hiddenField name="id" value="${memberInstance?.id}" />
     		<div class="control-group ${flash.error? 'error' : ''}">
           <label for="amount" class="control-label">Amount</label>
           <div class="controls">
