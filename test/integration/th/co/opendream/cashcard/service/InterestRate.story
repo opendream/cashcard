@@ -7,14 +7,14 @@ description "Request an interest rate from interest service"
 
 before "prepare helper functions", {
     inject "interestService"
-    def df = new SimpleDateFormat("yyyy-MM-dd", Locale.US)
-
+    
+    df = new SimpleDateFormat("yyyy-MM-dd", Locale.US)
+    
     prepareRate = { params->
-        def from = date(params.from)
-        def to = date(params.to)
+        from = date(params.from)
         
-        new th.co.opendream.cashcard.domain.InterestRate(
-            startDate: from, endDate: to, rate: params.rate).save(flush: true)
+        new th.co.opendream.cashcard.InterestRate(
+            startDate: from, rate: params.rate).save(flush: true)
     }
 
     date = { str ->
@@ -25,7 +25,6 @@ before "prepare helper functions", {
 given "rate between 2011-01-01 and 2011-11-01 is 5%", {
     prepareRate(
         from: '2011-01-01',
-        to: '2011-11-01',
         rate: 5.00
     )
 }
@@ -33,7 +32,6 @@ given "rate between 2011-01-01 and 2011-11-01 is 5%", {
 given "rate between 2011-11-02 and 2011-12-31 is 7%", {
     prepareRate(
         from: '2011-01-02',
-        to: '2011-12-31',
         rate: 7.00
     )
 }

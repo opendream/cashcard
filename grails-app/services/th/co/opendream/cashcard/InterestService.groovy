@@ -1,23 +1,19 @@
 package th.co.opendream.cashcard
 
-import th.co.opendream.cashcard.*
 
 class InterestService {
     static transactional = true
 
     def getRate(date) {
-    println InterestRate.list().collect { it.startDate
-    }
+        def result = InterestRate.executeQuery("""
+            from InterestRate int 
+            where int.startDate = (
+                select max(int.startDate) from InterestRate int 
+                where int.startDate <= :date
+            )
+        """, [date: date], [max: 1] )
 
-    println date
-
-        def c = InterestRate.createCriteria()
-        def result = c.get {
-            ge 'startDate', date
-            le 'endDate', date
-        }
-
-        result.rate
+        result[0].rate
     }
 
     def calculate(date, balance, rate) {
