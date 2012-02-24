@@ -66,9 +66,10 @@ class MemberTests {
         mockForConstraintsTests(Member, [member])
 
         assert field == member.hasProperty(field)?.name
-          assertFalse member.validate([field])
-          member.lastname = 'lastname'
-          assertTrue member.validate([field])
+        assertFalse member.validate([field])
+        member.lastname = 'lastname'
+        assertTrue member.validate([field])
+    }
 
 
     void testValidateGender() {
