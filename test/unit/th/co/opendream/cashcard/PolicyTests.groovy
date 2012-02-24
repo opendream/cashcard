@@ -8,18 +8,20 @@ import org.junit.*
 class PolicyTests {
     
     void testConstraints() {
+        mockForConstraintsTests(Policy, [])
+            
         // validation should fail if both properties are null 
         def policy = new Policy()
         assert !policy.validate() 
         assert "nullable" == policy.errors["key"] 
-        assert "nullable" == policy.errors["value"]  
+        assert "nullable" == policy.errors["value"]
     }
     
     void testUniqueKey() {
-        def existingPolicy = new Policy(key: "creditline", value: 1000.00)
+        def existingPolicy = new Policy(key: "creditline", value: '1000.00')
         mockForConstraintsTests(Policy, [existingPolicy])
         
-        def policy = new Policy(key: "creditline", value: 200.00)
+        def policy = new Policy(key: "creditline", value: '200.00')
         
         assertFalse policy.validate()
         assert "unique" == policy.errors["key"]
