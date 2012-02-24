@@ -17,4 +17,12 @@ class Policy {
     static String valueOf(key) {
         Policy.findByKey(key)?.value
     }
+    
+    static BigDecimal valueOfCreditLine() {
+        new BigDecimal(valueOf(KEY_CREDIT_LINE))
+    }
+    
+    static boolean isCompoundMethod() {
+        valueOf(KEY_INTEREST_METHOD) == VALUE_COMPOUND
+    }
 }

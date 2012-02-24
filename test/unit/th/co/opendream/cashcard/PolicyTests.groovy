@@ -29,12 +29,17 @@ class PolicyTests {
     
     void testFindPolicyValueByKey() {
         mockDomain(Policy, [
-            [ 
-                key: Policy.KEY_INTEREST_METHOD, 
-                value: Policy.VALUE_COMPOUND
-            ]
+            [ key: Policy.KEY_INTEREST_METHOD, value: Policy.VALUE_COMPOUND ]
         ])
         
         assert Policy.VALUE_COMPOUND == Policy.valueOf(Policy.KEY_INTEREST_METHOD)
+    }
+    
+    void testStaticCompoundMethod() {
+        mockDomain(Policy, [
+            [ key: Policy.KEY_INTEREST_METHOD, value: Policy.VALUE_COMPOUND ]
+        ])
+        
+        assertTrue Policy.isCompoundMethod()
     }
 }
