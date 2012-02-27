@@ -82,4 +82,13 @@ class Member {
     BigDecimal getInterest() {
         this.interest
     }
+
+    BigDecimal getTotalDebt() {
+        if (Policy.isCompoundMethod()) {
+            balance
+        }
+        else {
+            balance + interest
+        }
+    }
 }

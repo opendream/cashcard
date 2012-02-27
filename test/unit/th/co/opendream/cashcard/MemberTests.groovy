@@ -19,8 +19,8 @@ class MemberTests {
     }
 
     def generateFindBy(flag) {
-        return {key ->
-            if (Policy.KEY_CREDIT_LINE) {
+        return { key ->
+            if (key == Policy.KEY_CREDIT_LINE) {
                 return [value: "2000.00"]
             }
             else {
@@ -193,13 +193,13 @@ class MemberTests {
         Policy.metaClass.static.findByKey = generateFindBy(Policy.VALUE_NON_COMPOUND)
 
         def m1 = Member.get(1)
-        m1.withdraw(100.00)
 
+        m1.balance = 100.00
         m1.interest = 10.00
 
         assert m1.getRemainingFinancialAmount() == 1890.00
 
-        m1.withdraw(100.00)
+        m1.balance = 200.00
         m1.interest = 20.00
 
         assert m1.getRemainingFinancialAmount() == 1780.00
@@ -210,14 +210,14 @@ class MemberTests {
 
         def m1 = Member.get(1)
 
-        m1.withdraw(100.00)
-
+        m1.balance = 110.00
         m1.interest = 10.00
 
         assert m1.getRemainingFinancialAmount() == 1890.00
-        m1.withdraw(100.00)
 
+        m1.balance = 220.00
         m1.interest = 20.00
+
         assert m1.getRemainingFinancialAmount() == 1780.00
     }
 
@@ -230,4 +230,25 @@ class MemberTests {
         assert m1.getInterest() == 10.00
     }
 
+    void testGetTotalDebtWithCompoundInterest() {
+        Policy.metaClass.static.findByKey = generateFindBy(Policy.VALUE_COMPOUND)
+
+        def m1 = Member.get(1)
+
+        m1.balance = 110.00
+        m1.interest = 10.00
+
+        assert m1.getTotalDebt() == 110.00
+    }
+
+    void testGetTotalDebtWithNonCompoundInterest() {
+        Policy.metaClass.static.findByKey = generateFindBy(Policy.VALUE_NON_COMPOUND)
+
+        def m1 = Member.get(1)
+
+        m1.balance = 100.00
+        m1.interest = 10.00
+
+        assert m1.getTotalDebt() == 110.00
+    }
 }

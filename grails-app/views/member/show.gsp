@@ -75,7 +75,12 @@
 					</div>
 				</div>
 
-
+				<div class="row">
+					<div class="control-label span2"><strong>Total Debt</strong></div>
+					<div class="offset2">
+						<g:formatNumber number="${memberInstance?.getTotalDebt()}" type="currency" currencyCode="THB" />
+					</div>
+				</div>
 
 			</div>
 		</body>
