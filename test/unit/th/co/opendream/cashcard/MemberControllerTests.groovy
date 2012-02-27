@@ -14,6 +14,17 @@ class MemberControllerTests {
 
     def accountControl
 
+    def generateFindBy(flag) {
+        return {key ->
+            if (Policy.KEY_CREDIT_LINE) {
+                return [value: "2000.00"]
+            }
+            else {
+                return [value: flag]
+            }
+        }
+    }
+
     @Before
     void setUp() {
         mockDomain(Member, [
@@ -110,9 +121,7 @@ class MemberControllerTests {
     }
 
     void testMemberWithdrawValidUid() {
-        accountControl.demand.canWithdraw(1..1) { Member member, amount -> true }
-        accountControl.demand.withdraw(1..1) { Member member, amount -> true }
-        controller.accountService = accountControl.createMock()
+        Policy.metaClass.static.findByKey = generateFindBy(Policy.VALUE_COMPOUND)
 
         params.amount = 100.00
         params.id = 1
@@ -133,9 +142,7 @@ class MemberControllerTests {
     }
 
     void testMemberInvalidWithdrawAmount() {
-        accountControl.demand.canWithdraw(1..1) { Member member, amount -> false }
-        accountControl.demand.withdraw(0..0) { Member member, amount -> true }
-        controller.accountService = accountControl.createMock()
+        Policy.metaClass.static.findByKey = generateFindBy(Policy.VALUE_COMPOUND)
 
         params.amount = 10000
         params.id = 1
@@ -149,6 +156,7 @@ class MemberControllerTests {
 
     }
 
+/*
     void testMemberPaymentEmptyId() {
         def model = controller.payment()
 
@@ -186,7 +194,6 @@ class MemberControllerTests {
         accountControl.verify()
         assert flash.message != null
         assert response.redirectedUrl == '/member/payment/1'
-
     }
-
+    */
 }

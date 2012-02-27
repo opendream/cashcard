@@ -1,4 +1,5 @@
 import th.co.opendream.cashcard.Member
+import th.co.opendream.cashcard.Policy
 
 class BootStrap {
 
@@ -8,6 +9,9 @@ class BootStrap {
 
     	d1.save()
     	d2.save()
+
+    	new Policy(key: Policy.KEY_CREDIT_LINE, value: 2000).save()
+    	new Policy(key: Policy.KEY_INTEREST_METHOD, value: Policy.VALUE_NON_COMPOUND).save()
 
     }
     def destroy = {

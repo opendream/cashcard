@@ -37,4 +37,45 @@ class Member {
     static mapping = {
 
     }
+
+    BigDecimal getBalance() {
+        this.balance
+    }
+
+    BigDecimal getRemainingFinancialAmount() {
+        def balance = this.balance
+        def limit = Policy.valueOfCreditLine()
+
+        if (Policy.isCompoundMethod()) {
+            return limit - balance
+        } else {
+            return limit - balance - this.interest
+        }
+    }
+
+    void withdraw(amount) {
+        amount = amount as BigDecimal
+        if (amount <= 0) {
+           throw new RuntimeException(message: "Withdraw amount is less than or equal 0 : ${amount}")
+        }
+        this.balance += amount
+        this.save()
+    }
+
+    Boolean canWithdraw(amount) {
+        def limit = Policy.valueOfCreditLine()
+        amount = amount as BigDecimal
+        if (limit < amount + this.balance) {
+            return false
+        }
+        else if (amount <= 0) {
+            return false
+        }
+        else if (limit >= amount + this.balance) {
+            return true
+        }
+        else {
+            return false
+        }
+    }
 }

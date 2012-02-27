@@ -62,8 +62,8 @@ class MemberController {
             if (!params.amount) {
                 render(view: 'withdraw', model: [memberInstance: memberInstance])
             }
-            else if (accountService.canWithdraw(memberInstance, params.amount)) {
-                accountService.withdraw(memberInstance, params.amount)
+            else if (memberInstance.canWithdraw(params.amount)) {
+                memberInstance.withdraw(params.amount)
                 redirect(action: "show", id: memberInstance.id)
             }
             else {
@@ -91,7 +91,7 @@ class MemberController {
         def memberInstance = Member.get(params.id)
 
         if (memberInstance) {
-            def result = accountService.pay(memberInstance, params.amount)
+            def result = memberInstance.pay(memberInstance, params.amount)
             if (!result.errors) {
                 flash.message = "Pay success."
                 redirect(action: "show", id: memberInstance.id)
