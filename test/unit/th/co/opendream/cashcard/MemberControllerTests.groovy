@@ -9,10 +9,21 @@ import org.junit.*
  * See the API for {@link grails.test.mixin.web.ControllerUnitTestMixin} for usage instructions
  */
 @TestFor(MemberController)
-@Mock(Member)
+@Mock([Member, UtilService])
 class MemberControllerTests {
 
-    def accountControl
+    def utilControl
+
+    def generateFindBy(flag) {
+        return {key ->
+            if (Policy.KEY_CREDIT_LINE) {
+                return [value: "2000.00"]
+            }
+            else {
+                return [value: flag]
+            }
+        }
+    }
 
     @Before
     void setUp() {
@@ -21,7 +32,7 @@ class MemberControllerTests {
             [id: 2, identificationNumber: "2222222222222", firstname: "Noomz", lastname: "Siriwat", telNo: "0811111111", gender: "MALE", address: "2222222"]
         ])
 
-        accountControl = mockFor(AccountService)
+        utilControl = mockFor(UtilService)
     }
 
     @After
@@ -110,22 +121,19 @@ class MemberControllerTests {
     }
 
     void testMemberWithdrawValidUid() {
-        accountControl.demand.canWithdraw(1..1) { Member member, amount -> true }
-        accountControl.demand.withdraw(1..1) { Member member, amount -> true }
-        controller.accountService = accountControl.createMock()
+        Policy.metaClass.static.findByKey = generateFindBy(Policy.VALUE_COMPOUND)
 
         params.amount = 100.00
-        params.uid = 1
+        params.id = 1
 
         controller.withdraw()
-        accountControl.verify()
 
         assert response.redirectedUrl == '/member/show/1'
     }
 
     void testMemberWithdrawWithInvalidUid() {
         params.amount = 200.00
-        params.uid = 999999999
+        params.id = 999999999
 
         controller.withdraw()
 
@@ -133,19 +141,70 @@ class MemberControllerTests {
     }
 
     void testMemberInvalidWithdrawAmount() {
-        accountControl.demand.canWithdraw(1..1) { Member member, amount -> false }
-        accountControl.demand.withdraw(0..0) { Member member, amount -> true }
-        controller.accountService = accountControl.createMock()
+        Policy.metaClass.static.findByKey = generateFindBy(Policy.VALUE_COMPOUND)
 
         params.amount = 10000
-        params.uid = 1
+        params.id = 1
 
         controller.withdraw()
 
-        accountControl.verify()
 
         assert flash.error != null
         assert view == '/member/withdraw'
 
     }
+
+    void testMemberPaymentEmptyId() {
+        def model = controller.payment()
+
+        assert response.redirectedUrl == '/error'
+    }
+
+    void testMemberPayment() {
+        Policy.metaClass.static.findByKey = generateFindBy(Policy.VALUE_COMPOUND)
+
+        utilControl.demand.moneyRoundUp(1..1) { amount -> 200.25 }
+        controller.utilService = utilControl.createMock()
+
+        params.id = 1
+        def model = controller.payment()
+
+        utilControl.verify()
+        assert model.memberInstance != null
+    }
+
+    void testMemberValidPayWithNoChange() {
+        def counter = 0
+        Member.metaClass.pay = { amount -> counter++; 0.00}
+        params.id = 1
+        params.amount = 200.00
+        def model = controller.pay()
+
+        assert counter == 1
+        assert flash.message != null
+        assert response.redirectedUrl == '/member/show/1'
+
+    }
+
+    void testMemberValidPayWithChange() {
+        def counter = 0
+        Member.metaClass.pay = { amount -> counter++; 100.00}
+        params.id = 1
+        params.amount = 200.00
+        def model = controller.pay()
+
+        assert counter == 1
+        assert flash.message != null
+        assert response.redirectedUrl == '/member/show/1'
+
+    }
+
+    void testMemberInvalidPay() {
+        params.id = 1
+        def model = controller.pay()
+
+        assert flash.message != null
+        assert response.redirectedUrl == '/member/payment/1'
+    }
+
 }

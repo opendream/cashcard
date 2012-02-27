@@ -4,7 +4,7 @@ import th.co.opendream.cashcard.Member
 import th.co.opendream.cashcard.AccountService
 
 class MemberController {
-    def accountService
+    def utilService
 
     def index() { }
 
@@ -55,24 +55,55 @@ class MemberController {
     }
 
     def withdraw() {
-
-        def filterUid = { it? it : 0 }
-        def uid = filterUid(params.uid)
-        def memberInstance = Member.get(uid)
+        def memberInstance = Member.get(params.id)
         flash.error = null
 
         if (memberInstance) {
             if (!params.amount) {
                 render(view: 'withdraw', model: [memberInstance: memberInstance])
             }
-            else if (accountService.canWithdraw(memberInstance, params.amount)) {
-                accountService.withdraw(memberInstance, params.amount)
+            else if (memberInstance.canWithdraw(params.amount)) {
+                memberInstance.withdraw(params.amount)
                 redirect(action: "show", id: memberInstance.id)
             }
             else {
                 flash.error = "Can't withdraw. Invalid amount"
                 render(view: 'withdraw', model: [memberInstance: memberInstance])
             }
+        }
+        else {
+            redirect(uri: '/error')
+        }
+    }
+
+    def payment() {
+        def memberInstance = Member.get(params.id)
+
+        if (memberInstance) {
+            //memberInstance.metaClass.getTotalDebt = { utilService.moneyRoundUp(memberInstance.getTotalDebt()) }
+
+            [memberInstance: memberInstance, totalDebt: utilService.moneyRoundUp(memberInstance.getTotalDebt())]
+        }
+        else {
+            redirect(uri: '/error')
+        }
+    }
+
+    def pay() {
+        def memberInstance = Member.get(params.id)
+        if (memberInstance && params.amount) {
+            def change = memberInstance.pay(params.amount)
+            if (!change) {
+                flash.message = "Pay success."
+            }
+            else {
+                flash.message = "Change is ${change}"
+            }
+            redirect(action: "show", id: memberInstance.id)
+        }
+        else if (!params.amount) {
+            flash.message = "Invalid amount."
+            redirect(action: "payment", id: memberInstance.id)
         }
         else {
             redirect(uri: '/error')
