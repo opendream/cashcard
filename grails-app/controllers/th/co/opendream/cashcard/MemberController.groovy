@@ -89,17 +89,22 @@ class MemberController {
 
     def pay() {
         def memberInstance = Member.get(params.id)
-
-        if (memberInstance) {
-            def result = memberInstance.pay(memberInstance, params.amount)
-            if (!result.errors) {
+        if (memberInstance && params.amount) {
+            def change = memberInstance.pay(params.amount)
+            if (!change) {
                 flash.message = "Pay success."
-                redirect(action: "show", id: memberInstance.id)
             }
             else {
-                flash.message = result.errors.getAt(0)
-                redirect(action: "payment", id: memberInstance.id)
+                flash.message = "Change is ${change}"
             }
+            redirect(action: "show", id: memberInstance.id)
+        }
+        else if (!params.amount) {
+            flash.message = "Invalid amount."
+            redirect(action: "payment", id: memberInstance.id)
+        }
+        else {
+            redirect(uri: '/error')
         }
     }
 

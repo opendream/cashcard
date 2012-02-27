@@ -11,6 +11,9 @@
 		</div>
 
 		<div class="container">
+				<g:if test="${flash.message}">
+					<div class="message alert alert-success" role="status">${flash.message}</div>
+				</g:if>
 				<g:render template="toolbar" />
 
 				<div class="row">

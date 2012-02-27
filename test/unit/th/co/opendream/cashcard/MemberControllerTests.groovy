@@ -156,7 +156,6 @@ class MemberControllerTests {
 
     }
 
-/*
     void testMemberPaymentEmptyId() {
         def model = controller.payment()
 
@@ -171,29 +170,37 @@ class MemberControllerTests {
     }
 
     void testMemberValidPayWithNoChange() {
-        accountControl.demand.pay(1..1) { Member member, amount -> [:] }
-        controller.accountService = accountControl.createMock()
-
+        def counter = 0
+        Member.metaClass.pay = { amount -> counter++; 0.00}
         params.id = 1
         params.amount = 200.00
         def model = controller.pay()
 
-        accountControl.verify()
+        assert counter == 1
+        assert flash.message != null
+        assert response.redirectedUrl == '/member/show/1'
+
+    }
+
+    void testMemberValidPayWithChange() {
+        def counter = 0
+        Member.metaClass.pay = { amount -> counter++; 100.00}
+        params.id = 1
+        params.amount = 200.00
+        def model = controller.pay()
+
+        assert counter == 1
         assert flash.message != null
         assert response.redirectedUrl == '/member/show/1'
 
     }
 
     void testMemberInvalidPay() {
-        accountControl.demand.pay(1..1) { Member member, amount -> [errors:["Can't pay."]] }
-        controller.accountService = accountControl.createMock()
-
         params.id = 1
         def model = controller.pay()
 
-        accountControl.verify()
         assert flash.message != null
         assert response.redirectedUrl == '/member/payment/1'
     }
-    */
+
 }

@@ -91,4 +91,35 @@ class Member {
             balance + interest
         }
     }
+
+    BigDecimal pay(amount) {
+        amount = amount as BigDecimal
+        def change = 0.00
+        if (amount >= interest) {
+            if (Policy.isCompoundMethod()) {
+                balance -= amount
+                interest = 0.00
+            }
+            else {
+                balance -= amount - interest
+                interest = 0.00
+            }
+        }
+        else if (amount < interest) {
+            if (Policy.isCompoundMethod()) {
+                balance -= amount
+                interest -= amount
+            }
+            else {
+                interest -= amount
+            }
+        }
+
+        if (balance < 0.00) {
+            change = -balance
+            balance = 0.00
+        }
+
+        return change
+    }
 }

@@ -251,4 +251,216 @@ class MemberTests {
 
         assert m1.getTotalDebt() == 110.00
     }
+
+    void testPayWithOverDebt() {
+        Policy.metaClass.static.findByKey = generateFindBy(Policy.VALUE_NON_COMPOUND)
+
+        def m1 = Member.get(1)
+        m1.balance = 100.00
+        m1.interest = 10.00
+        def change = m1.pay(200.00)
+
+        assert m1.balance == 0.00
+        assert m1.interest == 0.00
+        assert change == 90.00
+
+        Policy.metaClass.static.findByKey = generateFindBy(Policy.VALUE_COMPOUND)
+
+        m1.balance = 110.00
+        m1.interest = 10.00
+        change = m1.pay(200.00)
+
+        assert m1.balance == 0.00
+        assert m1.interest == 0.00
+        assert change == 90.00
+
+        /* Balance 200.00 */
+
+        Policy.metaClass.static.findByKey = generateFindBy(Policy.VALUE_NON_COMPOUND)
+
+        m1.balance = 200.00
+        m1.interest = 23.00
+        change = m1.pay(500.00)
+
+        assert m1.balance == 0.00
+        assert m1.interest == 0.00
+        assert change == 277.00
+
+        Policy.metaClass.static.findByKey = generateFindBy(Policy.VALUE_COMPOUND)
+
+        m1.balance = 223.00
+        m1.interest = 23.00
+        change = m1.pay(500.00)
+
+        assert m1.balance == 0.00
+        assert m1.interest == 0.00
+        assert change == 277.00
+    }
+
+
+    void testPayWithAllDebt() {
+        Policy.metaClass.static.findByKey = generateFindBy(Policy.VALUE_NON_COMPOUND)
+
+        def m1 = Member.get(1)
+        m1.balance = 100.00
+        m1.interest = 10.00
+        m1.pay(110.00)
+
+        assert m1.balance == 0.00
+        assert m1.interest == 0.00
+
+        Policy.metaClass.static.findByKey = generateFindBy(Policy.VALUE_COMPOUND)
+
+        m1.balance = 110.00
+        m1.interest = 10.00
+        m1.pay(110.00)
+
+        assert m1.balance == 0.00
+        assert m1.interest == 0.00
+
+        /* Balance 200.00 */
+
+        Policy.metaClass.static.findByKey = generateFindBy(Policy.VALUE_NON_COMPOUND)
+
+        m1.balance = 200.00
+        m1.interest = 23.00
+        m1.pay(223.00)
+
+        assert m1.balance == 0.00
+        assert m1.interest == 0.00
+
+        Policy.metaClass.static.findByKey = generateFindBy(Policy.VALUE_COMPOUND)
+
+        m1.balance = 223.00
+        m1.interest = 23.00
+        m1.pay(223.00)
+
+        assert m1.balance == 0.00
+        assert m1.interest == 0.00
+    }
+
+    void testPayWithPartialDebt() {
+        def m1 = Member.get(1)
+
+        Policy.metaClass.static.findByKey = generateFindBy(Policy.VALUE_NON_COMPOUND)
+
+        m1.balance = 100.00
+        m1.interest = 10.00
+        m1.pay(90.00)
+
+        assert m1.balance == 20.00
+        assert m1.interest == 0.00
+
+
+        Policy.metaClass.static.findByKey = generateFindBy(Policy.VALUE_COMPOUND)
+
+        m1.balance = 110.00
+        m1.interest = 10.00
+        m1.pay(90.00)
+
+        assert m1.balance == 20.00
+        assert m1.interest == 0.00
+
+        /* Balance 200.00 */
+
+        Policy.metaClass.static.findByKey = generateFindBy(Policy.VALUE_NON_COMPOUND)
+
+        m1.balance = 200.00
+        m1.interest = 23.00
+        m1.pay(123.00)
+
+        assert m1.balance == 100.00
+        assert m1.interest == 0.00
+
+        Policy.metaClass.static.findByKey = generateFindBy(Policy.VALUE_COMPOUND)
+
+        m1.balance = 223.00
+        m1.interest = 23.00
+        m1.pay(223.00)
+
+        assert m1.balance == 0.00
+        assert m1.interest == 0.00
+    }
+
+    void testPayWithFullInterest() {
+        def m1 = Member.get(1)
+
+        Policy.metaClass.static.findByKey = generateFindBy(Policy.VALUE_NON_COMPOUND)
+
+        m1.balance = 100.00
+        m1.interest = 10.00
+        m1.pay(10.00)
+
+        assert m1.balance == 100.00
+        assert m1.interest == 0.00
+
+        Policy.metaClass.static.findByKey = generateFindBy(Policy.VALUE_COMPOUND)
+        m1.balance = 110.00
+        m1.interest = 10.00
+        m1.pay(10.00)
+
+        assert m1.balance == 100.00
+        assert m1.interest == 0.00
+
+        /* Balance 200.00 */
+
+        Policy.metaClass.static.findByKey = generateFindBy(Policy.VALUE_NON_COMPOUND)
+
+        m1.balance = 200.00
+        m1.interest = 23.00
+        m1.pay(23.00)
+
+        assert m1.balance == 200.00
+        assert m1.interest == 0.00
+
+        Policy.metaClass.static.findByKey = generateFindBy(Policy.VALUE_COMPOUND)
+        m1.balance = 223.00
+        m1.interest = 23.00
+        m1.pay(23.00)
+
+        assert m1.balance == 200.00
+        assert m1.interest == 0.00
+
+    }
+
+    void testPayWithPartialInterest() {
+        def m1 = Member.get(1)
+
+        Policy.metaClass.static.findByKey = generateFindBy(Policy.VALUE_NON_COMPOUND)
+
+        m1.balance = 100.00
+        m1.interest = 10.00
+        m1.pay(3.00)
+
+        assert m1.balance == 100.00
+        assert m1.interest == 7.00
+
+        Policy.metaClass.static.findByKey = generateFindBy(Policy.VALUE_COMPOUND)
+        m1.balance = 110.00
+        m1.interest = 10.00
+        m1.pay(3.00)
+
+        assert m1.balance == 107.00
+        assert m1.interest == 7.00
+
+        /* Balance 200.00 */
+
+        Policy.metaClass.static.findByKey = generateFindBy(Policy.VALUE_NON_COMPOUND)
+
+        m1.balance = 200.00
+        m1.interest = 23.00
+        m1.pay(3.00)
+
+        assert m1.balance == 200.00
+        assert m1.interest == 20.00
+
+        Policy.metaClass.static.findByKey = generateFindBy(Policy.VALUE_COMPOUND)
+
+        m1.balance = 223.00
+        m1.interest = 23.00
+        m1.pay(3.00)
+
+        assert m1.balance == 220.00
+        assert m1.interest == 20.00
+    }
 }
