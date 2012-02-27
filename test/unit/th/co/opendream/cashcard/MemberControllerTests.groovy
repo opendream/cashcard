@@ -9,10 +9,10 @@ import org.junit.*
  * See the API for {@link grails.test.mixin.web.ControllerUnitTestMixin} for usage instructions
  */
 @TestFor(MemberController)
-@Mock(Member)
+@Mock([Member, UtilService])
 class MemberControllerTests {
 
-    def accountControl
+    def utilControl
 
     def generateFindBy(flag) {
         return {key ->
@@ -32,7 +32,7 @@ class MemberControllerTests {
             [id: 2, identificationNumber: "2222222222222", firstname: "Noomz", lastname: "Siriwat", telNo: "0811111111", gender: "MALE", address: "2222222"]
         ])
 
-        accountControl = mockFor(AccountService)
+        utilControl = mockFor(UtilService)
     }
 
     @After
@@ -127,7 +127,6 @@ class MemberControllerTests {
         params.id = 1
 
         controller.withdraw()
-        accountControl.verify()
 
         assert response.redirectedUrl == '/member/show/1'
     }
@@ -149,7 +148,6 @@ class MemberControllerTests {
 
         controller.withdraw()
 
-        accountControl.verify()
 
         assert flash.error != null
         assert view == '/member/withdraw'
@@ -163,9 +161,15 @@ class MemberControllerTests {
     }
 
     void testMemberPayment() {
+        Policy.metaClass.static.findByKey = generateFindBy(Policy.VALUE_COMPOUND)
+
+        utilControl.demand.moneyRoundUp(1..1) { amount -> 200.25 }
+        controller.utilService = utilControl.createMock()
+
         params.id = 1
         def model = controller.payment()
 
+        utilControl.verify()
         assert model.memberInstance != null
     }
 

@@ -4,7 +4,7 @@ import th.co.opendream.cashcard.Member
 import th.co.opendream.cashcard.AccountService
 
 class MemberController {
-    def accountService
+    def utilService
 
     def index() { }
 
@@ -80,7 +80,9 @@ class MemberController {
         def memberInstance = Member.get(params.id)
 
         if (memberInstance) {
-            [memberInstance: memberInstance]
+            //memberInstance.metaClass.getTotalDebt = { utilService.moneyRoundUp(memberInstance.getTotalDebt()) }
+
+            [memberInstance: memberInstance, totalDebt: utilService.moneyRoundUp(memberInstance.getTotalDebt())]
         }
         else {
             redirect(uri: '/error')

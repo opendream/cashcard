@@ -17,6 +17,12 @@
 	  <div class="container">
       <g:form action="pay" class="form-horizontal">
         <g:hiddenField name="id" value="${memberInstance?.id}" />
+        <div class="control-group">
+          <label class="control-label"><strong>Total Debt</strong></label>
+          <div class="offset2">
+            ${totalDebt}
+          </div>
+        </div>
     		<div class="control-group ${flash.error? 'error' : ''}">
           <label for="amount" class="control-label">Amount</label>
           <div class="controls">
