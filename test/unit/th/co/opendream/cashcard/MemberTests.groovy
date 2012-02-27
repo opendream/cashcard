@@ -212,7 +212,6 @@ class MemberTests {
 
         m1.withdraw(100.00)
 
-        m1.balance + 10.00
         m1.interest = 10.00
 
         assert m1.getRemainingFinancialAmount() == 1890.00
@@ -220,6 +219,15 @@ class MemberTests {
 
         m1.interest = 20.00
         assert m1.getRemainingFinancialAmount() == 1780.00
+    }
+
+    void testGetInterest() {
+        Policy.metaClass.static.findByKey = generateFindBy(Policy.VALUE_COMPOUND)
+        def m1 = Member.get(1)
+
+        m1.interest = 10.00
+
+        assert m1.getInterest() == 10.00
     }
 
 }

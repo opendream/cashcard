@@ -55,11 +55,27 @@
 				</div>
 
 				<div class="row">
+					<div class="control-label span2"><strong>Credit Line</strong></div>
+					<div class="offset2">
+						<g:formatNumber number="${memberInstance?.getRemainingFinancialAmount()}" type="currency" currencyCode="THB" />
+					</div>
+				</div>
+
+				<div class="row">
 					<div class="control-label span2"><strong>Balance</strong></div>
 					<div class="offset2">
 						<g:formatNumber number="${memberInstance?.balance}" type="currency" currencyCode="THB" />
 					</div>
 				</div>
+
+				<div class="row">
+					<div class="control-label span2"><strong>Interest</strong></div>
+					<div class="offset2">
+						<g:formatNumber number="${memberInstance?.getInterest()}" type="currency" currencyCode="THB" />
+					</div>
+				</div>
+
+
 
 			</div>
 		</body>

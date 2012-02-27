@@ -78,4 +78,8 @@ class Member {
             return false
         }
     }
+
+    BigDecimal getInterest() {
+        this.interest
+    }
 }
