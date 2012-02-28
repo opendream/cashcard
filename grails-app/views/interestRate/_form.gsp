@@ -15,6 +15,6 @@
 			<span class="required-indicator">*</span>
 		</label>
 		<div class="controls">
-			<g:field type="text" name="rate" pattern="\\d*(\\.\\d\\d)?" required="" value="${formatNumber (type:'number', number:interestRateInstance.rate, maxFractionDigits: '2', minFractionDigits : '2')}" />
+			<g:field type="text" name="rate" pattern="\\d*(\\.\\d\\d)?" required="" value="${formatNumber (type:'number', number:interestRateInstance.rate, maxFractionDigits: '2', minFractionDigits : '2', groupingUsed : false)}" />
 		</div>
 	</div>
