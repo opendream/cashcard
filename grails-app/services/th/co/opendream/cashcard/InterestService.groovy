@@ -47,8 +47,11 @@ class InterestService {
         def member = Member.get(accountId)
         member.interest += interest
 
+        if (Policy.isCompoundMethod()) {
+            member.balance += interest
+        }
         member.save()
-        member.interest
+        member
     }
 
 }

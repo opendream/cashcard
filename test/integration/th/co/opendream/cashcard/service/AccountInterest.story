@@ -1,6 +1,7 @@
 package th.co.opendream.cashcard.service
 
 import th.co.opendream.cashcard.Member
+import th.co.opendream.cashcard.Policy
 import java.text.SimpleDateFormat
 
 
@@ -19,6 +20,7 @@ before "load interest service", {
             gender: Member.Gender.MALE,
             address: '123 silom streest, bkk',
             telNo: '021234567',
+            balance: 100.00,
             interest: amount
         ).save()
     }
@@ -44,31 +46,45 @@ scenario "Calculate an interest", {
     }
 }
 
-scenario "Each account Interest balance should accumulate separately", {
+scenario "Each account Interest and balance should accumulate separately", {
     given "Current interest balance of account 'A' is equals 17.30", {
         prepareInterestBalance('1234567890123', 17.30)
+    }
+    and "account balance is 100.00"
+    and "interest compound method is used", {
+        Policy.metaClass.static.findByKey = { key -> [value: Policy.VALUE_COMPOUND] }
     }
 
     when "an interest value of 0.73 is calculated and added to account 'A'", {
         id = Member.findByIdentificationNumber('1234567890123').id
-        interest = interestService.update(id, 0.73)
+        member = interestService.update(id, 0.73)
     }
 
     then "a new accumulated interest of account 'A' should be 18.03", {
-        interest.shouldBe 18.03
+        member.interest.shouldBe 18.03
+    }
+    and "new balance should be 100.73", {
+        member.balance.shouldBe 100.73
     }
 
     given "account 'B' has no interest balance", {
         prepareInterestBalance('1234567890124', 0.00)
     }
-
+    and "account balance is 100.00"
+    and "interest compound method is used", {
+        Policy.metaClass.static.findByKey = { key -> [value: Policy.VALUE_NON_COMPOUND] }
+    }
+    
     when "an interest value of 0.15 is calculated and added to account 'B'", {
         id = Member.findByIdentificationNumber('1234567890124').id
-        interest = interestService.update(id, 0.15)
+        member = interestService.update(id, 0.15)
     }
 
     then "a new accumulated interest of account 'B' should be 0.15", {
-        interest.shouldBe 0.15
+        member.interest.shouldBe 0.15
+    }
+    and "new balance should be 100.00", {
+        member.balance.shouldBe 100.00
     }
 }
 
