@@ -6,6 +6,7 @@ class Policy {
 
     static String KEY_CREDIT_LINE = 'CreditLine'
     static String KEY_INTEREST_METHOD = 'InterestMethod'
+    static String KEY_INTEREST_RATE_LIMIT = 'InterestRateLimit'
     
     static String VALUE_COMPOUND = 'CompoundInterest'
     static String VALUE_NON_COMPOUND = 'NonCompoundInterest'
@@ -24,5 +25,9 @@ class Policy {
     
     static boolean isCompoundMethod() {
         valueOf(KEY_INTEREST_METHOD) == VALUE_COMPOUND
+    }
+    
+    static BigDecimal valueOfInterestRateLimit() {
+        new BigDecimal(valueOf(KEY_INTEREST_RATE_LIMIT))
     }
 }
