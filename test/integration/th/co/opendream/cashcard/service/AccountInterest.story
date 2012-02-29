@@ -36,11 +36,11 @@ scenario "Calculate an interest", {
     }
 
     when "request for an interest", {
-        interest = interestService.calculate(date, balance, rate)
+        tx = interestService.calculate(date, balance, rate, 18.00)
     }
 
     then "interest should be 0.10", {
-        interest.shouldBe 0.10
+        tx.interest.shouldBe 0.10
     }
 }
 
@@ -69,5 +69,93 @@ scenario "Each account Interest balance should accumulate separately", {
 
     then "a new accumulated interest of account 'B' should be 0.15", {
         interest.shouldBe 0.15
+    }
+}
+
+scenario "Calculate interest and fee with rate over max interest rate, not in a leap year", {
+    given "interest rate is 24.00", {
+        interestRate = 24.00
+    }
+    and "interest rate limit is 18.00", {
+        rateLimit = 18.00
+    }
+    when "account balance has 1234567.00", {
+        balance = 1234567.00
+    }
+    and "calculate interest and fee", {
+        interestTx = interestService.calculate(
+                        df.parse('2011-02-11'), balance, interestRate, rateLimit)
+    }
+    then "interest should be 608.83", {
+        interestTx.interest.shouldBe 608.83
+    }
+    and "fee should be 202.94", {
+        interestTx.fee.shouldBe 202.94
+    }
+}
+
+scenario "Calculate interest and fee with rate not exceed max interest rate, not in a leap year", {
+    given "interest rate is 24.00", {
+        interestRate = 17.00
+    }
+    and "interest rate limit is 18.00", {
+        rateLimit = 18.00
+    }
+    when "account balance has 1234567.00", {
+        balance = 1234567.00
+    }
+    and "calculate interest and fee", {
+        interestTx = interestService.calculate(
+                        df.parse('2011-02-11'), balance, interestRate, rateLimit)
+    }
+    then "interest should be 575.00", {
+        interestTx.interest.shouldBe 575.00
+    }
+    and "fee should be 0.00", {
+        interestTx.fee.shouldBe 0.00
+    }
+}
+
+scenario "Calculate interest and fee with rate over max interest rate, in a leap year", {
+    given "interest rate is 24.00", {
+        interestRate = 24.00
+    }
+    and "interest rate limit is 18.00", {
+        rateLimit = 18.00
+    }
+    when "account balance has 1234567.00", {
+        balance = 1234567.00
+    }
+    and "calculate interest and fee", {
+        interestTx = interestService.calculate(
+                        df.parse('2012-02-11'), balance, interestRate, rateLimit)
+    }
+    then "interest should be 607.16", {
+        interestTx.interest.shouldBe 607.16
+    }
+    and "fee should be 202.39", {
+        interestTx.fee.shouldBe 202.39
+    }
+}
+
+scenario "Calculate interest and fee with rate not exceed max interest rate, in a leap year", {
+    given "interest rate is 24.00", {
+        interestRate = 17.00
+    }
+    and "interest rate limit is 18.00", {
+        rateLimit = 18.00
+    }
+    when "account balance has 1234567.00", {
+        balance = 1234567.00
+    }
+    and "calculate interest and fee", {
+        interestTx = interestService.calculate(
+                        df.parse('2012-02-11'), balance, interestRate, rateLimit)
+    }
+    then "interest should be 573.43", {
+        interestTx.interest.shouldBe 573.43
+    }
+    and "fee should be 0.00", {
+        interestTx.fee.shouldBe 0.00
     }
 }
