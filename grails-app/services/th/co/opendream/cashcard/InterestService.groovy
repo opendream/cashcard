@@ -40,9 +40,6 @@ class InterestService {
         
         interest -= fee
         
-            println interest
-            println fee
-            
         new InterestTransaction(interest: interest, fee: fee)
     }
 
