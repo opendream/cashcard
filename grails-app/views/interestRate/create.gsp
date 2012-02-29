@@ -30,6 +30,7 @@
 					<g:render template="form"/>
 						<div class="form-actions">
 							<button class="btn btn-primary" type="submit"><i class="icon-ok icon-white"></i> ${message(code: 'default.button.create.label', default: 'Create')}</button>
+							<g:link action="list">Cancel</g:link>
 						</div>
 				</g:form>
 			</div>

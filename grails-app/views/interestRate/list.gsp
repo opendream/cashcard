@@ -43,7 +43,7 @@
                         <td class="date"><g:formatDate format="yyyy-MM-dd HH:mm" date="${interestRateInstance.dateCreated}" /></td>
                         <td class="date"><g:formatDate format="yyyy-MM-dd HH:mm" date="${interestRateInstance.lastUpdated}" /></td>
                         <td class="action">
-                            <g:link action="edit" id="${interestRateInstance.id}">Edit</g:link>
+                            <g:link action="edit" id="${interestRateInstance.id}">${message(code: 'default.button.edit.label', default: 'Edit')}</g:link>
                         </td>
                         <td class="action">
                             <g:form method="post" action="delete">

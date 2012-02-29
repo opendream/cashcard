@@ -32,6 +32,7 @@
 
         <div class="form-actions">
           <button class="btn btn-primary" type="submit"><i class="icon-ok icon-white"></i> Pay</button>
+          <g:link action="show" id="${memberInstance?.id}">Cancel</g:link>
         </div>
   	  </g:form>
 	  </div>
