@@ -34,8 +34,26 @@ class MemberController {
     }
 
     def list() {
-        def memberList = Member.list()
-        render (view: 'list', model:[memberList: memberList])
+        params.offset = params.offset ? params.int('offset') : 0
+        params.max = params.max ? params.int('max') : 10
+
+        def c = Member.createCriteria()
+        def memberList = c.list(offset: params.offset, max: params.max) {
+            if (params.identificationNumber) {
+                eq('identificationNumber', params.identificationNumber)
+            }
+            if (params.firstname) {
+                ilike('firstname', '%' + params.firstname + '%')
+            }
+            if (params.lastname) {
+                ilike('lastname', '%' + params.lastname + '%')
+            }
+            if (params.telNo) {
+                ilike('telNo' , '%' + params.telNo + '%')
+            }
+        }
+
+        render (view: 'list', model:[memberList: memberList, memberCount: memberList.totalCount])
     }
 
     def verifyCard(String cardId) {

@@ -69,7 +69,7 @@ class MemberControllerTests {
 
     void testListMember() {
         controller.list()
-        assert Member.list().size() == model.memberList.size()
+        assert Member.list().size() == model.memberList?.size()
         assert view == '/member/list'
     }
 
@@ -151,7 +151,6 @@ class MemberControllerTests {
 
         assert flash.error != null
         assert view == '/member/withdraw'
-
     }
 
     void testMemberPaymentEmptyId() {
@@ -196,7 +195,6 @@ class MemberControllerTests {
         assert counter == 1
         assert flash.message != null
         assert response.redirectedUrl == '/member/show/1'
-
     }
 
     void testMemberInvalidPay() {
@@ -207,4 +205,91 @@ class MemberControllerTests {
         assert response.redirectedUrl == '/member/payment/1'
     }
 
+    void testMemberSearchByIdCard() {
+        params.identificationNumber = '1111111111111'
+        controller.list()
+
+        assert model.memberList.size() == 1
+        assert view == '/member/list'
+        response.reset()
+
+        params.identificationNumber = '2222222222222'
+        controller.list()
+
+        assert model.memberList.size() == 1
+        assert view == '/member/list'
+        response.reset()
+    }
+
+    void testMemberSearchByFirstname() {
+        params.firstname = 'Nat'
+        controller.list()
+
+        assert model.memberList.size() == 1
+        assert view == '/member/list'
+        response.reset()
+
+        params.firstname = 'nat'
+        controller.list()
+
+        assert model.memberList.size() == 1
+        assert view == '/member/list'
+        response.reset()
+
+        params.firstname = 'n'
+        controller.list()
+
+        assert model.memberList.size() == 2
+        assert view == '/member/list'
+    }
+
+    void testMemberSearchByLastname() {
+        params.lastname = 'Weerawan'
+        controller.list()
+
+        assert model.memberList.size() == 1
+        assert view == '/member/list'
+        response.reset()
+
+        params.lastname = 'Weerawan'
+        controller.list()
+
+        assert model.memberList.size() == 1
+        assert view == '/member/list'
+        response.reset()
+
+        params.lastname = 'w'
+        controller.list()
+
+        assert model.memberList.size() == 2
+        assert view == '/member/list'
+    }
+
+    void testMemberSearchByTelephone() {
+        params.telNo = '0891278552'
+        controller.list()
+
+        assert model.memberList.size() == 1
+        assert view == '/member/list'
+        response.reset()
+
+        params.telNo = '08'
+        controller.list()
+
+        assert model.memberList.size() == 2
+        assert view == '/member/list'
+    }
+
+    void testMemberSearchCompound() {
+        params.identificationNumber = '1111111111111'
+        params.firstname = 'Nat'
+        params.lastname = 'Weerawan'
+        params.telNo = '0891278552'
+
+        controller.list()
+
+        assert model.memberList.size() == 1
+        assert model.memberCount == 1
+        assert view == '/member/list'
+    }
 }
