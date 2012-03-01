@@ -67,11 +67,15 @@
         border: 0;
       }
 
+      table.table .string {
+        text-align: left;
+      }
+
       table.table .number {
         text-align: right;
       }
 
-      table.table .date, table.table .action {
+      table.table .date, table.table .action, table.table .id {
         text-align: center;
       }
 
@@ -163,6 +167,12 @@
 							</ul>
             </li>
             <li><a href="${createLink(controller:'interestRate', action:'list')}">Interest Rate</a></li>
+            <li class="dropdown">
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown">Report<b class="caret"></b></a>
+              <ul class="dropdown-menu">
+                <li><a href="${createLink(controller:'report', action:'dailyInterest')}">Daily Interest</a></li>
+              </ul>
+            </li>
           </ul>
         </div>
       </div>
