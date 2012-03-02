@@ -34,8 +34,26 @@ class MemberController {
     }
 
     def list() {
-        def memberList = Member.list()
-        render (view: 'list', model:[memberList: memberList])
+        params.offset = params.offset ? params.int('offset') : 0
+        params.max = params.max ? params.int('max') : 10
+
+        def c = Member.createCriteria()
+        def memberList = c.list(offset: params.offset, max: params.max) {
+            if (params.identificationNumber) {
+                eq('identificationNumber', params.identificationNumber)
+            }
+            if (params.firstname) {
+                ilike('firstname', '%' + params.firstname + '%')
+            }
+            if (params.lastname) {
+                ilike('lastname', '%' + params.lastname + '%')
+            }
+            if (params.telNo) {
+                ilike('telNo' , '%' + params.telNo + '%')
+            }
+        }
+
+        render (view: 'list', model:[memberList: memberList, memberCount: memberList.totalCount])
     }
 
     def verifyCard(String cardId) {
@@ -104,6 +122,24 @@ class MemberController {
         else if (!params.amount) {
             flash.message = "Invalid amount."
             redirect(action: "payment", id: memberInstance.id)
+        }
+        else {
+            redirect(uri: '/error')
+        }
+    }
+
+    def transaction() {
+        def memberInstance = Member.get(params.id)
+
+        if (memberInstance) {
+            def c = BalanceTransaction.createCriteria()
+            def transactionList = c.list {
+                member {
+                    eq('id', memberInstance.id)
+                }
+            }
+
+            render(view: 'transaction', model:[transactionList: transactionList])
         }
         else {
             redirect(uri: '/error')
