@@ -325,6 +325,8 @@ class MemberControllerTests {
         controller.transaction()
 
         assert model.transactionList.size() == 3
+        assert model.transactionCount == 3
+        assertNotNull model.memberInstance
         assert view == '/member/transaction'
     }
 }

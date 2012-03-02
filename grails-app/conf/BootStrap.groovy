@@ -1,8 +1,10 @@
 import th.co.opendream.cashcard.Member
 import th.co.opendream.cashcard.Policy
 import th.co.opendream.cashcard.InterestTransaction
+import th.co.opendream.cashcard.BalanceTransaction
 import th.co.opendream.cashcard.Transaction
 import th.co.opendream.cashcard.TransactionType
+import th.co.opendream.cashcard.ActivityType
 import groovy.time.*
 import static java.util.Calendar.*
 
@@ -28,7 +30,16 @@ class BootStrap {
         new InterestTransaction([id: 2, member: m2, amount: 21.00, txType: TransactionType.CREDIT, date: today, fee: 0.00, interest: 21.00]).save()
         new InterestTransaction([id: 3, member: m1, amount: 13.00, txType: TransactionType.CREDIT, date: today.plus(1), fee: 0.00, interest: 13.00]).save()
         new InterestTransaction([id: 4, member: m2, amount: 24.00, txType: TransactionType.CREDIT, date: today.plus(1), fee: 0.00, interest: 24.00]).save()
+        
+        new BalanceTransaction([id: 1, member: m1, amount: 500.00, txType: TransactionType.CREDIT, activity: ActivityType.WITHDRAW, date: today, net: 500.00, remainder: 0.00]).save()
+        new BalanceTransaction([id: 2, member: m2, amount: 700.00, txType: TransactionType.CREDIT, activity: ActivityType.WITHDRAW, date: today, net: 700.00, remainder: 0.00]).save()
+        new BalanceTransaction([id: 3, member: m1, amount: 200.00, txType: TransactionType.CREDIT, activity: ActivityType.WITHDRAW, date: today.plus(1), net: 200.00, remainder: 0.00]).save()
+        new BalanceTransaction([id: 4, member: m2, amount: 300.00, txType: TransactionType.DEBIT, activity: ActivityType.PAYMENT, date: today.plus(1), net: 300.00, remainder: 0.00]).save()
+        new BalanceTransaction([id: 5, member: m1, amount: 707.50, txType: TransactionType.DEBIT, activity: ActivityType.PAYMENT, date: today.plus(2), net: 707.32, remainder: 0.18]).save()
+        new BalanceTransaction([id: 6, member: m2, amount: 405.25, txType: TransactionType.DEBIT, activity: ActivityType.PAYMENT, date: today.plus(2), net: 405.08, remainder: 0.17]).save()
+    
     }
+
     def destroy = {
     }
 }

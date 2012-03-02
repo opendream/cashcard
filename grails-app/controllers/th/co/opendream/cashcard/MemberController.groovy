@@ -132,14 +132,17 @@ class MemberController {
         def memberInstance = Member.get(params.id)
 
         if (memberInstance) {
+            params.offset = params.offset ? params.int('offset') : 0
+            params.max = params.max ? params.int('max') : 10
+
             def c = BalanceTransaction.createCriteria()
-            def transactionList = c.list {
+            def transactionList = c.list(offset: params.offset, max: params.max) {
                 member {
                     eq('id', memberInstance.id)
                 }
             }
 
-            render(view: 'transaction', model:[transactionList: transactionList])
+            render(view: 'transaction', model:[transactionList: transactionList, memberInstance: memberInstance, transactionCount: transactionList.totalCount])
         }
         else {
             redirect(uri: '/error')
@@ -147,3 +150,4 @@ class MemberController {
     }
 
 }
+        
