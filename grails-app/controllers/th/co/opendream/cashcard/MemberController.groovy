@@ -128,4 +128,22 @@ class MemberController {
         }
     }
 
+    def transaction() {
+        def memberInstance = Member.get(params.id)
+
+        if (memberInstance) {
+            def c = BalanceTransaction.createCriteria()
+            def transactionList = c.list {
+                member {
+                    eq('id', memberInstance.id)
+                }
+            }
+
+            render(view: 'transaction', model:[transactionList: transactionList])
+        }
+        else {
+            redirect(uri: '/error')
+        }
+    }
+
 }
