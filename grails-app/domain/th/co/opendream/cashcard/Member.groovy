@@ -12,7 +12,10 @@ class Member {
     Date dateCreated
     Date lastUpdated
 
+    static hasMany = [balanceTransactions: BalanceTransaction]
+
     def transactionService
+    def utilService
 
     public enum Gender {
       MALE,
@@ -56,7 +59,17 @@ class Member {
     }
 
     void withdraw(amount) {
-        transactionService.withdraw(this, amount)
+        amount = amount as BigDecimal
+        if (amount <= 0) {
+           throw new RuntimeException(message: "Withdraw amount is less than or equal 0 : ${amount}")
+        }
+
+        if (this.canWithdraw(amount)) {
+            this.balance += amount
+            if (transactionService.withdraw(this, amount)) {
+                this.save()
+            }
+        }
     }
 
     Boolean canWithdraw(amount) {
@@ -89,32 +102,38 @@ class Member {
         }
     }
 
-    BigDecimal pay(amount) {
-        amount = amount as BigDecimal
+    BigDecimal pay(net) {
+        net = net as BigDecimal
+        def amount = utilService.moneyRoundUp(net)
+
         def change = 0.00
-        if (amount >= interest) {
+        if (net >= interest) {
             if (Policy.isCompoundMethod()) {
-                balance -= amount
+                balance -= net
                 interest = 0.00
             }
             else {
-                balance -= amount - interest
+                balance -= net - interest
                 interest = 0.00
             }
         }
-        else if (amount < interest) {
+        else if (net < interest) {
             if (Policy.isCompoundMethod()) {
-                balance -= amount
-                interest -= amount
+                balance -= net
+                interest -= net
             }
             else {
-                interest -= amount
+                interest -= net
             }
         }
 
         if (balance < 0.00) {
             change = -balance
             balance = 0.00
+        }
+
+        if (transactionService.pay(this, amount, net)) {
+            this.save()
         }
 
         return change
