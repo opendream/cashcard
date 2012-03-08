@@ -327,4 +327,15 @@ class MemberControllerTests {
         assert model.transactionList.size() == 3
         assert view == '/member/transaction'
     }
+
+    void testMemberTransactionListSortByDate() {
+        params.id = 1
+        controller.transaction()
+
+        def tx1 = model.transactionList[0]
+        def tx2 = model.transactionList[1]
+        def tx3 = model.transactionList[2]
+
+        assert tx3.date <= tx2.date && tx2.date <= tx1.date
+    }
 }

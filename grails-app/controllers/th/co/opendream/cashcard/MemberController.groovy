@@ -134,7 +134,7 @@ class MemberController {
 
         if (memberInstance) {
             def c = BalanceTransaction.createCriteria()
-            def transactionList = c.list {
+            def transactionList = c.list(sort: 'date', order: 'desc') {
                 member {
                     eq('id', memberInstance.id)
                 }
