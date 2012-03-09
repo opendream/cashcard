@@ -16,6 +16,22 @@
             </header>
         </div>
 
+        <div class="control-group">
+            <form action="${createLink (action:'dailyInterest')}">
+            <div class="container">
+                <label for="startDate" class="control-label">
+                ระหว่างวันที่
+                </label>
+                <g:datePicker name="startDate" precision="day"  value="${startDate}"  />
+                <label for="endDate" class="control-label">
+                ถึงวันที่
+                </label>
+                <g:datePicker name="endDate" precision="day"  value="${endDate}"  />
+                <button class="btn btn-primary" type="submit"><i class="icon-ok icon-white"></i>ค้นหา</button>
+            </div>
+            </form>
+        </div>
+
         <div id="list-interestRate" class="content scaffold-list" role="main">
             <g:if test="${flash.message}">
                 <div class="message alert alert-success" role="status">${flash.message} <a class="close" data-dismiss="alert">×</a></div>
