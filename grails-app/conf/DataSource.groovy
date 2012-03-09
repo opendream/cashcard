@@ -13,8 +13,12 @@ hibernate {
 environments {
     development {
         dataSource {
-            dbCreate = "create-drop" // one of 'create', 'create-drop', 'update', 'validate', ''
-            url = "jdbc:h2:mem:devDb;MVCC=TRUE"
+            driverClassName = "org.postgresql.Driver"
+            dialect = net.sf.hibernate.dialect.PostgreSQLDialect
+            dbCreate = "create-drop" 
+            url="jdbc:postgresql://localhost:5432/cashcard_development"
+            username = "postgres"
+            password = "postgres"
         }
     }
     test {

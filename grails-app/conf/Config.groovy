@@ -90,4 +90,9 @@ log4j = {
            'org.springframework',
            'org.hibernate',
            'net.sf.ehcache.hibernate'
+
 }
+
+grails.plugins.springsecurity.userLookup.userDomainClassName='th.co.opendream.cashcard.Users'
+grails.plugins.springsecurity.userLookup.authorityJoinClassName='th.co.opendream.cashcard.UsersRole'
+grails.plugins.springsecurity.authority.className='th.co.opendream.cashcard.Role'

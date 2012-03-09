@@ -12,6 +12,8 @@ class Member {
     Date dateCreated
     Date lastUpdated
 
+    Company company
+
     public enum Gender {
       MALE,
       FEMALE
