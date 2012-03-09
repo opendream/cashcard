@@ -34,6 +34,7 @@ class Member {
         telNo(nullable:true, matches: /\d{9,11}/)
         balance(blank: true, nullable: true)
         interest(blank: true, nullable: true)
+        company(nullable:true)
     }
 
     static mapping = {

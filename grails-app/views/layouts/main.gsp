@@ -1,4 +1,5 @@
 <!doctype html>
+
 <r:require modules="bootstrap"/>
 <!--[if lt IE 7 ]> <html lang="en" class="no-js ie6"> <![endif]-->
 <!--[if IE 7 ]>    <html lang="en" class="no-js ie7"> <![endif]-->
@@ -173,6 +174,7 @@
                 <li><a href="${createLink(controller:'report', action:'dailyInterest')}">Daily Interest</a></li>
               </ul>
             </li>
+            <li class="brand"><com:name/></li>
           </ul>
         </div>
       </div>

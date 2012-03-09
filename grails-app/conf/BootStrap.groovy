@@ -1,5 +1,9 @@
+import th.co.opendream.cashcard.Company
 import th.co.opendream.cashcard.Member
 import th.co.opendream.cashcard.Policy
+import th.co.opendream.cashcard.Role
+import th.co.opendream.cashcard.Users
+import th.co.opendream.cashcard.UsersRole
 import th.co.opendream.cashcard.InterestTransaction
 import th.co.opendream.cashcard.BalanceTransaction
 import th.co.opendream.cashcard.Transaction
@@ -13,11 +17,22 @@ import static java.util.Calendar.*
 class BootStrap {
 
     def init = { servletContext ->
+        def opendream = new Company(name:'opendream', address:'bkk', taxId:'1-2-3-4')
+        def user = new Users(username:'admin', password:'openpubyesroti!', 
+                            firstname:'admin', lastname:'messenger',
+                            email:'admin@messenger.opendream.org', enabled:true)
+        opendream.addToUsers(user)
+        opendream.save(failOnError: true)
+        def role = new Role(authority:'ROLE_ADMIN').save(failOnError: true)
+        new UsersRole(user:user, role:role).save(failOnError: true)
+
     	def m1 = new Member(identificationNumber:"1159900100015", firstname:"Nat", lastname: "Weerawan", telNo: "111111111", gender: "MALE", address: "Opendream")
     	def m2 = new Member(identificationNumber: "1234567891234", firstname: "Noomz", lastname: "Siriwat", telNo: "111111111", gender: "MALE", address: "Opendream2")
 
     	m1.save()
     	m2.save()
+
+
 
     	new Policy(key: Policy.KEY_CREDIT_LINE, value: 2000).save()
     	new Policy(key: Policy.KEY_INTEREST_METHOD, value: Policy.VALUE_NON_COMPOUND).save()

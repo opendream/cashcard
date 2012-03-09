@@ -10,7 +10,7 @@ class CompanyUserDetails extends GrailsUser {
     final String companyName
     final Long companyId
 
-    MyUserDetails(String username, 
+    CompanyUserDetails(String username, 
         String password, 
         boolean enabled, 
         boolean accountNonExpired, 

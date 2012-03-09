@@ -2,47 +2,42 @@ package th.co.opendream.cashcard
 
 class Users {
 
-    transient springSecurityService
+	transient springSecurityService
 
-    String username
-    String password
-   
-    String firstname
-    String lastname
-    String email
-   
-    boolean enabled
-    boolean accountExpired
-    boolean accountLocked
-    boolean passwordExpired
-   
-    static transients = ['authoritiesString']
+	String username
+	String password
+	boolean enabled
+	boolean accountExpired
+	boolean accountLocked
+	boolean passwordExpired
 
-    static constraints = {
-        username blank: false, unique: true
-        password blank: false
-    }
+	Company company
 
-    static mapping = {
-        password column: '`password`'
-    }
+	static constraints = {
+		username blank: false, unique: true
+		password blank: false
+		company nullable: true
+	}
 
-    Set<Role> getAuthorities() {
-        UserRole.findAllByUser(this).collect { it.role } as Set
-    }
-   
-    def beforeInsert() {
-        encodePassword()
-    }
+	static mapping = {
+		password column: '`password`'
+	}
 
-    def beforeUpdate() {
-        if (isDirty('password')) {
-            encodePassword()
-        }
-    }
+	Set<Role> getAuthorities() {
+		UsersRole.findAllByUser(this).collect { it.role } as Set
+	}
 
-    protected void encodePassword() {
-        password = springSecurityService.encodePassword(password)
-    }
+	def beforeInsert() {
+		encodePassword()
+	}
 
+	def beforeUpdate() {
+		if (isDirty('password')) {
+			encodePassword()
+		}
+	}
+
+	protected void encodePassword() {
+		password = springSecurityService.encodePassword(password)
+	}
 }

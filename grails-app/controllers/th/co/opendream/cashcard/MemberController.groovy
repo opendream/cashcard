@@ -5,7 +5,7 @@ import th.co.opendream.cashcard.AccountService
 
 class MemberController {
     def utilService
-
+    
     def index() { }
 
     def create() {
@@ -33,7 +33,7 @@ class MemberController {
         }
     }
 
-    def list() {
+    def list() {        
         params.offset = params.offset ? params.int('offset') : 0
         params.max = params.max ? params.int('max') : 10
 
