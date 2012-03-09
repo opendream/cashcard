@@ -22,9 +22,13 @@ class ReportController {
             endDate.set(hourOfDay: 23, minute: 59, second: 59)
 
         }
-        def results = InterestTransaction.findAllByDateBetween(
-            startDate,
-            endDate)
+        def results = InterestTransaction.createCriteria().list {
+            between('date', startDate, endDate)
+            member {
+                order('firstname')
+                order('lastname')
+            }
+        }
 
         [
             interestList: results,
