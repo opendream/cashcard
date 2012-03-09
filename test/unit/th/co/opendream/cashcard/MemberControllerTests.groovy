@@ -51,6 +51,11 @@ class MemberControllerTests {
         ])
 
         utilControl = mockFor(UtilService)
+
+        m1.transactionService = [
+            'withdraw': { obj, amount ->
+            }
+        ]
     }
 
     @After

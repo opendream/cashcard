@@ -36,7 +36,7 @@ class TransactionServiceTests {
         def tx = service.withdraw(m1, 100.00)
 
         assert tx.class == BalanceTransaction
-        assert m1.balance == 0.00
+        assert m1.balance == 100.00
         assert BalanceTransaction.count() == 1
 
         tx = BalanceTransaction.get(1)
@@ -44,6 +44,15 @@ class TransactionServiceTests {
         assert tx.net == 100.00
         assert tx.remainder == 0.00
         assert tx.activity == ActivityType.WITHDRAW
+
+    }
+
+    void testInvalidWithdraw() {
+        def m1 = Member.get(1)
+        Policy.metaClass.static.findByKey = generateFindBy(Policy.VALUE_NON_COMPOUND)
+        shouldFail(RuntimeException) {
+            def tx = service.withdraw(m1, 3000.00)
+        }
 
     }
 

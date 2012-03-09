@@ -187,23 +187,6 @@ class MemberTests {
         }
     }
 
-    void testWithdrawWithString() {
-        Policy.metaClass.static.findByKey = generateFindBy(Policy.VALUE_NON_COMPOUND)
-        def count = 0
-        BalanceTransaction.metaClass.save = { -> ++count }
-
-        def m1 = Member.get(1)
-        m1.transactionService = transactionService
-
-        m1.withdraw("100.00")
-        assert m1.getBalance() == 100.00
-        assert count == 1
-
-        m1.withdraw("200.00")
-        assert m1.getBalance() == 300.00
-        assert count == 2
-    }
-
     void testWithdrawWithZeroAmount() {
         shouldFail(RuntimeException) {
             Member.get(1).withdraw(0)
@@ -219,7 +202,9 @@ class MemberTests {
         def m1 = Member.get(1)
         m1.transactionService = transactionService
 
-        m1.withdraw(3000.00)
+        shouldFail(RuntimeException) {
+                m1.withdraw(3000.00)
+        }
         assert Member.get(1).getBalance() == 0.00
         assert count == 0
     }

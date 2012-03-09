@@ -58,18 +58,8 @@ class Member {
         }
     }
 
-    void withdraw(amount) {
-        amount = amount as BigDecimal
-        if (amount <= 0) {
-           throw new RuntimeException(message: "Withdraw amount is less than or equal 0 : ${amount}")
-        }
-
-        if (this.canWithdraw(amount)) {
-            this.balance += amount
-            if (transactionService.withdraw(this, amount)) {
-                this.save()
-            }
-        }
+    void withdraw(BigDecimal amount) {
+        transactionService.withdraw(this, amount)
     }
 
     Boolean canWithdraw(amount) {
@@ -101,41 +91,8 @@ class Member {
             balance + interest
         }
     }
-
-    BigDecimal pay(net) {
-        net = net as BigDecimal
-        def amount = utilService.moneyRoundUp(net)
-
-        def change = 0.00
-        if (net >= interest) {
-            if (Policy.isCompoundMethod()) {
-                balance -= net
-                interest = 0.00
-            }
-            else {
-                balance -= net - interest
-                interest = 0.00
-            }
-        }
-        else if (net < interest) {
-            if (Policy.isCompoundMethod()) {
-                balance -= net
-                interest -= net
-            }
-            else {
-                interest -= net
-            }
-        }
-
-        if (balance < 0.00) {
-            change = -balance
-            balance = 0.00
-        }
-
-        if (transactionService.pay(this, amount, net)) {
-            this.save()
-        }
-
-        return change
+    // amount = ยอดเงินที่ชำระจริง
+    BigDecimal pay(BigDecimal amount) {
+        transactionService.pay(this, amount)
     }
 }
