@@ -4,6 +4,8 @@ import grails.test.mixin.*
 import org.junit.*
 import groovy.time.*
 import static java.util.Calendar.*
+import org.codehaus.groovy.runtime.TimeCategory
+
 /**
  * See the API for {@link grails.test.mixin.web.ControllerUnitTestMixin} for usage instructions
  */
@@ -25,61 +27,16 @@ class ReportControllerTests {
     }
 
     void testDailyInterest() {
-        def m1 = Member.get(1)
-        m1.balance = 100.00
-        m1.interest = 10.00
-        m1.save()
-        def m2 = Member.get(2)
-        m2.balance = 200.00
-        m2.interest = 21.00
-        m2.save()
-
-        mockDomain(InterestTransaction, [
-            [id: 1, member: m1, amount: 10.00, txType: TransactionType.CREDIT, date: today, fee: 0.00, interest: 10.00],
-            [id: 2, member: m2, amount: 21.00, txType: TransactionType.CREDIT, date: today, fee: 0.00, interest: 21.00],
-            [id: 3, member: m1, amount: 13.00, txType: TransactionType.CREDIT, date: today.plus(1), fee: 0.00, interest: 13.00],
-            [id: 4, member: m2, amount: 24.00, txType: TransactionType.CREDIT, date: today.plus(1), fee: 0.00, interest: 24.00],
-        ])
-        ///////assert InterestTransaction.get(1).date == 2
-        def interestList
-
         Calendar.metaClass.static.getInstance = {
             today.toCalendar()
         }
 
-        interestList = controller.dailyInterest().interestList
-        assert interestList != null
+        def model = controller.dailyInterest()
+        today.set(hourOfDay: 0, minute: 0, second: 0)
+        assert model.startDate == today
 
-        def row1 = interestList.find {
-            it.id == 1
+        use(TimeCategory) {
+            assert model.endDate == (today + 24.hours - 1.seconds)
         }
-        assertNotNull row1
-        assert row1.member.id == 1
-
-        def row2 = interestList.find {
-            it.id == 2
-        }
-        assertNotNull row2
-        assert row2.member.id == 2
-
-        response.reset()
-
-        Calendar.metaClass.static.getInstance = {
-            today.plus(1).toCalendar()
-        }
-        interestList = controller.dailyInterest().interestList
-        assertNotNull interestList
-
-        row1 = interestList.find {
-            it.id == 3
-        }
-        assertNotNull row1
-        assert row1.member.id == 1
-
-        row2 = interestList.find {
-            it.id == 4
-        }
-        assertNotNull row2
-        assert row2.member.id == 2
     }
 }

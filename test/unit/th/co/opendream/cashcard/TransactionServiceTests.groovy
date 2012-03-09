@@ -58,33 +58,39 @@ class TransactionServiceTests {
 
     void testValidPay() {
         def m1 = Member.get(1)
+        m1.balance = 100
+        m1.interest = 20
         Policy.metaClass.static.findByKey = generateFindBy(Policy.VALUE_NON_COMPOUND)
-        def tx = service.pay(m1, 100.00, 100.00)
+        def tx = service.pay(m1, 120.00)
 
         assert tx.class == BalanceTransaction
         assert m1.balance == 0.00
+        assert m1.interest == 0.00
         assert BalanceTransaction.count() == 1
 
         tx = BalanceTransaction.get(1)
-        assert tx.amount == 100.00
-        assert tx.net == 100.00
+        assert tx.amount == 120.00
+        assert tx.net == 120.00
         assert tx.remainder == 0.00
         assert tx.activity == ActivityType.PAYMENT
     }
 
     void testValidPayWithRemainder() {
         def m1 = Member.get(1)
+        m1.balance = 100
+        m1.interest = 20.12
         Policy.metaClass.static.findByKey = generateFindBy(Policy.VALUE_NON_COMPOUND)
-        def tx = service.pay(m1, 100.50, 100.34)
+        def tx = service.pay(m1, 120.25)
 
         assert tx.class == BalanceTransaction
         assert m1.balance == 0.00
+        assert m1.interest == 0.00
         assert BalanceTransaction.count() == 1
 
         tx = BalanceTransaction.get(1)
-        assert tx.amount == 100.50
-        assert tx.net == 100.34
-        assert tx.remainder == 0.16
+        assert tx.amount == 120.25
+        assert tx.net == 120.12
+        assert tx.remainder == 0.13
     }
 
     void testInvalidPay() {

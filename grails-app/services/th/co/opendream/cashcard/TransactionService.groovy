@@ -50,7 +50,7 @@ class TransactionService {
             }
             member.interest = 0.00
         } else {
-            if (Policy.isCompoundMethod) {
+            if (Policy.isCompoundMethod()) {
                 // do nothing
                 member.interest -= outstanding
             } else {
@@ -64,7 +64,6 @@ class TransactionService {
         } else {
             member.balance -= outstanding
             outstanding = 0.00
-
         }
 
         def net = amount - outstanding
@@ -87,5 +86,7 @@ class TransactionService {
                throw new RuntimeException("Fail to save member record")
             }
         }
+
+        balance
     }
 }

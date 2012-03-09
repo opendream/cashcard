@@ -47,15 +47,12 @@ class Member {
         this.balance
     }
 
+    /**
+     * วงเงินที่ยังยืมได้
+     */
     BigDecimal getRemainingFinancialAmount() {
-        def balance = this.balance
         def limit = Policy.valueOfCreditLine()
-
-        if (Policy.isCompoundMethod()) {
-            return limit - balance
-        } else {
-            return limit - balance - this.interest
-        }
+        return limit - getTotalDebt()
     }
 
     void withdraw(BigDecimal amount) {
@@ -63,26 +60,12 @@ class Member {
     }
 
     Boolean canWithdraw(amount) {
-        def limit = Policy.valueOfCreditLine()
-        amount = amount as BigDecimal
-        if (limit < amount + this.balance) {
-            return false
-        }
-        else if (amount <= 0) {
-            return false
-        }
-        else if (limit >= amount + this.balance) {
-            return true
-        }
-        else {
-            return false
-        }
+        return amount <= getRemainingFinancialAmount() && amount > 0.00
     }
 
-    BigDecimal getInterest() {
-        this.interest
-    }
-
+    /**
+     * หนี้คงค้างสุทธิ
+     */
     BigDecimal getTotalDebt() {
         if (Policy.isCompoundMethod()) {
             balance
@@ -92,7 +75,7 @@ class Member {
         }
     }
     // amount = ยอดเงินที่ชำระจริง
-    BigDecimal pay(BigDecimal amount) {
+    def pay(BigDecimal amount) {
         transactionService.pay(this, amount)
     }
 }

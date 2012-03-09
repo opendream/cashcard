@@ -29,7 +29,6 @@ class ReportController {
                 order('lastname')
             }
         }
-
         [
             interestList: results,
             startDate: startDate,

@@ -290,58 +290,60 @@ class MemberTests {
         assert m1.getTotalDebt() == 110.00
     }
 
-    void testPayWithOverDebt() {
+    void testPayWithRoundup() {
+        // policy return NON_COMPOUND
         Policy.metaClass.static.findByKey = generateFindBy(Policy.VALUE_NON_COMPOUND)
 
+        // นับจำนวนว่าเกิด balance transaction กี่รายการ
         def count = 0
-        BalanceTransaction.metaClass.save = { -> ++count }
+        BalanceTransaction.metaClass.save = { -> ++count}
 
         def m1 = Member.get(1)
         m1.transactionService = transactionService
         m1.utilService = utilService
 
         m1.balance = 100.00
-        m1.interest = 10.00
-        def change = m1.pay(200.00)
+        m1.interest = 10.13
+        def bal = m1.pay(110.25)
 
         assert m1.balance == 0.00
         assert m1.interest == 0.00
-        assert change == 90.00
         assert count == 1
+        assert bal.remainder == 0.12
 
         Policy.metaClass.static.findByKey = generateFindBy(Policy.VALUE_COMPOUND)
 
-        m1.balance = 110.00
-        m1.interest = 10.00
-        change = m1.pay(200.00)
+        m1.balance = 110.13
+        m1.interest = 10.13
+        bal = m1.pay(110.25)
 
         assert m1.balance == 0.00
         assert m1.interest == 0.00
-        assert change == 90.00
         assert count == 2
+        assert bal.remainder == 0.12
 
         /* Balance 200.00 */
 
         Policy.metaClass.static.findByKey = generateFindBy(Policy.VALUE_NON_COMPOUND)
 
         m1.balance = 200.00
-        m1.interest = 23.00
-        change = m1.pay(500.00)
+        m1.interest = 23.49
+        bal = m1.pay(223.50)
 
         assert m1.balance == 0.00
         assert m1.interest == 0.00
-        assert change == 277.00
+        assert bal.remainder == 0.01
         assert count == 3
 
         Policy.metaClass.static.findByKey = generateFindBy(Policy.VALUE_COMPOUND)
 
-        m1.balance = 223.00
-        m1.interest = 23.00
-        change = m1.pay(500.00)
+        m1.balance = 223.17
+        m1.interest = 23.25
+        bal = m1.pay(223.25)
 
         assert m1.balance == 0.00
         assert m1.interest == 0.00
-        assert change == 277.00
+        assert bal.remainder == 0.08
         assert count == 4
     }
 
@@ -553,25 +555,5 @@ class MemberTests {
         assert m1.balance == 220.00
         assert m1.interest == 20.00
         assert count == 4
-    }
-
-    void testPayWithRemainder() {
-        def m1 = Member.get(1)
-        m1.transactionService = transactionService
-        m1.utilService = utilService
-
-        Policy.metaClass.static.findByKey = generateFindBy(Policy.VALUE_NON_COMPOUND)
-
-        def count = 0
-        BalanceTransaction.metaClass.save = { -> ++count }
-
-        m1.balance = 100.00
-        m1.interest = 10.34
-        def change = m1.pay(110.34)
-
-        assert m1.balance == 0.00
-        assert m1.interest == 0.00
-        assert change == 0.00
-        assert count == 1
     }
 }
