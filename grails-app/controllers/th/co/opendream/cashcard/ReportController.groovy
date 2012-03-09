@@ -10,6 +10,39 @@ class ReportController {
     def index() { }
 
     def dailyInterest() {
+        def range = getRange(params)
+        def results = InterestTransaction.createCriteria().list {
+            between('date', range.startDate, range.endDate)
+            member {
+                order('firstname')
+                order('lastname')
+            }
+        }
+        [
+            interestList: results,
+            startDate: range.startDate,
+            endDate: range.endDate
+        ]
+    }
+
+    def dailyTransaction() {
+        def range = getRange(params)
+        def results = BalanceTransaction.createCriteria().list {
+            between('date', range.startDate, range.endDate)
+            order('date')
+            member {
+                order('firstname')
+                order('lastname')
+            }
+        }
+        [
+            results: results,
+            startDate: range.startDate,
+            endDate: range.endDate
+        ]
+    }
+
+    def getRange(params) {
         def startDate = params.startDate ?: Calendar.instance.time
         startDate.set(hourOfDay: 0, minute: 0, second: 0)
 
@@ -22,15 +55,7 @@ class ReportController {
             endDate.set(hourOfDay: 23, minute: 59, second: 59)
 
         }
-        def results = InterestTransaction.createCriteria().list {
-            between('date', startDate, endDate)
-            member {
-                order('firstname')
-                order('lastname')
-            }
-        }
-        [
-            interestList: results,
+        return [
             startDate: startDate,
             endDate: endDate
         ]

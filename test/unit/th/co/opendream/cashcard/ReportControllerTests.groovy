@@ -10,7 +10,7 @@ import org.codehaus.groovy.runtime.TimeCategory
  * See the API for {@link grails.test.mixin.web.ControllerUnitTestMixin} for usage instructions
  */
 @TestFor(ReportController)
-@Mock([Member, InterestTransaction])
+@Mock([Member, InterestTransaction, BalanceTransaction])
 class ReportControllerTests {
     def today
 
@@ -32,6 +32,20 @@ class ReportControllerTests {
         }
 
         def model = controller.dailyInterest()
+        today.set(hourOfDay: 0, minute: 0, second: 0)
+        assert model.startDate == today
+
+        use(TimeCategory) {
+            assert model.endDate == (today + 24.hours - 1.seconds)
+        }
+    }
+
+    void testDailyTransaction() {
+        Calendar.metaClass.static.getInstance = {
+            today.toCalendar()
+        }
+
+        def model = controller.dailyTransaction()
         today.set(hourOfDay: 0, minute: 0, second: 0)
         assert model.startDate == today
 
