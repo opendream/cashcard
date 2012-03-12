@@ -13,6 +13,7 @@ class Member {
     Date lastUpdated
 
     Company company
+    def transactionService
 
     public enum Gender {
       MALE,
@@ -57,12 +58,7 @@ class Member {
     }
 
     void withdraw(amount) {
-        amount = amount as BigDecimal
-        if (amount <= 0) {
-           throw new RuntimeException(message: "Withdraw amount is less than or equal 0 : ${amount}")
-        }
-        this.balance += amount
-        this.save()
+        transactionService.withdraw(this, amount)
     }
 
     Boolean canWithdraw(amount) {

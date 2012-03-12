@@ -11,7 +11,7 @@ import static java.util.Calendar.*
  * See the API for {@link grails.test.mixin.web.ControllerUnitTestMixin} for usage instructions
  */
 @TestFor(MemberController)
-@Mock([Member, UtilService, InterestTransaction])
+@Mock([Member, UtilService, InterestTransaction, TransactionService])
 class MemberControllerTests {
 
     def utilControl

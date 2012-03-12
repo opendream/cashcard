@@ -8,14 +8,21 @@ import org.junit.*
  * See the API for {@link grails.test.mixin.domain.DomainClassUnitTestMixin} for usage instructions
  */
 @TestFor(Member)
-@Mock (Member)
+@Mock ([Member, TransactionService])
 class MemberTests {
+
+    def transactionService
+    def txServiceControl
+
     @Before
     void setUp() {
         mockDomain(Member, [
             [id: 1, identificationNumber: "1111111111111", firstname: "Nat", lastname: "Weerawan", telNo: "0891278552", gender: "MALE", address: "11223445"],
             [id: 2, identificationNumber: "2222222222222", firstname: "Noomz", lastname: "Siriwat", telNo: "0811111111", gender: "MALE", address: "2222222"]
         ])
+
+        transactionService = new TransactionService()
+        txServiceControl = mockFor(TransactionService)
     }
 
     def generateFindBy(flag) {
@@ -141,34 +148,14 @@ class MemberTests {
     }
 
 
-   void testValidWithdraw() {
-        def m1 = Member.get(1)
-        assert m1.getBalance() == 0.00
+   void testCallWithdraw() {
+        txServiceControl.demand.withdraw(1..1) { member, amount -> true }
 
+        def m1 = Member.get(1)
+        m1.transactionService = txServiceControl.createMock()
         m1.withdraw(100.00)
-        assert m1.getBalance() == 100.00
 
-        m1.withdraw(100.00)
-        assert m1.getBalance() == 200.00
-    }
-
-    void testWithdrawWithNegativeAmount() {
-        def m1 = Member.get(1)
-        shouldFail(RuntimeException) {
-            m1.withdraw(-100.00)
-        }
-    }
-
-    void testWithdrawWithString() {
-        def m1 = Member.get(1)
-        m1.withdraw("100.00")
-        assert m1.getBalance() == 100.00
-    }
-
-    void testWithdrawWithZeroAmount() {
-        shouldFail(RuntimeException) {
-            m1.withdraw(0)
-        }
+        txServiceControl.verify()
     }
 
     void testCanWithdraw() {

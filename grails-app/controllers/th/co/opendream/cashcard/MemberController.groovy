@@ -5,7 +5,8 @@ import th.co.opendream.cashcard.AccountService
 
 class MemberController {
     def utilService
-    
+    def transactionService
+
     def index() { }
 
     def create() {
@@ -81,7 +82,7 @@ class MemberController {
                 render(view: 'withdraw', model: [memberInstance: memberInstance])
             }
             else if (memberInstance.canWithdraw(params.amount)) {
-                memberInstance.withdraw(params.amount)
+                transactionService.withdraw(memberInstance, params.amount)
                 redirect(action: "show", id: memberInstance.id)
             }
             else {
