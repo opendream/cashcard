@@ -51,6 +51,13 @@ class MemberControllerTests {
         ])
 
         utilControl = mockFor(UtilService)
+
+        m1.transactionService = [
+            'withdraw': { obj, amount ->
+            },
+            'pay': {obj, amount ->
+            }
+        ]
     }
 
     @After
@@ -141,8 +148,8 @@ class MemberControllerTests {
     void testMemberWithdrawValidUid() {
         Policy.metaClass.static.findByKey = generateFindBy(Policy.VALUE_COMPOUND)
 
-        params.amount = 100.00
-        params.id = 1
+        params.amount = '100.00'
+        params.id = '1'
 
         controller.withdraw()
 
@@ -150,8 +157,8 @@ class MemberControllerTests {
     }
 
     void testMemberWithdrawWithInvalidUid() {
-        params.amount = 200.00
-        params.id = 999999999
+        params.amount = '200.00'
+        params.id = '999999999'
 
         controller.withdraw()
 
@@ -161,8 +168,8 @@ class MemberControllerTests {
     void testMemberInvalidWithdrawAmount() {
         Policy.metaClass.static.findByKey = generateFindBy(Policy.VALUE_COMPOUND)
 
-        params.amount = 10000
-        params.id = 1
+        params.amount = '10000'
+        params.id = '1'
 
         controller.withdraw()
 
@@ -183,7 +190,7 @@ class MemberControllerTests {
         utilControl.demand.moneyRoundUp(1..1) { amount -> 200.25 }
         controller.utilService = utilControl.createMock()
 
-        params.id = 1
+        params.id = '1'
         def model = controller.payment()
 
         utilControl.verify()
@@ -191,32 +198,28 @@ class MemberControllerTests {
     }
 
     void testMemberValidPayWithNoChange() {
-        def counter = 0
-        Member.metaClass.pay = { amount -> counter++; 0.00}
-        params.id = 1
-        params.amount = 200.00
+        params.id = '1'
+        params.amount = '200.00'
+        params.net = '200.00'
         def model = controller.pay()
 
-        assert counter == 1
         assert flash.message != null
         assert response.redirectedUrl == '/member/show/1'
 
     }
 
     void testMemberValidPayWithChange() {
-        def counter = 0
-        Member.metaClass.pay = { amount -> counter++; 100.00}
-        params.id = 1
-        params.amount = 200.00
+        params.id = '1'
+        params.amount = '200.00'
+        params.net = '220.00'
         def model = controller.pay()
 
-        assert counter == 1
         assert flash.message != null
         assert response.redirectedUrl == '/member/show/1'
     }
 
     void testMemberInvalidPay() {
-        params.id = 1
+        params.id = '1'
         def model = controller.pay()
 
         assert flash.message != null
@@ -328,5 +331,16 @@ class MemberControllerTests {
         assert model.transactionCount == 3
         assertNotNull model.memberInstance
         assert view == '/member/transaction'
+    }
+
+    void testMemberTransactionListSortByDate() {
+        params.id = 1
+        controller.transaction()
+
+        def tx1 = model.transactionList[0]
+        def tx2 = model.transactionList[1]
+        def tx3 = model.transactionList[2]
+
+        assert tx3.date <= tx2.date && tx2.date <= tx1.date
     }
 }

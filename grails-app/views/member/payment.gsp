@@ -20,13 +20,20 @@
         <div class="control-group">
           <label class="control-label"><strong>Total Debt</strong></label>
           <div class="offset2">
-            ${totalDebt}
+            ${roundUpDebt}
           </div>
         </div>
     		<div class="control-group ${flash.error? 'error' : ''}">
-          <label for="amount" class="control-label">Amount</label>
+          <label for="amount" class="control-label">จำนวนเงินที่จะชำระ</label>
           <div class="controls">
               <g:field type="text" id="amount" name="amount" pattern="\\d*(\\.\\d\\d)?" required="" value="" />
+          </div>
+        </div>
+
+        <div class="control-group ${flash.error? 'error' : ''}">
+          <label for="net" class="control-label">รับเงินมา</label>
+          <div class="controls">
+              <g:field type="text" id="net" name="net" pattern="\\d*(\\.\\d\\d)?" required="" value="" />
           </div>
         </div>
 

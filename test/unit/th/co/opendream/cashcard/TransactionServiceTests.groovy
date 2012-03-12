@@ -1,3 +1,4 @@
+
 package th.co.opendream.cashcard
 
 import grails.test.mixin.*
@@ -9,7 +10,7 @@ import org.junit.*
 @TestFor(TransactionService)
 @Mock([Member, BalanceTransaction])
 class TransactionServiceTests {
-    
+
     def generateFindBy(flag) {
         return { key ->
             if (key == Policy.KEY_CREDIT_LINE) {
@@ -30,58 +31,74 @@ class TransactionServiceTests {
     }
 
     void testValidWithdraw() {
-        Policy.metaClass.static.findByKey = generateFindBy(Policy.VALUE_NON_COMPOUND)
-
-        def count = 0
-        BalanceTransaction.metaClass.save = { -> ++count }
-
-    	def m1 = Member.get(1)
-
-    	service.withdraw(m1, 102.00)
-        assert Member.get(1).getBalance() == 102.00
-        assert count == 1
-
-        service.withdraw(m1, 100.00)
-        assert Member.get(1).getBalance() == 202.00
-        assert count == 2
-    }
-
-    void testWithdrawWithNegativeAmount() {
-        shouldFail(RuntimeException) {
-            service.withdraw(Member.get(1), -100.00)
-        }
-    }
-
-    void testWithdrawWithString() {
-        Policy.metaClass.static.findByKey = generateFindBy(Policy.VALUE_NON_COMPOUND)
-
         def m1 = Member.get(1)
+        Policy.metaClass.static.findByKey = generateFindBy(Policy.VALUE_NON_COMPOUND)
+        def tx = service.withdraw(m1, 100.00)
 
-        service.withdraw(m1, "100.00")
-        assert m1.getBalance() == 100.00
+        assert tx.class == BalanceTransaction
+        assert m1.balance == 100.00
         assert BalanceTransaction.count() == 1
 
-        service.withdraw(m1, "200.00")
-        assert m1.getBalance() == 300.00
-        assert BalanceTransaction.count() == 2
+        tx = BalanceTransaction.get(1)
+        assert tx.amount == 100.00
+        assert tx.net == 100.00
+        assert tx.remainder == 0.00
+        assert tx.activity == ActivityType.WITHDRAW
+
     }
 
-    void testWithdrawWithZeroAmount() {
+    void testInvalidWithdraw() {
+        def m1 = Member.get(1)
+        Policy.metaClass.static.findByKey = generateFindBy(Policy.VALUE_NON_COMPOUND)
         shouldFail(RuntimeException) {
-            service.withdraw(Member.get(1), 0)
+            def tx = service.withdraw(m1, 3000.00)
         }
+
     }
 
-    void testValidWithdrawButFailSaveTransaction() {
+    void testValidPay() {
+        def m1 = Member.get(1)
+        m1.balance = 100
+        m1.interest = 20
+        Policy.metaClass.static.findByKey = generateFindBy(Policy.VALUE_NON_COMPOUND)
+        def tx = service.pay(m1, 120.00)
+
+        assert tx.class == BalanceTransaction
+        assert m1.balance == 0.00
+        assert m1.interest == 0.00
+        assert BalanceTransaction.count() == 1
+
+        tx = BalanceTransaction.get(1)
+        assert tx.amount == 120.00
+        assert tx.net == 120.00
+        assert tx.remainder == 0.00
+        assert tx.activity == ActivityType.PAYMENT
+    }
+
+    void testValidPayWithRemainder() {
+        def m1 = Member.get(1)
+        m1.balance = 100
+        m1.interest = 20.12
+        Policy.metaClass.static.findByKey = generateFindBy(Policy.VALUE_NON_COMPOUND)
+        def tx = service.pay(m1, 120.25)
+
+        assert tx.class == BalanceTransaction
+        assert m1.balance == 0.00
+        assert m1.interest == 0.00
+        assert BalanceTransaction.count() == 1
+
+        tx = BalanceTransaction.get(1)
+        assert tx.amount == 120.25
+        assert tx.net == 120.12
+        assert tx.remainder == 0.13
+    }
+
+    void testInvalidPay() {
+        def m1 = Member.get(1)
         Policy.metaClass.static.findByKey = generateFindBy(Policy.VALUE_NON_COMPOUND)
 
-        def count = 0
-        BalanceTransaction.metaClass.save = { -> ++count }
-
-        def m1 = Member.get(1)
-
-        service.withdraw(m1, 3000.00)
-        assert Member.get(1).getBalance() == 0.00
-        assert count == 0
+        shouldFail {
+            service.pay(m1, 100.50, 300.00)
+        }
     }
 }

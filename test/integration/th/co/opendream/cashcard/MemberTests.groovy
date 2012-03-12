@@ -15,7 +15,6 @@ class MemberTests {
 
 	@After
 	void tearDown() {
-
 	}
 
     void testValidWithdraw() {
@@ -27,12 +26,29 @@ class MemberTests {
         assert BalanceTransaction.count() == 1
     }
 
-    void testValidWithdrawButTransactionFail() {   
+    void testValidPay() {
+        def m1 = Member.get(1)
+        m1.withdraw(100.00)
+        m1.pay(100.00)
+
+        m1 = Member.get(1)
+        assert m1.getBalance() == 0.00
+        assert BalanceTransaction.count() == 2
+    }
+
+
+    void testValidWithdrawButSaveTransactionFail() {
+        def count = 0
+        BalanceTransaction.metaClass.save = { -> null }
+
         def m1 = Member.get(1)
         m1.withdraw(100.00)
 
         m1 = Member.get(1)
+
+        assert count == 1
         assert m1.getBalance() == 0.00
         assert BalanceTransaction.count() == 0
-    }	
+    }
+
 }

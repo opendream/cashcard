@@ -17,7 +17,7 @@
         </div>
 
         <div class="control-group">
-            <form action="${createLink (action:'dailyInterest')}">
+            <form action="${createLink (action:'dailyTransaction')}">
             <div class="container">
                 <label for="startDate" class="control-label">
                 ระหว่างวันที่
@@ -40,33 +40,27 @@
             <table class="table table-striped table-bordered table-condensed">
                 <thead>
                     <tr>
-                        <th class="id">${message(code: 'report.dailyinterest.table.id', default: '#')}</th>
-                        <th class="string">${message(code: 'report.dailyinterest.table.member', default: 'Member')}</th>
-                        <th class="number">${message(code: 'report.dailyinterest.table.balance', default: 'Balance')}</th>
-                        <th class="number">${message(code: 'report.dailyinterest.table.accumulatedInterest', default: 'Accumulated Interest')}</th>
-                        <th class="number">${message(code: 'report.dailyinterest.table.fee', default: 'Fee')}</th>
-                        <th class="number">${message(code: 'report.dailyinterest.table.interest', default: 'Interest')}</th>
-                        <th class="number">${message(code: 'report.dailyinterest.table.totalInterest', default: 'Total Interest')}</th>
+                       <th class="id">${message(code: 'report.dailyinterest.table.id', default: '#')}</th>
+                       <th class="string">${message(code: 'report.dailyinterest.table.date', default: 'Date')}</th>
+                       <th class="string">${message(code: 'report.dailyinterest.table.member', default: 'Member')}</th>
+                       <th class="string">${message(code: 'report.dailyinterest.table.code', default: 'Code')}</th>
+                       <th class="number">${message(code: 'report.dailyinterest.table.amount', default: 'Amount')}</th>
+                       <th class="number">${message(code: 'report.dailyinterest.table.remainder', default: 'ส่วนต่างปัดเศษ')}</th>
                     </tr>
                 </thead>
                 <tbody>
-                <g:each in="${interestList}" status="i" var="interest">
+                <g:each in="${results}" status="i" var="tx">
                     <tr class="${(i % 2) == 0 ? 'even' : 'odd'}">
-                        <td class="id">${interest.id}</td>
-                        <td class="string">${interest.member}</td>
-                        <td class="number"><g:formatNumber type="number" number="${interest.member.balance}" maxFractionDigits="2" minFractionDigits="2" /></td>
-                        <td class="number"><g:formatNumber type="number" number="${interest.member.interest}" maxFractionDigits="2" minFractionDigits="2" /></td>
-                        <td class="number"><g:formatNumber type="number" number="${interest.fee}" maxFractionDigits="2" minFractionDigits="2" /></td>
-                        <td class="number"><g:formatNumber type="number" number="${interest.interest}" maxFractionDigits="2" minFractionDigits="2" /></td>
-                        <td class="number"><g:formatNumber type="number" number="${interest.amount}" maxFractionDigits="2" minFractionDigits="2" /></td>
-                     
+                        <td class="id">${i+1}</td>
+                        <td class="date"><g:formatDate format="yyyy-MM-dd HH:mm" date="${tx.date}" /></td>
+                        <td class="string">${tx.member}</td>
+                        <td class="string">${tx.code}</td>
+                        <td class="number"><g:formatNumber type="number" number="${tx.amount}" maxFractionDigits="2" minFractionDigits="2" /></td>
+                        <td class="number"><g:formatNumber type="number" number="${tx.remainder}" maxFractionDigits="2" minFractionDigits="2" /></td>
                     </tr>
                 </g:each>
                 </tbody>
             </table>
-            </div>
-            <div class="pagination">
-                <g:paginate total="${interestList}" />
             </div>
         </div>
         <script type="text/javascript">
