@@ -4,7 +4,7 @@
     <head>
         <meta name="layout" content="main">
         <g:set var="entityName" value="${message(code: 'interestRate.label', default: 'InterestRate')}" />
-        <title>Interate Rate</title>
+        <title><g:message code="interestRate.list.title"></g:message></title>
         <style type="text/css">
             td.right {
                 text-align: right;
@@ -14,7 +14,7 @@
     <body>
         <div class="container">
             <header class="page-header">
-                <h1>Interest Rate</h1>
+                <h1><g:message code="interestRate.list.title"></g:message></h1>
             </header>
         </div>
 
@@ -32,7 +32,7 @@
                         <th class="number"> ${message(code: 'interestRate.rate.label', default: 'Rate (%)')}</th>
                         <th class="date"> ${message(code: 'interestRate.dateCreated.label', default: 'Date Created')}</th>
                         <th class="date"> ${message(code: 'interestRate.lastUpdated.label', default: 'Last Updated')}</th>
-                        <th class="date" colspan="2"> ${message(code: 'Action', default: 'Action')}</th>
+                        <th class="date" colspan="2"> ${message(code: 'default.button.action.label', default: 'Action')}</th>
                     </tr>
                 </thead>
                 <tbody>

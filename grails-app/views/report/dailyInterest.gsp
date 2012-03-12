@@ -2,29 +2,32 @@
 <html>
     <head>
         <meta name="layout" content="main">
-        <title>Report: Daily Interest</title>
+        <title><g:message code="report.dailyinterest.title"></g:message></title>
         <style type="text/css">
             td.right {
                 text-align: right;
+            }
+            select#startDate_year {
+                margin-right: 20px;
             }
         </style>
     </head>
     <body>
         <div class="container">
             <header class="page-header">
-                <h1>Report: Daily Interest</h1>
+                <h1><g:message code="report.dailyinterest.title"></g:message></h1>
             </header>
         </div>
 
         <div class="control-group">
-            <form action="${createLink (action:'dailyInterest')}">
+            <form id="dailyInterest" action="${createLink (action:'dailyInterest')}">
             <div class="container">
                 <label for="startDate" class="control-label">
-                ระหว่างวันที่
+                    <g:message code="cashcard.date.from"></g:message>
                 </label>
                 <g:datePicker name="startDate" precision="day"  value="${startDate}"  />
                 <label for="endDate" class="control-label">
-                ถึงวันที่
+                    <g:message code="cashcard.date.to"></g:message>
                 </label>
                 <g:datePicker name="endDate" precision="day"  value="${endDate}"  />
                 <button class="btn btn-primary" type="submit"><i class="icon-ok icon-white"></i>ค้นหา</button>
@@ -59,7 +62,7 @@
                         <td class="number"><g:formatNumber type="number" number="${interest.fee}" maxFractionDigits="2" minFractionDigits="2" /></td>
                         <td class="number"><g:formatNumber type="number" number="${interest.interest}" maxFractionDigits="2" minFractionDigits="2" /></td>
                         <td class="number"><g:formatNumber type="number" number="${interest.amount}" maxFractionDigits="2" minFractionDigits="2" /></td>
-                     
+
                     </tr>
                 </g:each>
                 </tbody>

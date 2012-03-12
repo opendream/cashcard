@@ -1,12 +1,12 @@
 <html>
   <head>
     <meta name="layout" content="main" />
-    <title>List All Member</title>
+    <title>${message(code: 'member.list.title', default: 'List Members')}</title>
   </head>
   <body>
 		<div class="container">
 			<header class="page-header">
-				<h1>List Members</h1>
+				<h1>${message(code: 'member.list.title', default: 'List Members')}</h1>
 			</header>
 		</div>
 
@@ -14,48 +14,48 @@
 			<g:form action="list" class="form-horizontal">
 
 				<div class="control-group ${hasErrors(bean: memberInstance, field: 'identificationNumber', 'error')}">
-		          <label for="id-number" class="control-label">Identification Number</label>
+		          <label for="id-number" class="control-label">${message(code: 'member.label.identificationNumber', default: 'Identification Number')}</label>
 		          <div class="controls">
-		            <input id="id-number" name="identificationNumber" type="text" placeholder="Personal Id" value="${memberInstance?.identificationNumber}">
+		            <input id="id-number" name="identificationNumber" type="text" placeholder="${message(code: 'member.placeholder.identificationNumber', default: 'Identification Number')}" value="${memberInstance?.identificationNumber}">
 		          </div>
 		        </div>
 
 		        <div class="control-group ${hasErrors(bean: memberInstance, field: 'firstname', 'error')}">
-		          <label for="first-name" class="control-label">First Name</label>
+		          <label for="first-name" class="control-label">${message(code: 'member.label.firstName', default: 'First Name')}</label>
 		          <div class="controls">
-		            <input id="first-name" name="firstname" type="text" placeholder="First Name" value="${memberInstance?.firstname}">
+		            <input id="first-name" name="firstname" type="text" placeholder="${message(code: 'member.label.firstName', default: 'First Name')}" value="${memberInstance?.firstname}">
 		          </div>
 		        </div>
 
 		        <div class="control-group  ${hasErrors(bean: memberInstance, field: 'lastname', 'error')}">
-		          <label class="control-label" for="last-name">Last Name</label>
+		          <label class="control-label" for="last-name">${message(code: 'member.label.lastName', default: 'Last Name')}</label>
 		          <div class="controls">
-		            <input id="last-name" name="lastname" type="text" placeholder="Last Name" value="${memberInstance?.lastname}">
+		            <input id="last-name" name="lastname" type="text" placeholder="${message(code: 'member.label.lastName', default: 'Last Name')}" value="${memberInstance?.lastname}">
 		          </div>
 		        </div>
 
 		        <div class="control-group ${hasErrors(bean: memberInstance, field: 'telNo', 'error')}">
-		          <label class="control-label" for="tel">Tel.</label>
+		          <label class="control-label" for="tel">${message(code: 'member.label.telNo', default: 'Tel No.')}</label>
 		          <div class="controls">
-		            <input id="tel" name="telNo" type="text" placeholder="Tel." value="${memberInstance?.telNo}">
+		            <input id="tel" name="telNo" type="text" placeholder="${message(code: 'member.label.telNo', default: 'Tel.')}" value="${memberInstance?.telNo}">
 		          </div>
 		        </div>
 
 		        <div class="form-actions">
-		          <button class="btn btn-primary" type="submit"><i class="icon-search icon-white"></i> Search</button>
+		          <button class="btn btn-primary" type="submit"><i class="icon-search icon-white"></i> ${message(code: 'member.label.search', default: 'Search')}</button>
 		        </div>
 			</g:form>
 		</div>
-		
+
 	  <div class="container">
 			<table class="table table-striped table-bordered table-condensed">
 				<thead>
 					<tr>
-						<th>#</th>
-						<th>Name</th>
-						<th>Tel.</th>
-						<th>Gender</th>
-						<th>Address</th>
+						<th><g:message code="member.label.identificationNumber"></g:message></th>
+						<th><g:message code="member.label.name"></g:message></th>
+						<th><g:message code="member.label.telNo"></g:message></th>
+						<th><g:message code="member.label.gender"></g:message></th>
+						<th><g:message code="member.label.address"></g:message></th>
 					</tr>
 				</thead>
 				<tbody>

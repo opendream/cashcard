@@ -17,21 +17,21 @@
 				<g:render template="toolbar" />
 
 				<div class="row">
-					<div class="control-label span2"><strong>First Name</strong></div>
+					<div class="control-label span2"><strong><g:message code="member.label.firstName"></g:message></strong></div>
 					<div class="offset2">
 						${memberInstance?.firstname}
 					</div>
 				</div>
 
 				<div class="row">
-					<div class="control-label span2"><strong>Last Name</strong></div>
+					<div class="control-label span2"><strong><g:message code="member.label.lastName"></g:message></strong></div>
 					<div class="offset2">
 						${memberInstance?.lastname}
 					</div>
 				</div>
 
 				<div class="row">
-					<div class="control-label span2"><strong>Telephone Number</strong></div>
+					<div class="control-label span2"><strong><g:message code="member.label.telNo"></g:message></strong></div>
 					<div class="offset2">
 						<g:if test="${memberInstance.telNo}">
 							${memberInstance.telNo}
@@ -41,14 +41,14 @@
 				</div>
 
 				<div class="row">
-					<div class="control-label span2"><strong>Gender</strong></div>
+					<div class="control-label span2"><strong><g:message code="member.label.gender"></g:message></strong></div>
 					<div class="offset2">
 						${memberInstance?.gender}
 					</div>
 				</div>
 
 				<div class="row">
-					<div class="control-label span2"><strong>Address</strong></div>
+					<div class="control-label span2"><strong><g:message code="member.label.address"></g:message></strong></div>
 					<div class="offset2">
 						<g:if test="${memberInstance.address}">
 							${memberInstance.address}
@@ -58,28 +58,28 @@
 				</div>
 
 				<div class="row">
-					<div class="control-label span2"><strong>Credit Line</strong></div>
+					<div class="control-label span2"><strong><g:message code="member.label.creditLine"></g:message></strong></div>
 					<div class="offset2">
 						<g:formatNumber number="${memberInstance?.getRemainingFinancialAmount()}" type="currency" currencyCode="THB" />
 					</div>
 				</div>
 
 				<div class="row">
-					<div class="control-label span2"><strong>Balance</strong></div>
+					<div class="control-label span2"><strong><g:message code="member.label.balance"></g:message></strong></div>
 					<div class="offset2">
 						<g:formatNumber number="${memberInstance?.balance}" type="currency" currencyCode="THB" />
 					</div>
 				</div>
 
 				<div class="row">
-					<div class="control-label span2"><strong>Interest</strong></div>
+					<div class="control-label span2"><strong><g:message code="member.label.interest"></g:message></strong></div>
 					<div class="offset2">
 						<g:formatNumber number="${memberInstance?.getInterest()}" type="currency" currencyCode="THB" />
 					</div>
 				</div>
 
 				<div class="row">
-					<div class="control-label span2"><strong>Total Debt</strong></div>
+					<div class="control-label span2"><strong><g:message code="member.label.totalDebt"></g:message></strong></div>
 					<div class="offset2">
 						<g:formatNumber number="${memberInstance?.getTotalDebt()}" type="currency" currencyCode="THB" />
 					</div>

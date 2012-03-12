@@ -4,12 +4,12 @@
 	<head>
 		<meta name="layout" content="main">
 		<g:set var="entityName" value="${message(code: 'interestRate.label', default: 'InterestRate')}" />
-		<title>Create</title>
+		<title><g:message code="interestRate.create.title"></g:message></title>
 	</head>
 	<body>
 		<div class="container">
 			<header class="page-header">
-				<h1>Interest Rate: New</h1>
+				<h1><g:message code="interestRate.create.title"></g:message></h1>
 			</header>
 		</div>
 		<g:render template="toolbar"/>
@@ -30,7 +30,7 @@
 					<g:render template="form"/>
 						<div class="form-actions">
 							<button class="btn btn-primary" type="submit"><i class="icon-ok icon-white"></i> ${message(code: 'default.button.create.label', default: 'Create')}</button>
-							<g:link action="list">Cancel</g:link>
+							<g:link action="list"><g:message code="default.button.cancel.label"></g:message></g:link>
 						</div>
 				</g:form>
 			</div>

@@ -3,7 +3,7 @@
 <html>
     <head>
         <meta name="layout" content="main">
-        <title>${memberInstance}: Transaction</title>
+        <title>${memberInstance}: <g:message code="member.transaction.title"></g:message></title>
         <style type="text/css">
             td.right {
                 text-align: right;
@@ -13,7 +13,7 @@
     <body>
         <div class="container">
             <header class="page-header">
-                <h1>${memberInstance}: Transaction</h1>
+                <h1>${memberInstance}: <g:message code="member.transaction.title"></g:message></h1>
             </header>
         </div>
 
@@ -28,8 +28,8 @@
                 <thead>
                     <tr>
                         <th class="id">${message(code: 'member.transaction.transactionId', default: 'Transaction ID')}</th>
-                        <th class="date"> ${message(code: 'date', default: 'Date')}</th>
-                        <th class="string"> ${message(code: 'member.transaction.activityType', default: 'Activity Type')}</th>
+                        <th class="date"> ${message(code: 'cashcard.date', default: 'Date')}</th>
+                        <th class="string"> ${message(code: 'transaction.activityType', default: 'Activity Type')}</th>
                         <th class="number"> ${message(code: 'member.transaction.amount', default: 'Amount')}</th>
                         <th class="number"> ${message(code: 'member.transaction.net', default: 'Net')}</th>
                         <th class="number"> ${message(code: 'member.transaction.remainder', default: 'Remainder')}</th>
@@ -40,7 +40,7 @@
                     <tr class="${(i % 2) == 0 ? 'even' : 'odd'}">
                         <td class="id">${tx.id}</td>
                         <td class="date"><g:formatDate format="yyyy-MM-dd" date="${tx.date}" /></td>
-                        <td class="string">${message(code: 'member.transaction.'+tx.activity, default: '')}</td>
+                        <td class="string">${message(code: 'transaction.activityType.'+tx.activity, default: '')}</td>
                         <td class="number"><g:formatNumber type="number" number="${tx.amount}" maxFractionDigits="2" minFractionDigits="2" /></td>
                         <td class="number"><g:formatNumber type="number" number="${tx.net}" maxFractionDigits="2" minFractionDigits="2" /></td>
                          <td class="number"><g:formatNumber type="number" number="${tx.remainder}" maxFractionDigits="2" minFractionDigits="2" /></td>

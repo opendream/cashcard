@@ -150,13 +150,25 @@
                 border-radius: 0 0 4px 4px;
       }
 
+      select#startDate_year {
+          margin-right: 20px;
+      }
+
+      #dailyInterest label {
+          display: inline;
+      }
+
+      #dailyInterest .btn-primary {
+          margin-bottom: 10px;
+      }
+
     </style>
 	</head>
 	<body>
 		<div class="navbar navbar-fixed-top">
       <div class="navbar-inner">
         <div class="container">
-          <a class="brand" href="${createLink(controller:'member', action:'verifyCard')}">Cash Card</a>
+          <a class="brand" href="${createLink(controller:'member', action:'verifyCard')}"><g:message code="project.name"></g:message></a>
           <ul class="nav">
             <li class="#"><a href="${createLink(controller:'member', action:'verifyCard')}">${message(code: 'main.menu.home', default: 'Home')}</a></li>
             <li class="dropdown">

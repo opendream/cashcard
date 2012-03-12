@@ -1,12 +1,12 @@
 <html>
   <head>
     <meta name="layout" content="main" />
-    <title>${memberInstance} : Withdraw</title>
+    <title>${memberInstance} : <g:message code="member.toolbar.withdraw"></g:message></title>
   </head>
   <body>
 		<div class="container">
 			<header class="page-header">
-				<h1>${memberInstance} : Withdraw</h1>
+				<h1>${memberInstance} : <g:message code="member.toolbar.withdraw"></g:message></h1>
 			</header>
 		</div>
     <g:if test="${flash.error}">
@@ -18,15 +18,15 @@
       <g:form action="withdraw" class="form-horizontal">
         <g:hiddenField name="id" value="${memberInstance?.id}" />
     		<div class="control-group ${flash.error? 'error' : ''}">
-          <label for="amount" class="control-label">Amount</label>
+          <label for="amount" class="control-label"><g:message code="cashcard.withdraw.amount"></g:message></label>
           <div class="controls">
               <g:field type="text" id="amount" name="amount" pattern="\\d*(\\.\\d\\d)?" required="" value="" />
           </div>
         </div>
 
         <div class="form-actions">
-          <button class="btn btn-primary" type="submit"><i class="icon-ok icon-white"></i> Withdraw</button>
-          <g:link action="show" id="${memberInstance?.id}">Cancel</g:link>
+          <button class="btn btn-primary" type="submit"><i class="icon-ok icon-white"></i> <g:message code="cashcard.button.withdraw.label"></g:message></button>
+          <g:link action="show" id="${memberInstance?.id}"><g:message code="default.button.cancel.label"></g:message></g:link>
         </div>
   	  </g:form>
 	  </div>
