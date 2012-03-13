@@ -198,6 +198,8 @@ class MemberControllerTests {
     }
 
     void testMemberValidPayWithNoChange() {
+        Policy.metaClass.static.findByKey = generateFindBy(Policy.VALUE_COMPOUND)
+
         params.id = '1'
         params.amount = '200.00'
         params.net = '200.00'
@@ -209,6 +211,8 @@ class MemberControllerTests {
     }
 
     void testMemberValidPayWithChange() {
+        Policy.metaClass.static.findByKey = generateFindBy(Policy.VALUE_COMPOUND)
+
         params.id = '1'
         params.amount = '200.00'
         params.net = '220.00'
@@ -342,5 +346,21 @@ class MemberControllerTests {
         def tx3 = model.transactionList[2]
 
         assert tx3.date <= tx2.date && tx2.date <= tx1.date
+    }
+
+    void testMemberWithdrawOverBalance() {
+        Policy.metaClass.static.findByKey = generateFindBy(Policy.VALUE_COMPOUND)
+
+        def m1 = Member.get(1)
+        m1.balance = 1000.00
+        m1.save()
+
+        params.id = 1
+        params.amount = '2000.00'
+
+        controller.pay()
+
+        assert flash.message != null
+        assert Member.get(1).balance == 1000.00
     }
 }
