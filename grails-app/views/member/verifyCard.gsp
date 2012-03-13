@@ -9,7 +9,7 @@
 				<h1>${message(code: "member.vefify.title", default: "List All Member")}</h1>
 			</header>
 		</div>
-		
+
 	  <div class="container">
       <g:form action="verifyCard" class="form-horizontal">
 
@@ -19,9 +19,9 @@
             <input id="id-number" name="cardId" type="text" placeholder="${message(code: "member.placeholder.identificationNumber", default: "Identification Number")}" />
           </div>
         </div>
-        
+
         <div class="form-actions">
-          <button class="btn btn-primary" type="submit"><i class="icon-ok icon-white"></i> >${message(code: "member.label.verify", default: "Verify")}</button>
+          <button class="btn btn-primary" type="submit"><i class="icon-ok icon-white"></i> ${message(code: "member.label.verify", default: "Verify")}</button>
         </div>
   	  </g:form>
 	  </div>
