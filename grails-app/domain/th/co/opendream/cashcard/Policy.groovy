@@ -10,6 +10,7 @@ class Policy {
     
     static String VALUE_COMPOUND = 'CompoundInterest'
     static String VALUE_NON_COMPOUND = 'NonCompoundInterest'
+    static String VALUE_DEFERRED_COMPOUND = 'DeferredCompoundInterest'
     
     static constraints = {
         key(unique: true) 
@@ -25,6 +26,10 @@ class Policy {
     
     static boolean isCompoundMethod() {
         valueOf(KEY_INTEREST_METHOD) == VALUE_COMPOUND
+    }
+
+    static boolean isDeferredCompoundMethod() {
+        valueOf(KEY_INTEREST_METHOD) == VALUE_DEFERRED_COMPOUND
     }
     
     static BigDecimal valueOfInterestRateLimit() {

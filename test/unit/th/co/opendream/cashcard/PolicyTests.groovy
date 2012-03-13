@@ -42,4 +42,12 @@ class PolicyTests {
         
         assertTrue Policy.isCompoundMethod()
     }
+
+    void testStaticDeferredCompoundMethod() {
+        mockDomain(Policy, [
+            [ key: Policy.KEY_INTEREST_METHOD, value: Policy.VALUE_DEFERRED_COMPOUND ]
+        ])
+
+        assertTrue Policy.isDeferredCompoundMethod()
+    }
 }
