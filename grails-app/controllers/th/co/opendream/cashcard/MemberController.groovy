@@ -34,7 +34,7 @@ class MemberController {
         }
     }
 
-    def list() {        
+    def list() {
         params.offset = params.offset ? params.int('offset') : 0
         params.max = params.max ? params.int('max') : 10
 
@@ -113,11 +113,14 @@ class MemberController {
 
     def pay() {
         def memberInstance = Member.get(params.id)
+        params.net = params.amount
         if (memberInstance && params.amount) {
             memberInstance.pay(params.amount.toBigDecimal())
             def change = params.net?.toBigDecimal() - params.amount?.toBigDecimal()
 
-
+            if (params.amount.toBigDecimal() > memberInstance.getTotalDebt()) {
+                flash.message = message(code: "Can not withdraw with exceed amount")
+            }
             if (!change) {
                 flash.message = "Pay success."
             }
@@ -157,4 +160,4 @@ class MemberController {
     }
 
 }
-        
+
