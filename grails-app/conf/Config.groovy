@@ -93,6 +93,7 @@ log4j = {
 
 }
 
+company.management.authority = 'ROLE_ADMIN'
 grails.plugins.springsecurity.successHandler.defaultTargetUrl="/member/list"
 
 // Added by the Spring Security Core plugin:
