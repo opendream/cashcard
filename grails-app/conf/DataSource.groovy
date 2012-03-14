@@ -21,12 +21,6 @@ environments {
             password = "postgres"
         }
     }
-    h2 {
-        dataSource {
-            dbCreate = "create-drop"
-            url = "jdbc:h2:mem:devDb;MVCC=TRUE"
-        }     
-    }
     test {
         dataSource {
             dbCreate = "update"
