@@ -187,6 +187,10 @@
               </ul>
             </li>
             <li class="brand"><com:name/></li>
+            <li class="brand"><sec:ifLoggedIn>Hello
+              <sec:username/> <g:link controller='logout'>${message(code:'cashcard.logout.label', default: 'Logout')}</g:link>
+              </sec:ifLoggedIn>
+            </li>
           </ul>
         </div>
       </div>
