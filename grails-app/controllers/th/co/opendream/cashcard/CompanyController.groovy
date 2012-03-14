@@ -1,6 +1,7 @@
 package th.co.opendream.cashcard
 
 class CompanyController {
+	def companyService
 
     def search() { 
     	render view: 'search'
@@ -11,14 +12,15 @@ class CompanyController {
     }
 
     def save = {
-		def company = new Company(params)
-		if (!company.save(flush: true)) {
-         render view: 'create', model: [company: company]
-         return
+    	try {
+			def company = new Company(params)
+			companyService.save(company)
+			flash.message = "${message(code: 'default.created.message', args: [message(code: 'company.label', default: 'Company'), company.id])}"
+			redirect action: 'edit', id: company.id
+		} catch(e) {
+			log.error e
+			render view: 'create', model: [company: company]	         
 		}
-
-		flash.message = "${message(code: 'default.created.message', args: [message(code: 'company.label', default: 'Company'), company.id])}"
-		redirect action: 'edit', id: company.id
 	}
 
     def edit() {
