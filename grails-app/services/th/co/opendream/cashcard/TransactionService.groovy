@@ -28,7 +28,6 @@ class TransactionService {
             if (!member.save()) {
                 throw new RuntimeException("Fail to update member balance")
             }
-
             return balance
 
         } else {
@@ -42,28 +41,37 @@ class TransactionService {
      */
     def pay(Member member, amount) {
         def outstanding = amount
-        if (outstanding >= member.interest) {
-            if (Policy.isCompoundMethod()) {
-                // do nothing
-            } else {
-                outstanding -= member.interest
+        if (Policy.isDeferredCompoundMethod()) {
+            if (outstanding >= member.balance) {
+                throw RuntimeException("Not enought balance.")
             }
-            member.interest = 0.00
-        } else {
-            if (Policy.isCompoundMethod()) {
-                // do nothing
-                member.interest -= outstanding
-            } else {
-                member.interest -= outstanding
-                outstanding = 0.00
-            }
-        }
-        if (outstanding > member.balance) {
-            outstanding -= member.balance
-            member.balance = 0.00
-        } else {
             member.balance -= outstanding
             outstanding = 0.00
+        }
+        else {
+            if (outstanding >= member.interest) {
+                if (Policy.isCompoundMethod()) {
+                    // do nothing
+                } else {
+                    outstanding -= member.interest
+                }
+                member.interest = 0.00
+            } else {
+                if (Policy.isCompoundMethod()) {
+                    // do nothing
+                    member.interest -= outstanding
+                } else {
+                    member.interest -= outstanding
+                    outstanding = 0.00
+                }
+            }
+            if (outstanding > member.balance) {
+                outstanding -= member.balance
+                member.balance = 0.00
+            } else {
+                member.balance -= outstanding
+                outstanding = 0.00
+            }
         }
 
         def net = amount - outstanding

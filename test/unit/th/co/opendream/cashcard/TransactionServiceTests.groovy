@@ -101,4 +101,22 @@ class TransactionServiceTests {
             service.pay(m1, 100.50, 300.00)
         }
     }
+
+    void testPayDeferredCompound() {
+        def m1 = Member.get(1)
+        Policy.metaClass.static.findByKey = generateFindBy(Policy.VALUE_DEFERRED_COMPOUND)
+
+        m1.balance = 100.00
+        m1.interest = 20.12
+
+        def tx = service.pay(m1, 50.00)
+
+        assert m1.balance == 50.00
+        assert m1.interest == 20.12
+
+
+        shouldFail(RuntimeException) {
+            service.pay(70.00)
+        }
+    }
 }
