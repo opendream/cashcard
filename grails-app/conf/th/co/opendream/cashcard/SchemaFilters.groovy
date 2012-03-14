@@ -5,12 +5,12 @@ class SchemaFilters {
     def schemaService
 
     def filters = {
-        switchSchema(controller:'*', action:'*') {
+        switchSchema(controller:'*', action:'*', controllerExclude:'login') {
             before = {
                 def companyId = springSecurityService?.principal?.companyId
 
                 if (companyId) {
-                    schemaService.with(schema)
+                    schemaService.with("c$companyId",{})
                 }
             }
         }
