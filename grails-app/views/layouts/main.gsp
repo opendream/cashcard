@@ -150,28 +150,40 @@
                 border-radius: 0 0 4px 4px;
       }
 
+      select#startDate_year {
+          margin-right: 20px;
+      }
+
+      #dailyInterest label {
+          display: inline;
+      }
+
+      #dailyInterest .btn-primary {
+          margin-bottom: 10px;
+      }
+
     </style>
 	</head>
 	<body>
 		<div class="navbar navbar-fixed-top">
       <div class="navbar-inner">
         <div class="container">
-          <a class="brand" href="${createLink(controller:'member', action:'verifyCard')}">Cash Card</a>
+          <a class="brand" href="${createLink(controller:'member', action:'verifyCard')}"><g:message code="project.name"></g:message></a>
           <ul class="nav">
-            <li class="#"><a href="${createLink(controller:'member', action:'verifyCard')}">Home</a></li>
+            <li class="#"><a href="${createLink(controller:'member', action:'verifyCard')}">${message(code: 'main.menu.home', default: 'Home')}</a></li>
             <li class="dropdown">
-							<a href="#" class="dropdown-toggle" data-toggle="dropdown">Member<b class="caret"></b></a>
+							<a href="#" class="dropdown-toggle" data-toggle="dropdown">${message(code: 'main.menu.member', default: 'Member')}<b class="caret"></b></a>
 							<ul class="dropdown-menu">
-								<li><a href="${createLink(controller:'member', action:'create')}">Register</a></li>
-								<li><a href="${createLink(controller:'member', action:'verifyCard')}">Verify</a></li>
-								<li><a href="${createLink(controller:'member', action:'list')}">List Members</a></li>
+								<li><a href="${createLink(controller:'member', action:'create')}">${message(code: 'main.menu.register', default: 'Register')}</a></li>
+								<li><a href="${createLink(controller:'member', action:'verifyCard')}">${message(code: 'main.menu.verifyCard', default: 'Verify Card')}</a></li>
+								<li><a href="${createLink(controller:'member', action:'list')}">${message(code: 'main.menu.listMember', default: 'List')}</a></li>
 							</ul>
             </li>
-            <li><a href="${createLink(controller:'interestRate', action:'list')}">Interest Rate</a></li>
+            <li><a href="${createLink(controller:'interestRate', action:'list')}">${message(code: 'main.menu.interestRate', default: 'Interest Rate')}</a></li>
             <li class="dropdown">
-              <a href="#" class="dropdown-toggle" data-toggle="dropdown">Report<b class="caret"></b></a>
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown">${message(code: 'main.menu.report', default: 'Report')}<b class="caret"></b></a>
               <ul class="dropdown-menu">
-                <li><a href="${createLink(controller:'report', action:'dailyInterest')}">Daily Interest</a></li>
+                <li><a href="${createLink(controller:'report', action:'dailyInterest')}">${message(code: 'main.menu.dailyInterest', default: 'Daily Interest')}</a></li>
               </ul>
             </li>
             <li class="brand"><com:name/></li>

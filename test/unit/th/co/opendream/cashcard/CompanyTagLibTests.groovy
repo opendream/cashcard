@@ -11,7 +11,13 @@ import org.junit.*
 @TestFor(CompanyTagLib)
 class CompanyTagLibTests {
 
-    void testSomething() {
-        fail "Implement me"
+    void testCompanyTagLibRender() {
+        CompanyTagLib.metaClass.springSecurityService = [
+            principal: [
+                companyName: "Opendream"
+            ]
+        ]
+
+        assertEquals "Opendream", new CompanyTagLib().name().toString()
     }
 }

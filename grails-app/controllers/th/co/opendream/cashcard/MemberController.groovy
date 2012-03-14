@@ -5,7 +5,8 @@ import th.co.opendream.cashcard.AccountService
 
 class MemberController {
     def utilService
-    
+    def transactionService
+
     def index() { }
 
     def create() {
@@ -75,13 +76,13 @@ class MemberController {
     def withdraw() {
         def memberInstance = Member.get(params.id)
         flash.error = null
-
+        def amount = params.amount?.replace(',', '')?.toBigDecimal()
         if (memberInstance) {
             if (!params.amount) {
                 render(view: 'withdraw', model: [memberInstance: memberInstance])
             }
-            else if (memberInstance.canWithdraw(params.amount)) {
-                memberInstance.withdraw(params.amount)
+            else if (memberInstance.canWithdraw(amount)) {
+                memberInstance.withdraw(amount)
                 redirect(action: "show", id: memberInstance.id)
             }
             else {
@@ -100,7 +101,10 @@ class MemberController {
         if (memberInstance) {
             //memberInstance.metaClass.getTotalDebt = { utilService.moneyRoundUp(memberInstance.getTotalDebt()) }
 
-            [memberInstance: memberInstance, totalDebt: utilService.moneyRoundUp(memberInstance.getTotalDebt())]
+            [memberInstance: memberInstance,
+            roundUpDebt: utilService.moneyRoundUp(memberInstance.getTotalDebt()),
+            debt: memberInstance.getTotalDebt()
+            ]
         }
         else {
             redirect(uri: '/error')
@@ -110,7 +114,10 @@ class MemberController {
     def pay() {
         def memberInstance = Member.get(params.id)
         if (memberInstance && params.amount) {
-            def change = memberInstance.pay(params.amount)
+            memberInstance.pay(params.amount.toBigDecimal())
+            def change = params.net?.toBigDecimal() - params.amount?.toBigDecimal()
+
+
             if (!change) {
                 flash.message = "Pay success."
             }
@@ -136,7 +143,7 @@ class MemberController {
             params.max = params.max ? params.int('max') : 10
 
             def c = BalanceTransaction.createCriteria()
-            def transactionList = c.list(offset: params.offset, max: params.max) {
+            def transactionList = c.list(sort: 'date', order: 'desc') {
                 member {
                     eq('id', memberInstance.id)
                 }
