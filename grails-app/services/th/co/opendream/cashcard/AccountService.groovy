@@ -6,7 +6,7 @@ class AccountService {
 
     def getBalanceList() {
         Member.findAllByBalanceGreaterThan(0.00).collect {
-            [ accountId: it.id, balance: it.balance ]
+            [ accountId: it.id, balance: it.balance, effectiveBalance: it.getTotalDebt() ]
         }
     }
 

@@ -7,6 +7,7 @@ class ScheduleService {
     def accountService
     
     def updateInterest() {
+        println 1
         def now = new Date()
         def rate = interestService.getRate(now)
         def rateLimit = Policy.valueOfInterestRateLimit()
@@ -14,7 +15,7 @@ class ScheduleService {
         def accounts = accountService.getBalanceList()
 
         accounts.each { ac ->
-            def tx = interestService.calculate(now, ac.balance, rate, rateLimit)
+            def tx = interestService.calculate(now, ac.effectiveBalance, rate, rateLimit)
             def amount = tx.interest + tx.fee
             
             // update member's accumulated interest and compound new balance
