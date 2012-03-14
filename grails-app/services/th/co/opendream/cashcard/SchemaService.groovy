@@ -77,6 +77,8 @@ class SchemaService {
         def conn = session.connection();
         groovy.sql.Sql sql = new groovy.sql.Sql(conn)
 
+        sql.execute("reset search_path")
+
         def ret
         try {
             def cmd = String.format("set search_path to %s, public", schema)
@@ -89,4 +91,5 @@ class SchemaService {
 
         ret
     }
+
 }
