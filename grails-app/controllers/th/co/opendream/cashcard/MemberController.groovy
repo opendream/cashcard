@@ -34,7 +34,7 @@ class MemberController {
         }
     }
 
-    def list() {        
+    def list() {
         params.offset = params.offset ? params.int('offset') : 0
         params.max = params.max ? params.int('max') : 10
 
@@ -156,5 +156,27 @@ class MemberController {
         }
     }
 
+    def edit() {
+        def memberInstance = Member.get(params.id)
+
+        if (memberInstance) {
+            render(view: 'edit', id: memberInstance.id)
+        }
+        else {
+            redirect(uri: '/error')
+        }
+    }
+
+    def update() {
+        def memberInstance = Member.get(params.id)
+
+        if (memberInstance) {
+            flash.message = message(code: "member.update.success", default: "Update success.")
+            render(view: 'show', id: memberInstance.id)
+        }
+        else {
+            redirect(uri: '/error')
+        }
+    }
 }
-        
+
