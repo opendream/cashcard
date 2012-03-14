@@ -46,34 +46,43 @@ class UserControllerTests {
         mockDomain(Role, [roleUser, roleAdmin])
         mockDomain(Users,[user])
         mockDomain(UsersRole)
+
+        // add ROLE_USER to testUser
         UsersRole.create(user, roleUser)
+
+        // add testUser to opendream(Company)
         opendream.addToUsers(user)
 
+        // mock springSecurityUiService.encodePassword
         def springSecurityUiService = [:]
         springSecurityUiService.encodePassword = {salt, password -> '1234'}
         controller.springSecurityUiService = springSecurityUiService
 
-        
+        // stub springSecurityService principal
         def principal = [:]
         principal.authorities = ['ROLE_ADMIN', 'ROLE_USER']
         principal.companyId = 1
         principal.companyName = 'opendreamx'
         springSecurityService.principal = principal
         controller.springSecurityService = springSecurityService
+
+        // mock userCache
         def userCache = [:]
         userCache.removeUserFromCache = {str -> null}
         controller.userCache = userCache
 
+        // mock UserController lookupUserClass
         UserController.metaClass.lookupUserClass = { -> Users}
+        // mock UserController lookupRoleClass
         UserController.metaClass.lookupRoleClass = { -> Role}
+        // mock UsersRole static removeAll
         UsersRole.metaClass.static.removeAll = { Users users -> UsersRole.list().each {it.delete() } }
+        // mock UserController lookupUserRoleClass
         UserController.metaClass.lookupUserRoleClass = { -> UsersRole }
-        
+        // mock Users encodePassword
         Users.metaClass.encodePassword = {-> 'password'}
+        // mock Users isDirty
         Users.metaClass.isDirty = { password-> println 'update state!'; false}
-
-        
-        
     }
 
     @After
@@ -98,12 +107,7 @@ class UserControllerTests {
 
     void testSave() {
         // login user.principal.companyName = 'opendreamx'
-        params.username = "user"
-        params.password = "500"
-        params.enabled = true
-	params.accountExpired = false
-	params.accountLocked = false
-	params.passwordExpired = false
+        setParams()
 	params.'ROLE_USER' = 'on'
 	params.companyId = 2
 
@@ -117,13 +121,7 @@ class UserControllerTests {
 
     void testSaveWithOutCompanyIdAndRole() {
         // login user.principal.companyName = 'opendreamx'
-        params.username = "user"
-        params.password = "500"
-        params.enabled = true
-        params.accountExpired = false
-        params.accountLocked = false
-        params.passwordExpired = false
-        
+        setParams()
 
         controller.save()
         assert 1 == Users.count()
@@ -133,12 +131,7 @@ class UserControllerTests {
 
     void testSaveWithOutCompanyId() {
         // login user.principal.companyName = 'opendreamx'
-        params.username = "user"
-        params.password = "500"
-        params.enabled = true
-        params.accountExpired = false
-        params.accountLocked = false
-        params.passwordExpired = false
+        setParams()
         params.'ROLE_USER' = 'on'        
 
         controller.save()
@@ -149,12 +142,7 @@ class UserControllerTests {
 
     void testSaveWithOutRole() {
         // login user.principal.companyName = 'opendreamx'
-        params.username = "testUser"
-        params.password = "500"
-        params.enabled = true
-        params.accountExpired = false
-        params.accountLocked = false
-        params.passwordExpired = false
+        setParams()
         params.companyId = 2
 
         controller.save()
@@ -164,17 +152,6 @@ class UserControllerTests {
     }
 
     void testEdit() {
-        // create user no.1
-        params.username = "testUser"
-        params.password = "500"
-        params.enabled = true
-        params.accountExpired = false
-        params.accountLocked = false
-        params.passwordExpired = false
-        params.'ROLE_USER' = 'on'
-        params.companyId = 1
-        controller.save()
-
         // start edit
         params.username = "testUser"
         params.id = 1
@@ -230,5 +207,12 @@ class UserControllerTests {
         assert model.user.username == 'testUser'
     }
 
-    
+    void setParams() {
+        params.username = "user"
+        params.password = "500"
+        params.enabled = true
+        params.accountExpired = false
+        params.accountLocked = false
+        params.passwordExpired = false
+    }
 }
