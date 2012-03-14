@@ -187,5 +187,27 @@ class MemberController {
         }
     }
 
+    def edit() {
+        def memberInstance = Member.get(params.id)
+
+        if (memberInstance) {
+            render(view: 'edit', id: memberInstance.id)
+        }
+        else {
+            redirect(uri: '/error')
+        }
+    }
+
+    def update() {
+        def memberInstance = Member.get(params.id)
+
+        if (memberInstance) {
+            flash.message = message(code: "member.update.success", default: "Update success.")
+            render(view: 'show', id: memberInstance.id)
+        }
+        else {
+            redirect(uri: '/error')
+        }
+    }
 }
 

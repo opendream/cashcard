@@ -380,4 +380,36 @@ class MemberControllerTests {
 
         assert tx3.date >= tx2.date && tx2.date >= tx1.date
     }
+
+    void testEditInvalidMember() {
+        controller.edit()
+
+        assert response.redirectedUrl == '/error'
+    }
+
+    void testEditValidMember() {
+        params.id = 1
+        controller.edit()
+
+        assert view == '/member/edit'
+    }
+
+    void testUpdateInvalidMember() {
+        controller.update()
+
+        assert response.redirectedUrl == '/error'
+    }
+
+    void testUpdateValidValue() {
+        params.id = 2
+        params.firstname = 'Siriwat'
+        params.lastname = 'Uamngamsup'
+        params.telNo = '0846401342'
+        params.address = '162/37'
+
+        controller.update()
+
+        assert flash.message != null
+        assert view == '/member/show'
+    }
 }
