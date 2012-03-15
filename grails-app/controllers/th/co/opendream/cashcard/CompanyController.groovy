@@ -38,12 +38,12 @@ class CompanyController {
     def update() {
 		def company = Company.get(params.id)
 		if (!company) return
-		if (!(company.version < params.version)) {
+		if (company.version > params.version) {
 			return
 		}
 		company.properties = params
-		if (!company.save(flush:true)) {
-			render view: 'edit', model: [company:company, users:company.users, member:company.members]
+		if (!company.save(flush:true)) { 
+			render view: 'edit', model: [company:company, users:company.users, members:company.members]
 			return
 		}
 
