@@ -19,11 +19,11 @@ class Member {
     def utilService
 
     public enum Gender {
-      MALE,
-      FEMALE
-      static list() {
-       [MALE, FEMALE]
-      }
+        MALE,
+        FEMALE
+        static list() {
+            [MALE, FEMALE]
+        }
     }
 
     String toString() {

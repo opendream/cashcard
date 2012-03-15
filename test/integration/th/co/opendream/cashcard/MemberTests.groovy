@@ -11,44 +11,45 @@ class MemberTests {
 
 	@Before
 	void setUp() {
-	}
+        def m1 = new Member(identificationNumber:"1159900100015", firstname:"Nat", lastname: "Weerawan", telNo: "111111111", gender: "MALE", address: "Opendream")
+        def m2 = new Member(identificationNumber: "1234567891234", firstname: "Noomz", lastname: "Siriwat", telNo: "111111111", gender: "MALE", address: "Opendream2")
 
-	@After
-	void tearDown() {
+        m1.save()
+        m2.save()
+
+        new Policy(key: Policy.KEY_CREDIT_LINE, value: 2000000000).save() // 2 billion baht limit
+        new Policy(key: Policy.KEY_INTEREST_METHOD, value: Policy.VALUE_NON_COMPOUND).save()
+        new Policy(key: Policy.KEY_INTEREST_RATE_LIMIT, value: '18.00').save()
+    }
+
+    @After
+    void tearDown() {
+        Member.list().each {
+            it.delete()
+        }
+
+        BalanceTransaction.list().each {
+            it.delete()
+        }
 	}
 
     void testValidWithdraw() {
-        def m1 = Member.get(1)
+        def m1 = Member.findByFirstname("Nat")
         m1.withdraw(100.00)
 
-        m1 = Member.get(1)
+        m1 = Member.findByFirstname("Nat")
         assert m1.getBalance() == 100.00
         assert BalanceTransaction.count() == 1
     }
 
     void testValidPay() {
-        def m1 = Member.get(1)
+        def m1 = Member.findByFirstname("Nat")
         m1.withdraw(100.00)
         m1.pay(100.00)
 
-        m1 = Member.get(1)
+        m1 = Member.findByFirstname("Nat")
         assert m1.getBalance() == 0.00
         assert BalanceTransaction.count() == 2
-    }
-
-
-    void testValidWithdrawButSaveTransactionFail() {
-        def count = 0
-        BalanceTransaction.metaClass.save = { -> null }
-
-        def m1 = Member.get(1)
-        m1.withdraw(100.00)
-
-        m1 = Member.get(1)
-
-        assert count == 1
-        assert m1.getBalance() == 0.00
-        assert BalanceTransaction.count() == 0
     }
 
 }
