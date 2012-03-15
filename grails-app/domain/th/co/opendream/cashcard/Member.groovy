@@ -5,6 +5,7 @@ class Member {
     String firstname
     String lastname
     Gender gender
+    Status status = Status.ACTIVE
     String address
     String telNo
     BigDecimal balance = 0.00
@@ -23,6 +24,14 @@ class Member {
         FEMALE
         static list() {
             [MALE, FEMALE]
+        }
+    }
+
+    public enum Status {
+        ACTIVE,
+        DELETED
+        static list() {
+            [ACTIVE, DELETED]
         }
     }
 

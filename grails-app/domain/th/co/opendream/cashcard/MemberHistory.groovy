@@ -5,6 +5,7 @@ class MemberHistory {
     String firstname
     String lastname
     Member.Gender gender
+    Member.Status status
     String address
     String telNo
     BigDecimal balance = 0.00

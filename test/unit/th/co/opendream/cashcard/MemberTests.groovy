@@ -41,7 +41,8 @@ class MemberTests {
         def defaultProps = ["validationSkipMap", "gormPersistentEntity", "properties","id",
                             "gormDynamicFinders", "all", "attached", "class", "constraints", "version",
                             "validationErrorsMap", "errors", "mapping", "metaClass", "count"]
-        def memberProps = ['identificationNumber', 'firstname', 'lastname', 'dateCreated', 'lastUpdated', 'gender', 'telNo', 'address', 'balance']
+        def memberProps = ['identificationNumber', 'firstname', 'lastname', 'dateCreated',
+                           'lastUpdated', 'gender', 'telNo', 'address', 'balance', 'status']
 
         def instanceProperties = Member.metaClass.properties*.name
 
@@ -105,9 +106,19 @@ class MemberTests {
         mockForConstraintsTests(Member, [member])
 
         assert field == member.hasProperty(field)?.name
-          assertFalse member.validate([field])
-          member.gender = Member.Gender.MALE
-          assertTrue member.validate([field])
+        assertFalse member.validate([field])
+        member.gender = Member.Gender.MALE
+        assertTrue member.validate([field])
+    }
+
+    void testValidateStatus() {
+        def field = 'status'
+        def member = new Member()
+        mockForConstraintsTests(Member, [member])
+
+        assert field == member.hasProperty(field)?.name
+        assertTrue member.validate([field])
+        assert member.status == Member.Status.ACTIVE
     }
 
     void testValidateAddress() {

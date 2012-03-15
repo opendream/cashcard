@@ -20,9 +20,9 @@ class BootStrap {
 
         def currentEnv = Environment.current
 
-        if (currentEnv == Environment.DEVELOPMENT) {
+        if (currentEnv == Environment.DEVELOPMENT || currentEnv == Environment.CUSTOM) {
             def opendream = new Company(name:'opendream', address:'bkk', taxId:'1-2-3-4')
-            def user = new Users(username:'admin', password:'openpubyesroti!',
+            def user = new Users(username:'admin', password:'password',
                                 firstname:'admin', lastname:'messenger',
                                 email:'admin@messenger.opendream.org', enabled:true)
             opendream.addToUsers(user)
