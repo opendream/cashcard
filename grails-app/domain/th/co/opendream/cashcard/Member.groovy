@@ -34,6 +34,7 @@ class Member {
       static list() {
        [MALE, FEMALE]
       }
+    }
 
     public enum Status {
         ACTIVE,
