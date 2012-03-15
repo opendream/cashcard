@@ -20,7 +20,7 @@ class RoleController extends grails.plugins.springsecurity.ui.RoleController {
 
 		def roleClassName = GrailsNameUtils.getShortName(lookupRoleClassName())
 		def userField = GrailsNameUtils.getPropertyName(GrailsNameUtils.getShortName(lookupUserClassName()))
-		println "userField $userField"
+		
 		if(userField=='users') {
 			userField = 'user'
 		}
