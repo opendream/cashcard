@@ -39,7 +39,7 @@
                 <g:each in="${transactionList}" status="i" var="tx">
                     <tr class="${(i % 2) == 0 ? 'even' : 'odd'}">
                         <td class="id">${tx.id}</td>
-                        <td class="date"><g:formatDate format="yyyy-MM-dd" date="${tx.date}" /></td>
+                        <td class="date"><g:formatDate format="yyyy-MM-dd HH:mm:ss" date="${tx.date}" /></td>
                         <td class="string">${message(code: 'transaction.activityType.'+tx.activity, default: '')}</td>
                         <td class="number"><g:formatNumber type="number" number="${tx.amount}" maxFractionDigits="2" minFractionDigits="2" /></td>
                         <td class="number"><g:formatNumber type="number" number="${tx.net}" maxFractionDigits="2" minFractionDigits="2" /></td>
