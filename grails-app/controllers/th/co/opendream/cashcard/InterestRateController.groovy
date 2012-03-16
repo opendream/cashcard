@@ -28,7 +28,7 @@ class InterestRateController {
             return
         }
 
-		flash.message = message(code: 'default.created.message', args: [message(code: 'interestRate.label', default: 'InterestRate'), interestRateInstance.id])
+		flash.message = message(code: 'th.co.opendream.cashcard.InterestRate.created.message', args: [message(code: 'interestRate.label', default: 'InterestRate'), interestRateInstance.id])
         redirect action: "list"
     }
 
@@ -69,7 +69,7 @@ class InterestRateController {
             return
         }
 
-		flash.message = message(code: 'default.updated.message', args: [message(code: 'interestRate.label', default: 'InterestRate'), interestRateInstance.id])
+		flash.message = message(code: 'th.co.opendream.cashcard.InterestRate.updated.message', args: [message(code: 'interestRate.label', default: 'InterestRate'), interestRateInstance.id])
         redirect(action: "list")
     }
 
