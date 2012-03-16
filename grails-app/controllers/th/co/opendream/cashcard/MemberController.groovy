@@ -118,7 +118,7 @@ class MemberController {
 
             def withdrawable = utilService.moneyRoundDown(memberInstance.getTotalDebt())
             if (params.amount.toBigDecimal() >  withdrawable) {
-                flash.error = message(code: "Can not withdraw with exceed amount")
+                flash.error = message(code: "member.pay.exceed", default: "Can not withdraw with exceed amount")
                 render(view: "payment", model: [
                     memberInstance: memberInstance,
                     withdrawable: withdrawable,
@@ -129,10 +129,10 @@ class MemberController {
             def change = params.net?.toBigDecimal() - params.amount?.toBigDecimal()
             memberInstance.pay(params.amount.toBigDecimal())
             if (!change) {
-                flash.message = "Pay success."
+                flash.message = message(code: "member.pay.success", args: [params.amount])
             }
             else {
-                flash.message = "Change is ${change}"
+                flash.message = message(code: "member.pay.change", default: "Change is ${change}", args: [change])
             }
             redirect(action: "show", id: memberInstance.id)
         }
