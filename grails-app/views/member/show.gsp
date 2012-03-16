@@ -44,7 +44,7 @@
                     <tr>
                         <td><strong><g:message code="member.label.gender"></g:message></strong></td>
                         <td>
-                            ${memberInstance?.gender}
+                            ${message(code: 'member.label.'+memberInstance?.gender.toString().toLowerCase(), default: memberInstance?.gender.toString())}
                         </td>
                     </tr>
 
