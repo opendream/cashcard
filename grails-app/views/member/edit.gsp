@@ -2,12 +2,12 @@
 <html>
   <head>
     <meta name="layout" content="main" />
-    <title>${memberInstance} : ${message(code: 'member.edit.title', default: 'Edit')}</title>
+    <title>${message(code: 'member.edit.title', default: 'Edit member profile')}</title>
   </head>
   <body>
 		<div class="container">
 			<header class="page-header">
-				<h1>${memberInstance} : ${message(code: 'member.edit.title', default: 'Edit')}</h1>
+				<h1>${message(code: 'member.edit.title', default: 'Edit member profile')}</h1>
 			</header>
 		</div>
     <g:hasErrors bean="${memberInstance}">
