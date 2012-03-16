@@ -17,6 +17,7 @@ class Member {
     static hasMany = [balanceTransactions: BalanceTransaction]
 
     def transactionService
+    def memberService
     def utilService
 
     public enum Gender {

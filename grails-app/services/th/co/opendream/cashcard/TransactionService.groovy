@@ -3,6 +3,7 @@ package th.co.opendream.cashcard
 class TransactionService {
 
     def utilService
+    def memberService
 
     def withdraw(Member member, amount) {
         if (amount <= 0) {
@@ -27,7 +28,7 @@ class TransactionService {
                 throw new RuntimeException("Fail to save transaction record")
             }
 
-            if (!member.save()) {
+            if (!memberService.update(member)) {
                 throw new RuntimeException("Fail to update member balance")
             }
             return balance
@@ -92,7 +93,7 @@ class TransactionService {
         if (!balance.save()) {
             throw new RuntimeException("Fail to save transaction record")
         } else {
-            if (! member.save()) {
+            if (!memberService.update(member)) {
                throw new RuntimeException("Fail to save member record")
             }
         }

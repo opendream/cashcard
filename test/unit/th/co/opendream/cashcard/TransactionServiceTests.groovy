@@ -8,7 +8,7 @@ import org.junit.*
  * See the API for {@link grails.test.mixin.services.ServiceUnitTestMixin} for usage instructions
  */
 @TestFor(TransactionService)
-@Mock([Member, BalanceTransaction, UtilService])
+@Mock([Member, BalanceTransaction, UtilService, MemberService, MemberHistory])
 class TransactionServiceTests {
 
     def generateFindBy(flag) {

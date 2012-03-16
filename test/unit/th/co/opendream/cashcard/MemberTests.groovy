@@ -8,10 +8,10 @@ import org.junit.*
  * See the API for {@link grails.test.mixin.domain.DomainClassUnitTestMixin} for usage instructions
  */
 @TestFor(Member)
-@Mock ([Member, TransactionService])
+@Mock ([Member, TransactionService, MemberService, MemberHistory])
 class MemberTests {
 
-    def transactionService, utilService
+    def transactionService, utilService, memberService
     def txServiceControl, utilServiceControl
 
     @Before
@@ -23,6 +23,8 @@ class MemberTests {
 
         transactionService = new TransactionService()
         utilService = new UtilService()
+        memberService = new MemberService()
+        transactionService.memberService = memberService
         txServiceControl = mockFor(TransactionService)
     }
 
@@ -166,6 +168,7 @@ class MemberTests {
 
         def m1 = Member.get(1)
         m1.transactionService = txServiceControl.createMock()
+        m1.memberService = memberService
         m1.withdraw(100.00)
 
         txServiceControl.verify()
@@ -177,10 +180,11 @@ class MemberTests {
         def count = 0
         BalanceTransaction.metaClass.save = { -> ++count }
 
+        def memberServiceCount = 0
+
         def m1 = Member.get(1)
 
         m1.transactionService = transactionService
-
 
         m1.withdraw(102.00)
 
@@ -212,6 +216,9 @@ class MemberTests {
 
         def m1 = Member.get(1)
         m1.transactionService = transactionService
+        m1.memberService = memberService
+        m1.memberService = memberService
+        m1.memberService = memberService
 
         shouldFail(RuntimeException) {
                 m1.withdraw(3000.00)
@@ -311,6 +318,8 @@ class MemberTests {
 
         def m1 = Member.get(1)
         m1.transactionService = transactionService
+        m1.memberService = memberService
+        m1.memberService = memberService
         m1.utilService = utilService
 
         m1.balance = 100.00
@@ -367,6 +376,8 @@ class MemberTests {
 
         def m1 = Member.get(1)
         m1.transactionService = transactionService
+        m1.memberService = memberService
+        m1.memberService = memberService
         m1.utilService = utilService
 
         m1.balance = 100.00
@@ -413,6 +424,7 @@ class MemberTests {
     void testPayWithPartialDebt() {
         def m1 = Member.get(1)
         m1.transactionService = transactionService
+        m1.memberService = memberService
         m1.utilService = utilService
 
 
@@ -467,6 +479,7 @@ class MemberTests {
     void testPayWithFullInterest() {
         def m1 = Member.get(1)
         m1.transactionService = transactionService
+        m1.memberService = memberService
         m1.utilService = utilService
 
 
@@ -519,6 +532,7 @@ class MemberTests {
     void testPayWithPartialInterest() {
         def m1 = Member.get(1)
         m1.transactionService = transactionService
+        m1.memberService = memberService
         m1.utilService = utilService
 
 
