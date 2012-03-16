@@ -4,6 +4,9 @@ class BalanceTransaction extends Transaction {
     ActivityType activity
     BigDecimal net
     BigDecimal remainder
+    TransferType transferType = TransferType.NONE
+    Company userCompany
+    Company memberCompany
 
     def beforeValidate() {
         if (! code) {
@@ -17,6 +20,9 @@ class BalanceTransaction extends Transaction {
     }
     
     static constraints = {
+        userCompany nullable: true
+        memberCompany nullable: true
+        transferType nullable: true
         remainder validator: { val, obj ->
             (val == obj.amount - obj.net) ? null : "RemainderAmountNotEqual"
         }
@@ -27,4 +33,10 @@ class BalanceTransaction extends Transaction {
 public enum ActivityType {
     PAYMENT,
     WITHDRAW
+}
+
+public enum TransferType {
+    SENT,
+    RECEIVE,
+    NONE
 }
