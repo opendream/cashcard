@@ -3,18 +3,19 @@ package th.co.opendream.cashcard
 class MemberService {
 
     def update(Member member) {
+    	def __member__ = Member.get(member.id)
     	def properties = [
-			identificationNumber: member.identificationNumber,
-			firstname: member.firstname,
-			lastname: member.lastname,
-			dateCreated: member.dateCreated,
-			lastUpdated: member.lastUpdated,
-			gender: member.gender,
-			telNo: member.telNo,
-			address: member.address,
-			balance: member.balance,
+			identificationNumber: __member__.identificationNumber,
+			firstname: __member__.firstname,
+			lastname: __member__.lastname,
+			dateCreated: __member__.dateCreated,
+			lastUpdated: __member__.lastUpdated,
+			gender: __member__.gender,
+			telNo: __member__.telNo,
+			address: __member__.address,
+			balance: __member__.balance,
 			member: member.save(),
-			status: member.status,
+			status: __member__.status,
     	]
 
     	new MemberHistory(properties).save()
