@@ -20,7 +20,7 @@
     		<div class="control-group ${flash.error? 'error' : ''}">
           <label for="amount" class="control-label"><g:message code="cashcard.withdraw.amount"></g:message></label>
           <div class="controls">
-              <g:field type="text" id="amount" name="amount" pattern="\\d*(\\.\\d\\d)?" required="" value="" />
+              <g:field type="text" id="amount" name="amount" pattern="\\d*(\\.(25|50|75|00))?" required="" value="" />
           </div>
         </div>
 

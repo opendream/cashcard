@@ -8,7 +8,7 @@ import org.junit.*
  * See the API for {@link grails.test.mixin.services.ServiceUnitTestMixin} for usage instructions
  */
 @TestFor(TransactionService)
-@Mock([Member, BalanceTransaction])
+@Mock([Member, BalanceTransaction, UtilService])
 class TransactionServiceTests {
 
     def generateFindBy(flag) {
@@ -105,6 +105,7 @@ class TransactionServiceTests {
     void testPayDeferredCompound() {
         def m1 = Member.get(1)
         Policy.metaClass.static.findByKey = generateFindBy(Policy.VALUE_DEFERRED_COMPOUND)
+
 
         m1.balance = 100.00
         m1.interest = 20.12

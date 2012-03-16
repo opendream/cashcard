@@ -100,11 +100,10 @@ class MemberController {
         def memberInstance = Member.get(params.id)
 
         if (memberInstance) {
-            //memberInstance.metaClass.getTotalDebt = { utilService.moneyRoundUp(memberInstance.getTotalDebt()) }
-
-            [memberInstance: memberInstance,
-            roundUpDebt: utilService.moneyRoundUp(memberInstance.getTotalDebt()),
-            debt: memberInstance.getTotalDebt()
+            [
+                memberInstance: memberInstance,
+                withdrawable: utilService.moneyRoundDown(memberInstance.getTotalDebt()),
+                debt: memberInstance.getTotalDebt()
             ]
         }
         else {
@@ -116,12 +115,19 @@ class MemberController {
         def memberInstance = Member.get(params.id)
         params.net = params.amount
         if (memberInstance && params.amount) {
-            memberInstance.pay(params.amount.toBigDecimal())
-            def change = params.net?.toBigDecimal() - params.amount?.toBigDecimal()
 
-            if (params.amount.toBigDecimal() > memberInstance.getTotalDebt()) {
-                flash.message = message(code: "Can not withdraw with exceed amount")
-            }
+            def withdrawable = utilService.moneyRoundDown(memberInstance.getTotalDebt())
+            if (params.amount.toBigDecimal() >  withdrawable) {
+                flash.error = message(code: "Can not withdraw with exceed amount")
+                render(view: "payment", model: [
+                    memberInstance: memberInstance,
+                    withdrawable: withdrawable,
+                    debt: memberInstance.getTotalDebt()
+                    ])
+                return
+               }
+            def change = params.net?.toBigDecimal() - params.amount?.toBigDecimal()
+            memberInstance.pay(params.amount.toBigDecimal())
             if (!change) {
                 flash.message = "Pay success."
             }

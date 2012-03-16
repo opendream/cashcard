@@ -17,16 +17,24 @@
 	  <div class="container">
       <g:form action="pay" class="form-horizontal">
         <g:hiddenField name="id" value="${memberInstance?.id}" />
+
         <div class="control-group">
           <label class="control-label"><strong><g:message code="member.label.totalDebt"></g:message></strong></label>
           <div class="offset2">
-            ${roundUpDebt}
+            ${debt}
+          </div>
+        </div>
+
+        <div class="control-group">
+          <label class="control-label"><strong><g:message code="member.label.withdrawable"></g:message></strong></label>
+          <div class="offset2">
+            ${withdrawable}
           </div>
         </div>
     		<div class="control-group ${flash.error? 'error' : ''}">
           <label for="amount" class="control-label"><g:message code="cashcard.pay.amount"></g:message></label>
           <div class="controls">
-              <g:field type="text" id="amount" name="amount" pattern="\\d*(\\.\\d\\d)?" required="" value="" />
+              <g:field type="text" id="amount" name="amount" pattern="\\d*(\\.(25|50|75|00))?" required="" value="" />
           </div>
         </div>
 

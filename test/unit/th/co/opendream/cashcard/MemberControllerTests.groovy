@@ -191,7 +191,7 @@ class MemberControllerTests {
     void testMemberPayment() {
         Policy.metaClass.static.findByKey = generateFindBy(Policy.VALUE_COMPOUND)
 
-        utilControl.demand.moneyRoundUp(1..1) { amount -> 200.25 }
+        utilControl.demand.moneyRoundDown(1..1) { amount -> 200.25 }
         controller.utilService = utilControl.createMock()
 
         params.id = '1'
@@ -204,6 +204,10 @@ class MemberControllerTests {
     void testMemberValidPayWithNoChange() {
         Policy.metaClass.static.findByKey = generateFindBy(Policy.VALUE_COMPOUND)
 
+        def m1 = Member.get(1)
+        m1.balance = 300.00
+        m1.save()
+
         params.id = '1'
         params.amount = '200.00'
         params.net = '200.00'
@@ -212,18 +216,6 @@ class MemberControllerTests {
         assert flash.message != null
         assert response.redirectedUrl == '/member/show/1'
 
-    }
-
-    void testMemberValidPayWithChange() {
-        Policy.metaClass.static.findByKey = generateFindBy(Policy.VALUE_COMPOUND)
-
-        params.id = '1'
-        params.amount = '200.00'
-        params.net = '220.00'
-        def model = controller.pay()
-
-        assert flash.message != null
-        assert response.redirectedUrl == '/member/show/1'
     }
 
     void testMemberInvalidPay() {
@@ -364,7 +356,7 @@ class MemberControllerTests {
 
         controller.pay()
 
-        assert flash.message != null
+        assert flash.error != null
         assert Member.get(1).balance == 1000.00
     }
 

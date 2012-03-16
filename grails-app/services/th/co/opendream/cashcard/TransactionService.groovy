@@ -2,6 +2,8 @@ package th.co.opendream.cashcard
 
 class TransactionService {
 
+    def utilService
+
     def withdraw(Member member, amount) {
         if (amount <= 0) {
            throw new RuntimeException(message: "Withdraw amount is less than or equal 0 : ${amount}")
