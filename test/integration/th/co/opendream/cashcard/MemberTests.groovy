@@ -48,6 +48,7 @@ class MemberTests {
 
         m1 = Member.findByFirstname("Nat")
         assert m1.getBalance() == 10.00
+        assert BalanceTransaction.count() == 2
     }
 
 }

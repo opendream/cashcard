@@ -2,6 +2,7 @@ package th.co.opendream.cashcard
 
 
 import th.co.opendream.cashcard.Member.Gender
+import th.co.opendream.cashcard.Member.Status
 import grails.test.mixin.*
 import org.junit.*
 import groovy.time.*
@@ -11,10 +12,11 @@ import static java.util.Calendar.*
  * See the API for {@link grails.test.mixin.web.ControllerUnitTestMixin} for usage instructions
  */
 @TestFor(MemberController)
-@Mock([Member, UtilService, InterestTransaction, TransactionService])
+@Mock([Member, UtilService, InterestTransaction, TransactionService, MemberService])
 class MemberControllerTests {
 
     def utilControl
+    def memberControl
 
     def generateFindBy(flag) {
         return {key ->
@@ -34,6 +36,7 @@ class MemberControllerTests {
             [id: 2, identificationNumber: "2222222222222", firstname: "Noomz", lastname: "Siriwat", telNo: "0811111111", gender: "MALE", address: "2222222"]
         ])
 
+
         def m1 = Member.get(1)
         def m2 = Member.get(2)
 
@@ -51,6 +54,7 @@ class MemberControllerTests {
         ])
 
         utilControl = mockFor(UtilService)
+        memberControl = mockFor(MemberService)
 
         m1.transactionService = [
             'withdraw': { obj, amount ->
@@ -362,5 +366,89 @@ class MemberControllerTests {
 
         assert flash.message != null
         assert Member.get(1).balance == 1000.00
+    }
+
+    void testEditInvalidMember() {
+        controller.edit()
+
+        assert response.redirectedUrl == '/error'
+    }
+
+    void testEditValidMember() {
+        params.id = 1
+        controller.edit()
+
+        assert view == '/member/edit'
+    }
+
+    void testUpdateInvalidMember() {
+        controller.update()
+
+        assert response.redirectedUrl == '/error'
+    }
+
+    def populateValidParams(params) {
+        params.firstname = 'Siriwat'
+        params.lastname = 'Uamngamsup'
+        params.telNo = '0846401342'
+        params.address = '162/37'
+    }
+
+    void testUpdateValidValue() {
+        memberControl.demand.update(1..1) { member -> true }
+        controller.memberService = memberControl.createMock()
+
+        populateValidParams(params)
+        params.id = 2
+        params.version = 1
+
+        controller.update()
+        memberControl.verify()
+
+
+        assert flash.message != null
+        assert response.redirectedUrl == '/member/show/2'
+    }
+
+    void testUpdateWithOutdatedVersionNumber() {
+        def m1 = Member.get(2)
+        m1.version = 1
+        m1.save()
+
+        populateValidParams(params)
+        params.id = 2
+        params.version = -2
+
+        controller.update()
+
+        assert view == '/member/edit'
+        assert model.memberInstance != null
+        assert model.memberInstance.errors.getFieldError('version')
+    }
+
+    void testDisableSuccess() {
+        memberControl.demand.update(1..1) { member -> true }
+        params.id = 2
+
+        controller.memberService = memberControl.createMock()
+        controller.disable()
+        memberControl.verify()
+
+        assert flash.message != null
+        assert model.errors == null
+        assert response.redirectedUrl == '/member/list'
+    }
+
+    void testDisableFail() {
+        memberControl.demand.update(1..1) { member -> false }
+        params.id = 2
+
+        controller.memberService = memberControl.createMock()
+        controller.disable()
+        memberControl.verify()
+
+        assert flash.message != null
+        assert model.memberInstance.errors != null
+        assert view == '/member/edit'
     }
 }
