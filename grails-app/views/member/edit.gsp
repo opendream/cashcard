@@ -71,6 +71,7 @@
 
         <div class="form-actions">
           <button class="btn btn-primary" type="submit"><i class="icon-ok icon-white"></i> ${message(code: 'member.label.update', default: 'Update')}</button>
+          <g:link action="show" id="${memberInstance?.id}"><g:message code="default.button.cancel.label"></g:message></g:link>
         </div>
       </g:form>
     </div>
