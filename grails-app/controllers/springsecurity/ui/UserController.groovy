@@ -18,7 +18,7 @@ class UserController extends grails.plugins.springsecurity.ui.UserController {
 		def user = lookupUserClass().newInstance(params)
 		if (params.password) {
 			String salt = saltSource instanceof NullSaltSource ? null : params.username
-			user.password = springSecurityUiService.encodePassword(params.password, salt)
+			//user.password = springSecurityUiService.encodePassword(params.password, salt)
 		}
 		if(!user.validate() || !params.containsKey('companyId') || !params.keySet().find {it.contains('ROLE')}) {
 			render view: 'create', model: [user: user, authorityList: sortedRoles(), companyList: sortedCompanies()]
