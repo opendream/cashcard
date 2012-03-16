@@ -54,7 +54,7 @@ class BootStrap {
             new BalanceTransaction([id: 2, member: m2, amount: 700.00, txType: TransactionType.CREDIT, activity: ActivityType.WITHDRAW, date: today, net: 700.00, remainder: 0.00]).save()
             new BalanceTransaction([id: 3, member: m1, amount: 200.00, txType: TransactionType.CREDIT, activity: ActivityType.WITHDRAW, date: today.minus(1), net: 200.00, remainder: 0.00]).save()
             new BalanceTransaction([id: 4, member: m2, amount: 300.00, txType: TransactionType.DEBIT, activity: ActivityType.PAYMENT, date: today.minus(1), net: 300.00, remainder: 0.00]).save()
-            new BalanceTransaction([id: 5, member: m1, amount: 707.50, txType: TransactionType.DEBIT, activity: ActivityType.PAYMENT, date: today.minus(2), net: 707.32, remainder: 0.18]).save()
+            //new BalanceTransaction([id: 5, member: m1, amount: 707.50, txType: TransactionType.DEBIT, activity: ActivityType.PAYMENT, date: today.minus(2), net: 707.32, remainder: 0.18]).save()
             new BalanceTransaction([id: 6, member: m2, amount: 405.25, txType: TransactionType.DEBIT, activity: ActivityType.PAYMENT, date: today.minus(2), net: 405.08, remainder: 0.17]).save()
         }
 

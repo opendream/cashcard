@@ -30,7 +30,6 @@
                         <th class="id">${message(code: 'member.transaction.transactionId', default: 'Transaction ID')}</th>
                         <th class="date"> ${message(code: 'cashcard.date', default: 'Date')}</th>
                         <th class="string"> ${message(code: 'transaction.activityType', default: 'Activity Type')}</th>
-                        <th class="number"> ${message(code: 'member.transaction.amount', default: 'Amount')}</th>
                         <th class="number"> ${message(code: 'member.transaction.net', default: 'Net')}</th>
                         <th class="number"> ${message(code: 'member.transaction.remainder', default: 'Remainder')}</th>
                     </tr>
@@ -41,7 +40,6 @@
                         <td class="id">${tx.id}</td>
                         <td class="date"><g:formatDate format="yyyy-MM-dd HH:mm:ss" date="${tx.date}" /></td>
                         <td class="string">${message(code: 'transaction.activityType.'+tx.activity, default: '')}</td>
-                        <td class="number"><g:formatNumber type="number" number="${tx.amount}" maxFractionDigits="2" minFractionDigits="2" /></td>
                         <td class="number"><g:formatNumber type="number" number="${tx.net}" maxFractionDigits="2" minFractionDigits="2" /></td>
                          <td class="number"><g:formatNumber type="number" number="${tx.remainder}" maxFractionDigits="2" minFractionDigits="2" /></td>
                     </tr>
