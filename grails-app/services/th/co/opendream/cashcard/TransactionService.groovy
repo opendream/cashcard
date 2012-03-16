@@ -80,9 +80,14 @@ class TransactionService {
             member: member,
             activity: ActivityType.PAYMENT,
             net: net,
-            remainder: outstanding
-        )
-
+            remainder: outstanding,
+            userCompany: sessionUtilService.company,
+            memberCompany: member.company                
+            )
+        if(sessionUtilService.company!=member.company) {
+            balance.transferType = TransferType.SENT
+        }
+        println "member ${member}"
         if (!balance.save(flush:true)) {
             throw new RuntimeException("Fail to save transaction record")
         } else {
