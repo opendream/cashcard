@@ -31,6 +31,13 @@
 				</div>
 
 				<div class="row">
+					<div class="control-label span2"><strong><g:message code="member.label.company"></g:message></strong></div>
+					<div class="offset2">
+						${memberInstance?.company?.name}
+					</div>
+				</div>
+
+				<div class="row">
 					<div class="control-label span2"><strong><g:message code="member.label.telNo"></g:message></strong></div>
 					<div class="offset2">
 						<g:if test="${memberInstance.telNo}">

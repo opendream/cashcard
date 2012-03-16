@@ -56,6 +56,7 @@
 						<th><g:message code="member.label.telNo"></g:message></th>
 						<th><g:message code="member.label.gender"></g:message></th>
 						<th><g:message code="member.label.address"></g:message></th>
+						<th><g:message code="member.label.company"></g:message></th>
 					</tr>
 				</thead>
 				<tbody>
@@ -66,6 +67,7 @@
 							<td>${member.telNo}</td>
 							<td>${member.gender}</td>
 							<td>${member.address}</td>
+							<td>${member?.company?.name}</td>
 						</tr>
 					</g:each>
 				</tbody>
