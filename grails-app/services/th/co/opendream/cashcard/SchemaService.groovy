@@ -14,6 +14,7 @@ class SchemaService {
         if (Environment.current == Environment.DEVELOPMENT) {
             queryCreateTables += """
                 DROP SCHEMA IF EXISTS ${schema} CASCADE;
+                DROP FUNCTION ${schema}.createMemberTx() CASCADE;
             """
         }
 
@@ -57,9 +58,68 @@ class SchemaService {
               remainder numeric(19,2),
               fee numeric(19,2),
               interest numeric(19,2),
+              user_company_id bigint,
+              member_company_id bigint,
               CONSTRAINT transaction_pkey PRIMARY KEY (id)
             );
 
+            CREATE or REPLACE FUNCTION ${schema}.createMemberTx()
+                RETURNS trigger AS \$createMemberTx\$
+            DECLARE
+                user_current_schema text;
+                member_target_schema text;
+            begin
+                user_current_schema = 'c' || NEW.user_company_id;
+                member_target_schema = 'c' || NEW.member_company_id;
+
+                if (current_schema = user_current_schema) then
+                    if (user_current_schema != member_target_schema) then
+                        execute 'set search_path to ' || member_target_schema;
+                        insert into transaction (
+                          id,
+                          version,
+                          amount,
+                          code,
+                          date,
+                          member_id,
+                          tx_type,
+                          class,
+                          activity,
+                          net,
+                          remainder,
+                          fee,
+                          interest,
+                          user_company_id,
+                          member_company_id
+                        )
+                        values(
+                          NEW.id,
+                          NEW.version,
+                          NEW.amount,
+                          NEW.code,
+                          NEW.date,
+                          NEW.member_id,
+                          NEW.tx_type,
+                          NEW.class,
+                          NEW.activity,
+                          NEW.net,
+                          NEW.remainder,
+                          NEW.fee,
+                          NEW.interest,
+                          NEW.user_company_id,
+                          NEW.member_company_id
+                        );
+                    end if;
+                end if;
+
+                execute 'set search_path to ' || user_company_id;
+                return null;
+            end;
+            \$createMemberTx\$ LANGUAGE plpgsql;
+
+            create trigger createMemberTx
+            AFTER INSERT ON ${schema}."transaction"
+            FOR EACH ROW EXECUTE PROCEDURE ${schema}.createMemberTx();
         """
         println queryCreateTables
 
