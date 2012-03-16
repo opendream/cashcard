@@ -6,6 +6,7 @@ import th.co.opendream.cashcard.AccountService
 class MemberController {
     def utilService
     def transactionService
+    def sessionUtilService
 
     def index() { }
 
@@ -16,7 +17,9 @@ class MemberController {
 
     def save() {
         def memberInstance = new Member(params)
+        memberInstance.company = sessionUtilService.company 
         if ( memberInstance.save() ) {
+           
           redirect(action: "show", id: memberInstance.id)
         }
         else {
