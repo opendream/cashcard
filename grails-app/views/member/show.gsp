@@ -59,13 +59,6 @@
                     </tr>
 
                     <tr>
-                        <td><strong><g:message code="member.label.creditLine"></g:message></strong></td>
-                        <td>
-                            <g:formatNumber number="${memberInstance?.getRemainingFinancialAmount()}" type="currency" currencyCode="THB" />
-                        </td>
-                    </tr>
-
-                    <tr>
                         <td><strong><g:message code="member.label.balance"></g:message></strong></td>
                         <td>
                             <g:formatNumber number="${memberInstance?.balance}" type="currency" currencyCode="THB" />
