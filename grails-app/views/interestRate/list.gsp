@@ -29,7 +29,7 @@
                 <thead>
                     <tr>
                         <th class="date">${message(code: 'interestRate.startDate.label', default: 'Start Date')}</th>
-                        <th class="number"> ${message(code: 'interestRate.rate.label', default: 'Rate (%)')}</th>
+                        <th class="date"> ${message(code: 'interestRate.rate.label', default: 'Rate (%)')}</th>
                         <th class="date"> ${message(code: 'interestRate.dateCreated.label', default: 'Date Created')}</th>
                         <th class="date"> ${message(code: 'interestRate.lastUpdated.label', default: 'Last Updated')}</th>
                         <th class="date" colspan="2"> ${message(code: 'default.button.action.label', default: 'Action')}</th>
@@ -38,10 +38,10 @@
                 <tbody>
                 <g:each in="${interestRateInstanceList}" status="i" var="interestRateInstance">
                     <tr class="${(i % 2) == 0 ? 'even' : 'odd'}">
-                        <td class="date"><g:formatDate format="yyyy-MM-dd" date="${interestRateInstance.startDate}" /></td>
-                        <td class="number"><g:formatNumber type="number" number="${interestRateInstance.rate}" maxFractionDigits="2" minFractionDigits="2" /></td>
-                        <td class="date"><g:formatDate format="yyyy-MM-dd HH:mm" date="${interestRateInstance.dateCreated}" /></td>
-                        <td class="date"><g:formatDate format="yyyy-MM-dd HH:mm" date="${interestRateInstance.lastUpdated}" /></td>
+                        <td class="date"><g:formatDate format="dd/MM/yyyy" date="${interestRateInstance.startDate}" /></td>
+                        <td class="date"><g:formatNumber type="number" number="${interestRateInstance.rate}" maxFractionDigits="2" minFractionDigits="2" /></td>
+                        <td class="date"><g:formatDate format="dd/MM/yyyy HH:mm" date="${interestRateInstance.dateCreated}" /></td>
+                        <td class="date"><g:formatDate format="dd/MM/yyyy HH:mm" date="${interestRateInstance.lastUpdated}" /></td>
                         <td class="action">
                             <g:link action="edit" id="${interestRateInstance.id}">${message(code: 'default.button.edit.label', default: 'Edit')}</g:link>
                         </td>

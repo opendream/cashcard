@@ -188,9 +188,15 @@
                 <li><a href="${createLink(controller:'report', action:'dailyDiff')}">${message(code: 'main.menu.dailyDiff', default: 'สรุปรายการรับ/จ่ายเงิน ต่างสหกรณ์')}</a></li>
               </ul>
             </li>
-            <li class="brand"><com:name/></li>
-            <li class="brand"><sec:ifLoggedIn>Hello
-              <sec:username/> <g:link controller='logout'>${message(code:'cashcard.logout.label', default: 'Logout')}</g:link>
+            <li ><a><com:name/></a></li>
+            <li class="dropdown">
+              <sec:ifLoggedIn>
+              <a href='#' class="dropdown-toggle" data-toggle="dropdown"><sec:username/><b class="caret"></b></a>
+              <ul class="dropdown-menu">
+                <li>
+                <g:link controller='logout'>${message(code:'cashcard.logout.label', default: 'Logout')}</g:link>
+                </li>
+              </ul>
               </sec:ifLoggedIn>
             </li>
           </ul>
