@@ -188,6 +188,7 @@
                 <li><a href="${createLink(controller:'report', action:'dailyInterest')}">${message(code: 'main.menu.dailyInterest', default: 'สรุปดอกเบี้ย')}</a></li>
                 <li><a href="${createLink(controller:'report', action:'dailyDiff')}">${message(code: 'main.menu.dailyDiff', default: 'สรุปรายการรับ/จ่ายเงิน แทนสหกรณ์อื่น')}</a></li>
                 <li><a href="${createLink(controller:'report', action:'dailyDiffReceive')}">${message(code: 'main.menu.dailyDiff', default: 'สรุปรายการรับ/จ่ายเงิน จากสหกรณ์อื่น')}</a></li>
+                <li><a href="${createLink(controller:'report', action:'relate')}">${message(code: 'main.menu.dailyDiff', default: 'เงินข้ามสหกรณ์')}</a></li>
               </ul>
             </li>
             <li ><a><com:name/></a></li>

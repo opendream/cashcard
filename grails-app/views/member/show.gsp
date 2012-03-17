@@ -17,6 +17,13 @@
 				<g:render template="toolbar" />
 
 				<div class="row">
+					<div class="control-label span2"><strong><g:message code="member.label.identificationNumber"></g:message></strong></div>
+					<div class="offset2">
+						${memberInstance.identificationNumber}
+					</div>
+				</div>
+
+				<div class="row">
 					<div class="control-label span2"><strong><g:message code="member.label.firstName"></g:message></strong></div>
 					<div class="offset2">
 						${memberInstance?.firstname} ${memberInstance?.lastname}

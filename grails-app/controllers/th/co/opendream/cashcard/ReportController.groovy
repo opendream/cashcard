@@ -10,6 +10,7 @@ import org.codehaus.groovy.runtime.TimeCategory
 class ReportController {
 
     def sessionUtilService
+    def chartService
 
     def index() { }
 
@@ -173,6 +174,22 @@ class ReportController {
             results: results,
             startDate: range.startDate,
             endDate: range.endDate
+        ]
+    }
+
+    def relate() {
+        def rows = chartService.relate();
+        println rows
+        def txt = rows.collect { row ->
+            row.collect {
+                it.amount
+            }.join(',')
+        }.collect {
+            "[${it}]"
+        }.join(',')
+
+        [
+            rows: txt
         ]
     }
 
