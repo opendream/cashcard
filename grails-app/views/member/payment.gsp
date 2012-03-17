@@ -9,6 +9,9 @@
 				<h1>${memberInstance} : <g:message code="member.toolbar.pay"></g:message></h1>
 			</header>
 		</div>
+
+    <g:render template="toolbar" />
+    
     <g:if test="${flash.error}">
         <div id="errors" class="alert alert-error">
           ${flash.error}
@@ -19,7 +22,7 @@
         <g:hiddenField name="id" value="${memberInstance?.id}" />
         <div class="control-group">
           <label class="control-label"><strong><g:message code="member.label.totalDebt"></g:message></strong></label>
-          <div class="offset2">
+          <div class="offset2" style="padding-top:5px">
             ${roundUpDebt}
           </div>
         </div>

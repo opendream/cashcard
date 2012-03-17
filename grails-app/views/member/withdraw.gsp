@@ -9,6 +9,9 @@
 				<h1>${memberInstance} : <g:message code="member.toolbar.withdraw"></g:message></h1>
 			</header>
 		</div>
+
+    <g:render template="toolbar" />
+    
     <g:if test="${flash.error}">
         <div id="errors" class="alert alert-error">
           ${flash.error}
@@ -17,6 +20,14 @@
 	  <div class="container">
       <g:form action="withdraw" class="form-horizontal">
         <g:hiddenField name="id" value="${memberInstance?.id}" />
+
+        <div class="control-group ${flash.error? 'error' : ''}">
+          <label for="amount" class="control-label"><g:message code="member.label.creditLine"></g:message></label>
+          <div class="controls" style="padding-top:5px">
+              <g:formatNumber number="${memberInstance?.getRemainingFinancialAmount()}" format="#,##0.00" />
+          </div>
+        </div>
+
     		<div class="control-group ${flash.error? 'error' : ''}">
           <label for="amount" class="control-label"><g:message code="cashcard.withdraw.amount"></g:message></label>
           <div class="controls">

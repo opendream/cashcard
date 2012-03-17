@@ -2,6 +2,7 @@ package th.co.opendream.cashcard
 
 import th.co.opendream.cashcard.Member
 import th.co.opendream.cashcard.AccountService
+import th.co.opendream.cashcard.TransactionType
 
 class MemberController {
     def utilService
@@ -30,7 +31,8 @@ class MemberController {
     def show() {
         if (params.id) {
             def memberInstance = Member.get(params.id)
-            render(view:'show', model:[memberInstance: memberInstance])
+            def isOrigCompany = memberInstance.company != sessionUtilService.company
+            render(view:'show', model:[memberInstance: memberInstance, isOrigCompany: isOrigCompany])
         }
         else {
             redirect(uri: '/error')
@@ -55,6 +57,7 @@ class MemberController {
             if (params.telNo) {
                 ilike('telNo' , '%' + params.telNo + '%')
             }
+            eq('company', sessionUtilService.company)
         }
 
         render (view: 'list', model:[memberList: memberList, memberCount: memberList.totalCount])
@@ -146,11 +149,20 @@ class MemberController {
             params.max = params.max ? params.int('max') : 10
 
             def c = BalanceTransaction.createCriteria()
-            def transactionList = c.list(sort: 'date', order: 'desc') {
+            def transactionList = c.list(sort: 'date', order: 'asc') {
                 member {
                     eq('id', memberInstance.id)
                 }
+            }.collect {
+                [
+                    date: it.date,
+                    activity: it.activity,
+                    amount: it.amount,
+                    debit: (it.txType == TransactionType.CREDIT) ? it.amount : 0.00,
+                    credit: (it.txType == TransactionType.DEBIT) ? it.amount : 0.00
+                ]
             }
+            println transactionList
 
             render(view: 'transaction', model:[transactionList: transactionList, memberInstance: memberInstance, transactionCount: transactionList.totalCount])
         }

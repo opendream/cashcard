@@ -19,21 +19,14 @@
 				<div class="row">
 					<div class="control-label span2"><strong><g:message code="member.label.firstName"></g:message></strong></div>
 					<div class="offset2">
-						${memberInstance?.firstname}
+						${memberInstance?.firstname} ${memberInstance?.lastname}
 					</div>
 				</div>
 
 				<div class="row">
-					<div class="control-label span2"><strong><g:message code="member.label.lastName"></g:message></strong></div>
+					<div class="control-label span2"><strong><g:message code="member.label.gender"></g:message></strong></div>
 					<div class="offset2">
-						${memberInstance?.lastname}
-					</div>
-				</div>
-
-				<div class="row">
-					<div class="control-label span2"><strong><g:message code="member.label.company"></g:message></strong></div>
-					<div class="offset2">
-						${memberInstance?.company?.name}
+						${memberInstance?.gender == th.co.opendream.cashcard.Member.Gender.MALE ? 'ชาย' : 'หญิง'}
 					</div>
 				</div>
 
@@ -47,13 +40,7 @@
 					</div>
 				</div>
 
-				<div class="row">
-					<div class="control-label span2"><strong><g:message code="member.label.gender"></g:message></strong></div>
-					<div class="offset2">
-						${memberInstance?.gender}
-					</div>
-				</div>
-
+				
 				<div class="row">
 					<div class="control-label span2"><strong><g:message code="member.label.address"></g:message></strong></div>
 					<div class="offset2">
@@ -64,31 +51,50 @@
 					</div>
 				</div>
 
+
+				<hr/>
+
+				<div class="row">
+					<div class="control-label span2"><strong>สมาชิกของ</strong></div>
+					<div class="offset2">
+						<g:if test="${isOrigCompany}">
+						<span style="color:red">
+						</g:if>
+						${memberInstance?.company?.name}
+						<g:if test="${isOrigCompany}">
+						<span style="color:red">
+						</g:if>
+
+					</div>
+				</div>
+
+				<hr/>
+
 				<div class="row">
 					<div class="control-label span2"><strong><g:message code="member.label.creditLine"></g:message></strong></div>
-					<div class="offset2">
-						<g:formatNumber number="${memberInstance?.getRemainingFinancialAmount()}" type="currency" currencyCode="THB" />
+					<div class="span1" style="text-align:right">
+						<g:formatNumber number="${memberInstance?.getRemainingFinancialAmount()}" format="#,##0.00" />
 					</div>
 				</div>
 
 				<div class="row">
 					<div class="control-label span2"><strong><g:message code="member.label.balance"></g:message></strong></div>
-					<div class="offset2">
-						<g:formatNumber number="${memberInstance?.balance}" type="currency" currencyCode="THB" />
+					<div class="span1" style="text-align:right">
+						<g:formatNumber number="${memberInstance?.balance}" format="#,##0.00" />
 					</div>
 				</div>
 
 				<div class="row">
 					<div class="control-label span2"><strong><g:message code="member.label.interest"></g:message></strong></div>
-					<div class="offset2">
-						<g:formatNumber number="${memberInstance?.getInterest()}" type="currency" currencyCode="THB" />
+					<div class="span1" style="text-align:right">
+						<g:formatNumber number="${memberInstance?.getInterest()}" format="#,##0.00" />
 					</div>
 				</div>
 
 				<div class="row">
 					<div class="control-label span2"><strong><g:message code="member.label.totalDebt"></g:message></strong></div>
-					<div class="offset2">
-						<g:formatNumber number="${memberInstance?.getTotalDebt()}" type="currency" currencyCode="THB" />
+					<div class="span1" style="text-align:right">
+						<g:formatNumber number="${memberInstance?.getTotalDebt()}" format="#,##0.00" />
 					</div>
 				</div>
 

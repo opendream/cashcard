@@ -54,20 +54,16 @@
 						<th><g:message code="member.label.identificationNumber"></g:message></th>
 						<th><g:message code="member.label.name"></g:message></th>
 						<th><g:message code="member.label.telNo"></g:message></th>
-						<th><g:message code="member.label.gender"></g:message></th>
 						<th><g:message code="member.label.address"></g:message></th>
-						<th><g:message code="member.label.company"></g:message></th>
 					</tr>
 				</thead>
 				<tbody>
 					<g:each var="member" in ="${memberList}">
 						<tr>
-							<td>${member.identificationNumber}</td>
-							<td><a href="${createLink(controller:'member', action:'show', params:[id: member.id])}">${member.firstname} ${member.lastname}</a></td>
+							<td><a href="${createLink(controller:'member', action:'show', params:[id: member.id])}">${member.identificationNumber}</a></td>
+							<td>${member.firstname} ${member.lastname}</td>
 							<td>${member.telNo}</td>
-							<td>${member.gender}</td>
 							<td>${member.address}</td>
-							<td>${member?.company?.name}</td>
 						</tr>
 					</g:each>
 				</tbody>

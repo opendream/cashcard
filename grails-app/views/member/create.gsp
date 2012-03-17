@@ -59,7 +59,7 @@
         <div class="control-group ${hasErrors(bean: memberInstance, field: 'address', 'error')}">
           <label class="control-label" for="address">${message(code: 'member.label.address', default: 'Address')}</label>
           <div class="controls">
-            <textarea id="address" name="address" type="text" placeholder="${message(code: 'member.label.address', default: 'Address')}">${memberInstance?.address}</textarea>
+            <textarea id="address" name="address" rows="3" type="text" placeholder="${message(code: 'member.label.address', default: 'Address')}">${memberInstance?.address}</textarea>
           </div>
         </div>
 
