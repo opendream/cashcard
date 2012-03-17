@@ -183,7 +183,9 @@
             <li class="dropdown">
               <a href="#" class="dropdown-toggle" data-toggle="dropdown">${message(code: 'main.menu.report', default: 'Report')}<b class="caret"></b></a>
               <ul class="dropdown-menu">
-                <li><a href="${createLink(controller:'report', action:'dailyInterest')}">${message(code: 'main.menu.dailyInterest', default: 'Daily Interest')}</a></li>
+                <li><a href="${createLink(controller:'report', action:'dailyTransaction')}">${message(code: 'main.menu.payment', default: 'สรุปรายการรับ/จ่าย')}</a></li>
+                <li><a href="${createLink(controller:'report', action:'dailyInterest')}">${message(code: 'main.menu.dailyInterest', default: 'สรุปดอกเบี้ย')}</a></li>
+                <li><a href="${createLink(controller:'report', action:'dailyDiff')}">${message(code: 'main.menu.dailyDiff', default: 'สรุปรายการรับ/จ่ายเงิน ต่างสหกรณ์')}</a></li>
               </ul>
             </li>
             <li class="brand"><com:name/></li>

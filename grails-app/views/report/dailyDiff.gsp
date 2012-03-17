@@ -2,7 +2,7 @@
 <html>
     <head>
         <meta name="layout" content="main">
-        <title>สรุปรายการรับ/จ่าย</title>
+        <title>สรุปรายการรับ/จ่าย ต่างสหกรณ์</title>
         <style type="text/css">
             td.right {
                 text-align: right;
@@ -12,7 +12,7 @@
     <body>
         <div class="container">
             <header class="page-header">
-                <h1>สรุปรายการรับ/จ่าย</h1>
+                <h1>สรุปรายการรับ/จ่าย ต่างสหกรณ์</h1>
             </header>
         </div>
 
@@ -40,17 +40,24 @@
             <table class="table table-striped table-bordered table-condensed">
                 <thead>
                     <tr>
+                       <th class="date">สหกรณ์</th>
                        <th class="id">${message(code: 'report.dailyinterest.table.id', default: '#')}</th>
-                       <th class="date">${message(code: 'report.dailyinterest.table.date', default: 'วันที่')}</th>
+                       <th class="date">${message(code: 'report.dailyinterest.table.date', default: 'Date')}</th>
                        <th class="string">${message(code: 'report.dailyinterest.table.member', default: 'Member')}</th>
-                       <th class="date">${message(code: 'report.dailyinterest.table.code', default: 'ประเภทรายการ')}</th>
-                       <th class="number">เดบิต</th>
-                       <th class="number">เครดิต</th>
+                       <th class="date">${message(code: 'report.dailyinterest.table.code', default: 'Code')}</th>
+                       <th class="number">Debit</th>
+                       <th class="number">Credit</th>
                     </tr>
                 </thead>
                 <tbody>
-                <g:each in="${results}" status="i" var="tx">
+                <g:each in="${results}" var="item">
+                <tr>
+                    <td>${item.key}</td>
+                    <td colspan='6'></td>
+                </tr>
+                    <g:each in="${item.value}" var="tx" status="i">
                     <tr class="${(i % 2) == 0 ? 'even' : 'odd'}">
+                        <td class="date"></td>
                         <td class="id">${tx.code != 'รวมเงิน' ? i+1 : ''}</td>
                         <td class="date"><g:formatDate format="dd/MM/yyyy HH:mm" date="${tx.date}" /></td>
                         <td class="string">${tx.member}</td>
@@ -58,7 +65,10 @@
                         <td class="number"><g:formatNumber type="number" number="${tx.debit}" maxFractionDigits="2" minFractionDigits="2" /></td>
                         <td class="number"><g:formatNumber type="number" number="${tx.credit}" maxFractionDigits="2" minFractionDigits="2" /></td>
                     </tr>
+
+                    </g:each>
                 </g:each>
+
                 </tbody>
             </table>
             </div>
