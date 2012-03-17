@@ -159,7 +159,8 @@ class MemberController {
                     activity: it.activity,
                     amount: it.amount,
                     debit: (it.txType == TransactionType.CREDIT) ? it.amount : 0.00,
-                    credit: (it.txType == TransactionType.DEBIT) ? it.amount : 0.00
+                    credit: (it.txType == TransactionType.DEBIT) ? it.amount : 0.00,
+                    remark: (it.userCompany != sessionUtilService.company ? it.userCompany.name : '')
                 ]
             }
             println transactionList

@@ -2,7 +2,7 @@
 <html>
     <head>
         <meta name="layout" content="main">
-        <title>สรุปรายการรับ/จ่าย แทนสหกรณ์อื่น</title>
+        <title>สรุปรายการรับ/จ่าย จากสหกรณ์อื่น</title>
         <style type="text/css">
             td.right {
                 text-align: right;
@@ -12,12 +12,12 @@
     <body>
         <div class="container">
             <header class="page-header">
-                <h1>สรุปรายการรับ/จ่าย แทนสหกรณ์อื่น</h1>
+                <h1>สรุปรายการรับ/จ่าย จากสหกรณ์อื่น</h1>
             </header>
         </div>
 
         <div class="control-group">
-            <form id="dailyInterest" action="${createLink (action:'dailyDiff')}">
+            <form id="dailyInterest" action="${createLink (action:'dailyDiffReceive')}">
             <div class="container">
                 <label for="startDate" class="control-label">
                 ระหว่างวันที่

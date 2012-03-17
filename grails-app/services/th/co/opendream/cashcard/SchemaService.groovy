@@ -75,54 +75,19 @@ class SchemaService {
                 end if;
 
                 user_current_schema = 'c' || NEW.user_company_id;
-                member_target_schema = 'c' || NEW.member_company_id;                
+                member_target_schema = 'c' || NEW.member_company_id;
 
-                if (current_schema = user_current_schema) then                    
+                if (NEW.transfer_type = 'SENT') then
                     if (user_current_schema != member_target_schema) then
-                        if (NEW.transfer_type = 'SENT') then
-                          current_transfer_type = 'RECEIVE';
-                        end if;
-                        execute 'set search_path to ' || member_target_schema || ', public';
-                        insert into transaction (
-                          id,
-                          version,
-                          amount,
-                          code,
-                          date,
-                          member_id,
-                          tx_type,
-                          class,
-                          activity,
-                          net,
-                          remainder,
-                          fee,
-                          interest,
-                          transfer_type,
-                          user_company_id,
-                          member_company_id
-                        )
-                        values(
-                          NEW.id,
-                          NEW.version,
-                          NEW.amount,
-                          NEW.code,
-                          NEW.date,
-                          NEW.member_id,
-                          NEW.tx_type,
-                          NEW.class,
-                          NEW.activity,
-                          NEW.net,
-                          NEW.remainder,
-                          NEW.fee,
-                          NEW.interest,
-                          current_transfer_type,
-                          NEW.user_company_id,
-                          NEW.member_company_id
-                        );
+
+                      sql_command :=  'insert into ' || member_target_schema || '.transaction  (version, amount, code, date, member_id, tx_type, activity, member_company_id, net, remainder, transfer_type, user_company_id, class, id) '
+                        || 'select  version, amount, code, date, member_id, tx_type, activity, member_company_id, net, remainder, ''RECEIVE'', user_company_id, class, id  '
+                        || 'from ' || user_current_schema || '."transaction"  where id = ' || new.id;
+
+                      execute sql_command;
                     end if;
                 end if;
 
-                execute 'set search_path to ' || user_current_schema || ', public';
                 return null;
             end;
             \$createMemberTx\$ LANGUAGE plpgsql;

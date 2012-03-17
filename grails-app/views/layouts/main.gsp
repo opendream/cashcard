@@ -183,9 +183,11 @@
             <li class="dropdown">
               <a href="#" class="dropdown-toggle" data-toggle="dropdown">${message(code: 'main.menu.report', default: 'Report')}<b class="caret"></b></a>
               <ul class="dropdown-menu">
+                <li><a href="${createLink(controller:'report', action:'balance')}">${message(code: 'main.menu.payment', default: 'สรุปยอดเงินกู้คงค้าง')}</a></li>
                 <li><a href="${createLink(controller:'report', action:'dailyTransaction')}">${message(code: 'main.menu.payment', default: 'สรุปรายการรับ/จ่าย')}</a></li>
                 <li><a href="${createLink(controller:'report', action:'dailyInterest')}">${message(code: 'main.menu.dailyInterest', default: 'สรุปดอกเบี้ย')}</a></li>
-                <li><a href="${createLink(controller:'report', action:'dailyDiff')}">${message(code: 'main.menu.dailyDiff', default: 'สรุปรายการรับ/จ่ายเงิน ต่างสหกรณ์')}</a></li>
+                <li><a href="${createLink(controller:'report', action:'dailyDiff')}">${message(code: 'main.menu.dailyDiff', default: 'สรุปรายการรับ/จ่ายเงิน แทนสหกรณ์อื่น')}</a></li>
+                <li><a href="${createLink(controller:'report', action:'dailyDiffReceive')}">${message(code: 'main.menu.dailyDiff', default: 'สรุปรายการรับ/จ่ายเงิน จากสหกรณ์อื่น')}</a></li>
               </ul>
             </li>
             <li ><a><com:name/></a></li>

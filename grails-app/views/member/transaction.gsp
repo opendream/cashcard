@@ -31,6 +31,7 @@
                         <th class="string"> ${message(code: 'transaction.activityType', default: 'Activity Type')}</th>
                         <th class="number"> Debit</th>
                         <th class="number"> Credit</th>
+                        <th class="string">หมายเหตุ</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -40,6 +41,7 @@
                         <td class="string">${message(code: 'transaction.activityType.'+tx.activity, default: '')}</td>
                         <td class="number"><g:formatNumber type="number" number="${tx.debit}" maxFractionDigits="2" minFractionDigits="2" /></td>
                         <td class="number"><g:formatNumber type="number" number="${tx.credit}" maxFractionDigits="2" minFractionDigits="2" /></td>
+                        <td class="string">${tx.remark}</td>
                     </tr>
                 </g:each>
                 </tbody>

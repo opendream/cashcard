@@ -13,11 +13,25 @@ class ReportController {
 
     def index() { }
 
+    def balance() {
+        def results = Member.findByCompany(sessionUtilService.company, [order: 'firstname']).collect {
+            [name: "${it.firstname} ${it.lastname}",
+             balance: it.balance,
+             interest: it.interest
+            ]
+        }
+
+        [
+            results: results
+        ]
+    }
+
     def dailyInterest() {
         def range = getRange(params)
         def results = InterestTransaction.createCriteria().list {
             between('date', range.startDate, range.endDate)
             member {
+                eq('company', sessionUtilService.company)
                 order('firstname')
                 order('lastname')
             }
@@ -74,6 +88,7 @@ class ReportController {
         def range = getRange(params)
         def results = BalanceTransaction.createCriteria().list {
             between('date', range.startDate, range.endDate)
+            eq('userCompany', sessionUtilService.company)
             ne('transferType', TransferType.NONE)
             userCompany {
                 order('name')
@@ -114,6 +129,53 @@ class ReportController {
             endDate: range.endDate
         ]
     }
+
+    def dailyDiffReceive() {
+        def range = getRange(params)
+        def results = BalanceTransaction.createCriteria().list {
+            between('date', range.startDate, range.endDate)
+            eq('memberCompany', sessionUtilService.company)
+            eq('transferType', TransferType.RECEIVE)
+            memberCompany {
+                order('name')
+            }
+            order('date')
+        }.collect {
+            [
+                date: it.date,
+                member: it.member,
+                code: it.code,
+                amount: it.amount,
+                credit: it.code == 'PAY' ? it.amount : 0.00,
+                debit: it.code == 'WDR' ? it.amount : 0.00,
+                userCompany: it.userCompany
+            ]
+        }.groupBy { it.userCompany.name }.entrySet()
+
+        results.each {
+            def sdebit = 0.00
+            def scredit = 0.00
+            it.value.each {
+                sdebit += it.debit
+                scredit += it.credit
+            }
+            it.value << [
+                date: null,
+                member: '',
+                code: 'รวมเงิน',
+                credit: scredit,
+                debit: sdebit
+            ]
+        }
+
+        println results
+        [
+            results: results,
+            startDate: range.startDate,
+            endDate: range.endDate
+        ]
+    }
+
     def getRange(params) {
         def startDate = params.startDate ?: Calendar.instance.time
         startDate.set(hourOfDay: 0, minute: 0, second: 0)

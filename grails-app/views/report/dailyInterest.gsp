@@ -55,7 +55,7 @@
                 <tbody>
                 <g:each in="${interestList}" status="i" var="interest">
                     <tr class="${(i % 2) == 0 ? 'even' : 'odd'}">
-                        <td class="id">${interest.id}</td>
+                        <td class="id">${i+1}</td>
                         <td class="string">${interest.member}</td>
                         <td class="number"><g:formatNumber type="number" number="${interest.member.balance}" maxFractionDigits="2" minFractionDigits="2" /></td>
                         <td class="number"><g:formatNumber type="number" number="${interest.member.interest}" maxFractionDigits="2" minFractionDigits="2" /></td>
