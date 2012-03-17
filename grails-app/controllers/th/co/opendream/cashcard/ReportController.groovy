@@ -11,6 +11,7 @@ class ReportController {
 
     def sessionUtilService
     def chartService
+    def transactionService
 
     def index() { }
 
@@ -174,6 +175,28 @@ class ReportController {
             results: results,
             startDate: range.startDate,
             endDate: range.endDate
+        ]
+    }
+
+    def settlement() {
+        def range = getRange(params)
+        def results = transactionService.settlement(range.startDate, range.endDate)
+
+        def ret = []
+        results.entrySet().each {
+            def amount = it.value
+            if (amount != 0.00) {
+                def company = Company.get(it.key)
+                ret << [
+                    name: company.name,
+                    receive: amount < 0.00 ? -1.00 * amount : 0.00,
+                    sent: amount > 0.00 ? amount : 0.00
+                ]
+            }
+
+        }
+        [
+            results: ret.sort {it.name}
         ]
     }
 

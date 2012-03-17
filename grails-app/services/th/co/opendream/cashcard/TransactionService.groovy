@@ -98,4 +98,37 @@ class TransactionService {
 
         balance
     }
+
+    def settlement(begin, end) {
+        def comsSettle = [:]
+        def coms = Company.findAll().each {
+            comsSettle[it.id] = 0.00
+        }
+
+        def results = Transaction.createCriteria().list {
+            or {
+                eq('transferType', TransferType.RECEIVE)
+                eq('transferType', TransferType.SENT)
+            }
+            between('date', begin, end)
+        }.each {
+            if (it.txType == TransactionType.CREDIT) {
+                if (it.transferType == TransferType.SENT) {
+                    comsSettle[it.memberCompany.id] += it.amount
+                } else if (it.transferType == TransferType.RECEIVE) {
+                    comsSettle[it.userCompany.id] -= it.amount
+                }
+            } else {
+                if (it.transferType == TransferType.SENT) {
+                    comsSettle[it.memberCompany.id] -= it.amount
+                } else if (it.transferType == TransferType.RECEIVE) {
+                    comsSettle[it.userCompany.id] += it.amount
+                }
+            }
+
+        }
+
+        comsSettle
+
+    }
 }

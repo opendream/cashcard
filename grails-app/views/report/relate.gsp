@@ -40,14 +40,14 @@ var chord = d3.layout.chord()
     ${rows}
   ]);
 
-var w = 600,
-    h = 600,
+var w = 500,
+    h = 500,
     r0 = Math.min(w, h) * .41,
     r1 = r0 * 1.1;
 
 var fill = d3.scale.ordinal()
-    .domain(d3.range(4))
-    .range(["#000000", "#FFDD89", "#957244", "#F26223"]);
+    .domain(d3.range(3))
+    .range(["#000000", "#FFDD89", "#957244"]);
 
 var svg = d3.select("#chart")
   .append("svg")
