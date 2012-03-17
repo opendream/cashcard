@@ -94,7 +94,7 @@ log4j = {
 }
 
 company.management.authority = 'ROLE_ADMIN'
-grails.plugins.springsecurity.successHandler.defaultTargetUrl="/member/list"
+grails.plugins.springsecurity.successHandler.defaultTargetUrl="/member/verifyCard"
 
 // Added by the Spring Security Core plugin:
 grails.plugins.springsecurity.userLookup.userDomainClassName = 'th.co.opendream.cashcard.Users'
