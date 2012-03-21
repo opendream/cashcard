@@ -69,6 +69,7 @@ class SchemaService {
                 user_current_schema text;
                 member_target_schema text;
                 current_transfer_type text;
+                sql_command text;
             begin
                 if (NEW.class ~ 'Interest') then
                   return null;
