@@ -109,6 +109,9 @@ class TransactionServiceTests {
         assert tx.amount == 120.25
         assert tx.net == 120.12
         assert tx.remainder == 0.13
+        assert tx.balance == 0.00
+        assert tx.balance_pay == 100.00
+        assert tx.interest_pay == 20.12
     }
 
     void testInvalidPay() {
