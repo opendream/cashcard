@@ -8,8 +8,9 @@ import org.junit.*
  * See the API for {@link grails.test.mixin.services.ServiceUnitTestMixin} for usage instructions
  */
 @TestFor(TransactionService)
-@Mock([Member, BalanceTransaction])
+@Mock([Member, BalanceTransaction, Company, SessionUtilService])
 class TransactionServiceTests {
+    def sessionUtilControl
 
     def generateFindBy(flag) {
         return { key ->
@@ -28,9 +29,14 @@ class TransactionServiceTests {
             [id: 1, identificationNumber: "1111111111111", firstname: "Nat", lastname: "Weerawan", telNo: "0891278552", gender: "MALE", address: "11223445"],
             [id: 2, identificationNumber: "2222222222222", firstname: "Noomz", lastname: "Siriwat", telNo: "0811111111", gender: "MALE", address: "2222222"]
         ])
+
+        sessionUtilControl = mockFor(SessionUtilService)
     }
 
     void testValidWithdraw() {
+        sessionUtilControl.demand.getCompany(1..10) { -> Company.get(1) }
+        service.sessionUtilService = sessionUtilControl.createMock()
+
         def m1 = Member.get(1)
         Policy.metaClass.static.findByKey = generateFindBy(Policy.VALUE_NON_COMPOUND)
         def tx = service.withdraw(m1, 100.00)
@@ -48,6 +54,9 @@ class TransactionServiceTests {
     }
 
     void testInvalidWithdraw() {
+        sessionUtilControl.demand.getCompany(1..10) { -> Company.get(1) }
+        service.sessionUtilService = sessionUtilControl.createMock()
+
         def m1 = Member.get(1)
         Policy.metaClass.static.findByKey = generateFindBy(Policy.VALUE_NON_COMPOUND)
         shouldFail(RuntimeException) {
@@ -57,6 +66,9 @@ class TransactionServiceTests {
     }
 
     void testValidPay() {
+        sessionUtilControl.demand.getCompany(1..10) { -> Company.get(1) }
+        service.sessionUtilService = sessionUtilControl.createMock()
+
         def m1 = Member.get(1)
         m1.balance = 100
         m1.interest = 20
@@ -76,6 +88,9 @@ class TransactionServiceTests {
     }
 
     void testValidPayWithRemainder() {
+        sessionUtilControl.demand.getCompany(1..10) { -> Company.get(1) }
+        service.sessionUtilService = sessionUtilControl.createMock()
+
         def m1 = Member.get(1)
         m1.balance = 100
         m1.interest = 20.12
@@ -94,6 +109,9 @@ class TransactionServiceTests {
     }
 
     void testInvalidPay() {
+        sessionUtilControl.demand.getCompany(1..10) { -> Company.get(1) }
+        service.sessionUtilService = sessionUtilControl.createMock()
+
         def m1 = Member.get(1)
         Policy.metaClass.static.findByKey = generateFindBy(Policy.VALUE_NON_COMPOUND)
 
