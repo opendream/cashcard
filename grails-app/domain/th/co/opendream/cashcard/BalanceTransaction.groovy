@@ -4,6 +4,9 @@ class BalanceTransaction extends Transaction {
     ActivityType activity
     BigDecimal net
     BigDecimal remainder
+    BigDecimal balance
+    BigDecimal balance_pay
+    BigDecimal interest_pay
     TransferType transferType = TransferType.NONE
     Company userCompany
     Company memberCompany
@@ -18,7 +21,7 @@ class BalanceTransaction extends Transaction {
             }
         }
     }
-    
+
     static constraints = {
         userCompany nullable: true
         memberCompany nullable: true
@@ -27,7 +30,7 @@ class BalanceTransaction extends Transaction {
             (val == obj.amount - obj.net) ? null : "RemainderAmountNotEqual"
         }
     }
-    
+
 }
 
 public enum ActivityType {

@@ -85,6 +85,9 @@ class TransactionServiceTests {
         assert tx.net == 120.00
         assert tx.remainder == 0.00
         assert tx.activity == ActivityType.PAYMENT
+        assert tx.balance == 0.00
+        assert tx.balance_pay == 100.00
+        assert tx.interest_pay == 20.00
     }
 
     void testValidPayWithRemainder() {

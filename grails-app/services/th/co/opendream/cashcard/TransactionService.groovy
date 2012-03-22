@@ -21,7 +21,10 @@ class TransactionService {
                 net: amount,
                 remainder: 0.00,
                 userCompany: sessionUtilService.company,
-                memberCompany: member.company
+                memberCompany: member.company,
+                balance: member.balance,
+                balance_pay: 0.00,
+                interest_pay: 0.00
             )
             if(sessionUtilService.company!=member.company) {
                 balance.transferType = TransferType.SENT
@@ -47,15 +50,20 @@ class TransactionService {
      *
      */
     def pay(Member member, amount) {
-        def outstanding = amount
+        def outstanding = amount,
+            balance_pay = 0.00,
+            interest_pay = 0.00
+
         if (outstanding >= member.interest) {
             if (Policy.isCompoundMethod()) {
                 // do nothing
             } else {
                 outstanding -= member.interest
             }
+            interest_pay = member.interest
             member.interest = 0.00
         } else {
+            interest_pay = outstanding
             if (Policy.isCompoundMethod()) {
                 // do nothing
                 member.interest -= outstanding
@@ -65,9 +73,11 @@ class TransactionService {
             }
         }
         if (outstanding > member.balance) {
+            balance_pay = member.balance
             outstanding -= member.balance
             member.balance = 0.00
         } else {
+            balance_pay = outstanding
             member.balance -= outstanding
             outstanding = 0.00
         }
@@ -82,7 +92,10 @@ class TransactionService {
             net: net,
             remainder: outstanding,
             userCompany: sessionUtilService.company,
-            memberCompany: member.company
+            memberCompany: member.company,
+            balance: member.balance,
+            balance_pay: balance_pay,
+            interest_pay: interest_pay
             )
         if(sessionUtilService.company!=member.company) {
             balance.transferType = TransferType.SENT
