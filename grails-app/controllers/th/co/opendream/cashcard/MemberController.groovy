@@ -18,9 +18,9 @@ class MemberController {
 
     def save() {
         def memberInstance = new Member(params)
-        memberInstance.company = sessionUtilService.company 
+        memberInstance.company = sessionUtilService.company
         if ( memberInstance.save() ) {
-           
+
           redirect(action: "show", id: memberInstance.id)
         }
         else {
@@ -39,7 +39,7 @@ class MemberController {
         }
     }
 
-    def list() {        
+    def list() {
         params.offset = params.offset ? params.int('offset') : 0
         params.max = params.max ? params.int('max') : 10
 
@@ -153,7 +153,9 @@ class MemberController {
                 member {
                     eq('id', memberInstance.id)
                 }
-            }.collect {
+            }
+            def totalCount = transactionList.totalCount
+            transactionList = transactionList.collect {
                 [
                     date: it.date,
                     activity: it.activity,
@@ -163,9 +165,7 @@ class MemberController {
                     remark: (it.userCompany != sessionUtilService.company ? it.userCompany.name : '')
                 ]
             }
-            println transactionList
-
-            render(view: 'transaction', model:[transactionList: transactionList, memberInstance: memberInstance, transactionCount: transactionList.totalCount])
+            render(view: 'transaction', model:[transactionList: transactionList, memberInstance: memberInstance, transactionCount: totalCount])
         }
         else {
             redirect(uri: '/error')
@@ -173,4 +173,4 @@ class MemberController {
     }
 
 }
-        
+

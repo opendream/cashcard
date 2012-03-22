@@ -11,10 +11,11 @@ import static java.util.Calendar.*
  * See the API for {@link grails.test.mixin.web.ControllerUnitTestMixin} for usage instructions
  */
 @TestFor(MemberController)
-@Mock([Member, UtilService, InterestTransaction, TransactionService])
+@Mock([Member, UtilService, InterestTransaction, TransactionService, Company, SessionUtilService])
 class MemberControllerTests {
 
     def utilControl
+    def sessionUtilControl
 
     def generateFindBy(flag) {
         return {key ->
@@ -51,6 +52,7 @@ class MemberControllerTests {
         ])
 
         utilControl = mockFor(UtilService)
+        sessionUtilControl = mockFor(SessionUtilService)
 
         m1.transactionService = [
             'withdraw': { obj, amount ->
@@ -58,6 +60,14 @@ class MemberControllerTests {
             'pay': {obj, amount ->
             }
         ]
+
+        def opendream = new Company(name:'opendream', address:'bkk', taxId:'1-2-3-4').save()
+
+        m1.company = opendream
+        m2.company = opendream
+
+        m1.save()
+        m2.save()
     }
 
     @After
@@ -93,6 +103,10 @@ class MemberControllerTests {
     }
 
     void testListMember() {
+        sessionUtilControl.demand.getCompany(1..1) { -> Company.get(1) }
+        controller.sessionUtilService = sessionUtilControl.createMock()
+
+
         controller.list()
         assert Member.list().size() == model.memberList?.size()
         assert view == '/member/list'
@@ -227,6 +241,9 @@ class MemberControllerTests {
     }
 
     void testMemberSearchByIdCard() {
+        sessionUtilControl.demand.getCompany(2..2) { -> Company.get(1) }
+        controller.sessionUtilService = sessionUtilControl.createMock()
+
         params.identificationNumber = '1111111111111'
         controller.list()
 
@@ -243,6 +260,9 @@ class MemberControllerTests {
     }
 
     void testMemberSearchByFirstname() {
+        sessionUtilControl.demand.getCompany(3..3) { -> Company.get(1) }
+        controller.sessionUtilService = sessionUtilControl.createMock()
+
         params.firstname = 'Nat'
         controller.list()
 
@@ -265,6 +285,9 @@ class MemberControllerTests {
     }
 
     void testMemberSearchByLastname() {
+        sessionUtilControl.demand.getCompany(3..3) { -> Company.get(1) }
+        controller.sessionUtilService = sessionUtilControl.createMock()
+
         params.lastname = 'Weerawan'
         controller.list()
 
@@ -287,6 +310,9 @@ class MemberControllerTests {
     }
 
     void testMemberSearchByTelephone() {
+        sessionUtilControl.demand.getCompany(2..2) { -> Company.get(1) }
+        controller.sessionUtilService = sessionUtilControl.createMock()
+
         params.telNo = '0891278552'
         controller.list()
 
@@ -302,6 +328,9 @@ class MemberControllerTests {
     }
 
     void testMemberSearchCompound() {
+        sessionUtilControl.demand.getCompany(1..1) { -> Company.get(1) }
+        controller.sessionUtilService = sessionUtilControl.createMock()
+
         params.identificationNumber = '1111111111111'
         params.firstname = 'Nat'
         params.lastname = 'Weerawan'
@@ -341,6 +370,6 @@ class MemberControllerTests {
         def tx2 = model.transactionList[1]
         def tx3 = model.transactionList[2]
 
-        assert tx3.date <= tx2.date && tx2.date <= tx1.date
+        assert tx3.date >= tx2.date && tx2.date >= tx1.date
     }
 }
