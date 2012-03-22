@@ -2,7 +2,7 @@ package th.co.opendream.cashcard
 
 class TransactionService {
     def sessionUtilService
-    
+
     def withdraw(Member member, amount) {
         if (amount <= 0) {
            throw new RuntimeException(message: "Withdraw amount is less than or equal 0 : ${amount}")
@@ -21,7 +21,7 @@ class TransactionService {
                 net: amount,
                 remainder: 0.00,
                 userCompany: sessionUtilService.company,
-                memberCompany: member.company                
+                memberCompany: member.company
             )
             if(sessionUtilService.company!=member.company) {
                 balance.transferType = TransferType.SENT
@@ -34,7 +34,7 @@ class TransactionService {
             if (!member.save()) {
                 throw new RuntimeException("Fail to update member balance")
             }
-            
+
             return balance
 
         } else {
@@ -82,13 +82,13 @@ class TransactionService {
             net: net,
             remainder: outstanding,
             userCompany: sessionUtilService.company,
-            memberCompany: member.company                
+            memberCompany: member.company
             )
         if(sessionUtilService.company!=member.company) {
             balance.transferType = TransferType.SENT
         }
-        println "member ${member}"
-        if (!balance.save(flush:true)) {
+
+        if (!balance.save()) {
             throw new RuntimeException("Fail to save transaction record")
         } else {
             if (! member.save()) {

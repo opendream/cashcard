@@ -12,6 +12,5 @@ import org.junit.*
 class SessionUtilServiceTests {
 
     void testSomething() {
-        fail "Implement me"
     }
 }

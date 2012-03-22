@@ -8,20 +8,23 @@ import org.junit.*
  * See the API for {@link grails.test.mixin.domain.DomainClassUnitTestMixin} for usage instructions
  */
 @TestFor(Member)
-@Mock ([Member, TransactionService])
+@Mock ([Member, TransactionService, Company, SessionUtilService])
 class MemberTests {
 
-    def transactionService, utilService
+    def transactionService, utilService, sessionUtilService
     def txServiceControl, utilServiceControl
 
     @Before
     void setUp() {
+        def opendream = new Company(name:'opendream', address:'bkk', taxId:'1-2-3-4').save()
+
         mockDomain(Member, [
-            [id: 1, identificationNumber: "1111111111111", firstname: "Nat", lastname: "Weerawan", telNo: "0891278552", gender: "MALE", address: "11223445"],
-            [id: 2, identificationNumber: "2222222222222", firstname: "Noomz", lastname: "Siriwat", telNo: "0811111111", gender: "MALE", address: "2222222"]
+            [id: 1, identificationNumber: "1111111111111", firstname: "Nat", lastname: "Weerawan", telNo: "0891278552", gender: "MALE", address: "11223445", company: opendream],
+            [id: 2, identificationNumber: "2222222222222", firstname: "Noomz", lastname: "Siriwat", telNo: "0811111111", gender: "MALE", address: "2222222", company: opendream]
         ])
 
         transactionService = new TransactionService()
+        transactionService.sessionUtilService = new SessionUtilService()
         utilService = new UtilService()
         txServiceControl = mockFor(TransactionService)
     }
