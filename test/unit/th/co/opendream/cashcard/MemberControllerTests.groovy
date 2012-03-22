@@ -43,12 +43,12 @@ class MemberControllerTests {
         today = today.time
 
         mockDomain(BalanceTransaction, [
-            [id: 1, member: m1, amount: 500.00, txType: TransactionType.CREDIT, activity: ActivityType.WITHDRAW, date: today, net: 500.00, remainder: 0.00],
-            [id: 2, member: m2, amount: 700.00, txType: TransactionType.CREDIT, activity: ActivityType.WITHDRAW, date: today, net: 700.00, remainder: 0.00],
-            [id: 3, member: m1, amount: 200.00, txType: TransactionType.CREDIT, activity: ActivityType.WITHDRAW, date: today.plus(1), net: 200.00, remainder: 0.00],
-            [id: 4, member: m2, amount: 300.00, txType: TransactionType.DEBIT, activity: ActivityType.PAYMENT, date: today.plus(1), net: 300.00, remainder: 0.00],
-            [id: 5, member: m1, amount: 707.50, txType: TransactionType.DEBIT, activity: ActivityType.PAYMENT, date: today.plus(2), net: 707.32, remainder: 0.18],
-            [id: 6, member: m2, amount: 405.25, txType: TransactionType.DEBIT, activity: ActivityType.PAYMENT, date: today.plus(2), net: 405.08, remainder: 0.17],
+            [id: 1, member: m1, amount: 500.00, txType: TransactionType.CREDIT, activity: ActivityType.WITHDRAW, date: today, net: 500.00, remainder: 0.00, balance: 500.00, balance_pay: 0.00, interest_pay: 0.00],
+            [id: 2, member: m2, amount: 700.00, txType: TransactionType.CREDIT, activity: ActivityType.WITHDRAW, date: today, net: 700.00, remainder: 0.00, balance: 700.00, balance_pay: 0.00, interest_pay: 0.00],
+            [id: 3, member: m1, amount: 200.00, txType: TransactionType.CREDIT, activity: ActivityType.WITHDRAW, date: today.plus(1), net: 200.00, remainder: 0.00, balance: 700.00, balance_pay: 0.00, interest_pay: 0.00],
+            [id: 4, member: m2, amount: 300.00, txType: TransactionType.DEBIT, activity: ActivityType.PAYMENT, date: today.plus(1), net: 300.00, remainder: 0.00, balance: 400.00, balance_pay: 300.00, interest_pay: 0.00],
+            [id: 5, member: m1, amount: 707.50, txType: TransactionType.DEBIT, activity: ActivityType.PAYMENT, date: today.plus(2), net: 707.32, remainder: 0.18, balance: 0.00, balance_pay: 700.00, interest_pay: 707.50],
+            [id: 6, member: m2, amount: 405.25, txType: TransactionType.DEBIT, activity: ActivityType.PAYMENT, date: today.plus(2), net: 405.08, remainder: 0.17, balance: 0.00, balance_pay: 400.00, interest_pay: 405.25],
         ])
 
         utilControl = mockFor(UtilService)
@@ -105,7 +105,6 @@ class MemberControllerTests {
     void testListMember() {
         sessionUtilControl.demand.getCompany(1..1) { -> Company.get(1) }
         controller.sessionUtilService = sessionUtilControl.createMock()
-
 
         controller.list()
         assert Member.list().size() == model.memberList?.size()

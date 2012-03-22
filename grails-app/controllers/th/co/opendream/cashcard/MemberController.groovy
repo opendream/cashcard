@@ -154,6 +154,7 @@ class MemberController {
                     eq('id', memberInstance.id)
                 }
             }
+            println transactionList
             def totalCount = transactionList.totalCount
             transactionList = transactionList.collect {
                 [
@@ -162,7 +163,7 @@ class MemberController {
                     amount: it.amount,
                     debit: (it.txType == TransactionType.CREDIT) ? it.amount : 0.00,
                     credit: (it.txType == TransactionType.DEBIT) ? it.amount : 0.00,
-                    remark: (it.userCompany != sessionUtilService.company ? it.userCompany.name : '')
+                    remark: (it.userCompany != sessionUtilService.company ? it.userCompany.name : ''),
                 ]
             }
             render(view: 'transaction', model:[transactionList: transactionList, memberInstance: memberInstance, transactionCount: totalCount])
