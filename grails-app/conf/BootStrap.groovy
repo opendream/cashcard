@@ -9,6 +9,7 @@ import th.co.opendream.cashcard.BalanceTransaction
 import th.co.opendream.cashcard.Transaction
 import th.co.opendream.cashcard.TransactionType
 import th.co.opendream.cashcard.ActivityType
+import th.co.opendream.cashcard.RequestMap
 import groovy.time.*
 import static java.util.Calendar.*
 
@@ -37,8 +38,12 @@ class BootStrap {
         companyService.save(opendreamx)
 
         //opendream.save(failOnError: true)
-        def role = new Role(authority:'ROLE_ADMIN').save(failOnError: true)
-        new UsersRole(user:user, role:role).save(failOnError: true)
+        def roleAdmin = new Role(authority:'ROLE_ADMIN').save(failOnError: true)
+        def roleCounter = new Role(authority:'ROLE_COUNTER').save(failOnError: true)
+        def roleUser = new Role(authority:'ROLE_USER').save(failOnError: true)
+        new UsersRole(user:user, role:roleAdmin).save(failOnError: true)
+        new UsersRole(user:user, role:roleCounter).save(failOnError: true)
+        new UsersRole(user:user, role:roleUser).save(failOnError: true)
 
         def today = Calendar.instance
             today = today.time
@@ -54,8 +59,30 @@ class BootStrap {
             new BalanceTransaction([id: 4, member: m2, amount: 300.00, txType: TransactionType.DEBIT, activity: ActivityType.PAYMENT, date: today.plus(1), net: 300.00, remainder: 0.00]).save()
             new BalanceTransaction([id: 5, member: m1, amount: 707.50, txType: TransactionType.DEBIT, activity: ActivityType.PAYMENT, date: today.plus(2), net: 707.32, remainder: 0.18]).save()
             new BalanceTransaction([id: 6, member: m2, amount: 405.25, txType: TransactionType.DEBIT, activity: ActivityType.PAYMENT, date: today.plus(2), net: 405.08, remainder: 0.17]).save() */  
+
+            createRequestMaps();
     }
 
     def destroy = {
+    }
+
+    def createRequestMaps() {
+        new RequestMap(url: '/js/**', configAttribute: 'IS_AUTHENTICATED_ANONYMOUSLY').save()
+        new RequestMap(url: '/css/**', configAttribute: 'IS_AUTHENTICATED_ANONYMOUSLY').save()
+        new RequestMap(url: '/images/**', configAttribute: 'IS_AUTHENTICATED_ANONYMOUSLY').save()
+        new RequestMap(url: '/login/**', configAttribute: 'IS_AUTHENTICATED_ANONYMOUSLY').save()
+        new RequestMap(url: '/logout/**', configAttribute: 'IS_AUTHENTICATED_ANONYMOUSLY').save()
+        new RequestMap(url: '/j_spring_security_switch_user',
+                       configAttribute: 'ROLE_SWITCH_USER,IS_AUTHENTICATED_FULLY').save()
+        new RequestMap(url: '/*', configAttribute: 'IS_AUTHENTICATED_ANONYMOUSLY').save()
+        new RequestMap(url: '/user/**', configAttribute: 'ROLE_ADMIN').save()
+        new RequestMap(url: '/role/**', configAttribute: 'ROLE_ADMIN').save()
+        new RequestMap(url: '/company/**', configAttribute: 'ROLE_ADMIN').save()
+        new RequestMap(url: '/member/**', configAttribute: 'ROLE_USER,ROLE_COUNTER').save()
+        new RequestMap(url: '/member/payment/**', configAttribute: 'ROLE_COUNTER').save()
+        new RequestMap(url: '/member/pay/**', configAttribute: 'ROLE_COUNTER').save()
+        new RequestMap(url: '/member/withdraw/**', configAttribute: 'ROLE_COUNTER').save()
+        new RequestMap(url: '/interestRate/**', configAttribute: 'ROLE_USER,ROLE_COUNTER').save()
+        new RequestMap(url: '/report/**', configAttribute: 'ROLE_USER,ROLE_COUNTER').save()
     }
 }
