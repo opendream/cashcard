@@ -11,6 +11,7 @@ class Member {
     BigDecimal interest = 0.00
     Date dateCreated
     Date lastUpdated
+    InterestMethod interestMethod
 
     Company company
     static hasMany = [balanceTransactions: BalanceTransaction]
@@ -18,9 +19,17 @@ class Member {
     def transactionService
     def utilService
 
+    public enum InterestMethod {
+        COMPOUND,
+        NON_COMPOUND,
+        static list() {
+            [COMPOUND, NON_COMPOUND]
+        }
+    }
+
     public enum Gender {
       MALE,
-      FEMALE
+      FEMALE,
       static list() {
        [MALE, FEMALE]
       }
@@ -69,7 +78,7 @@ class Member {
      * หนี้คงค้างสุทธิ
      */
     BigDecimal getTotalDebt() {
-        if (Policy.isCompoundMethod()) {
+        if (this.interestMethod == InterestMethod.COMPOUND) {
             balance
         }
         else {

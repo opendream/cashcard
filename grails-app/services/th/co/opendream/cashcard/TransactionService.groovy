@@ -1,7 +1,8 @@
 package th.co.opendream.cashcard
 
 class TransactionService {
-    def sessionUtilService
+    def sessionUtilService,
+        policyService
 
     def withdraw(Member member, amount) {
         if (amount <= 0) {
@@ -55,7 +56,7 @@ class TransactionService {
             interest_pay = 0.00
 
         if (outstanding >= member.interest) {
-            if (Policy.isCompoundMethod()) {
+            if (policyService.isCompoundMethod(member)) {
                 // do nothing
             } else {
                 outstanding -= member.interest
@@ -64,7 +65,7 @@ class TransactionService {
             member.interest = 0.00
         } else {
             interest_pay = outstanding
-            if (Policy.isCompoundMethod()) {
+            if (policyService.isCompoundMethod(member)) {
                 // do nothing
                 member.interest -= outstanding
             } else {

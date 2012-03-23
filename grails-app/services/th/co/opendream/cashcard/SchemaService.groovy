@@ -32,16 +32,6 @@ class SchemaService {
               CONSTRAINT interest_rate_start_date_key UNIQUE (start_date)
             );
 
-            CREATE TABLE ${schema}.policy
-            (
-              id bigint NOT NULL,
-              "version" bigint NOT NULL,
-              "key" character varying(255) NOT NULL,
-              "value" character varying(255) NOT NULL,
-              CONSTRAINT policy_pkey PRIMARY KEY (id),
-              CONSTRAINT policy_key_key UNIQUE (key)
-            );
-
             CREATE TABLE ${schema}."transaction"
             (
               id bigint NOT NULL,

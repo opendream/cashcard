@@ -8,10 +8,10 @@ import org.junit.*
  * See the API for {@link grails.test.mixin.domain.DomainClassUnitTestMixin} for usage instructions
  */
 @TestFor(Member)
-@Mock ([Member, TransactionService, Company, SessionUtilService])
+@Mock ([Member, TransactionService, Company, SessionUtilService, PolicyService])
 class MemberTests {
 
-    def transactionService, utilService, sessionUtilService
+    def transactionService, utilService, sessionUtilService, policyService
     def txServiceControl, utilServiceControl
 
     @Before
@@ -19,23 +19,22 @@ class MemberTests {
         def opendream = new Company(name:'opendream', address:'bkk', taxId:'1-2-3-4').save()
 
         mockDomain(Member, [
-            [id: 1, identificationNumber: "1111111111111", firstname: "Nat", lastname: "Weerawan", telNo: "0891278552", gender: "MALE", address: "11223445", company: opendream],
-            [id: 2, identificationNumber: "2222222222222", firstname: "Noomz", lastname: "Siriwat", telNo: "0811111111", gender: "MALE", address: "2222222", company: opendream]
+            [id: 1, identificationNumber: "1111111111111", firstname: "Nat", lastname: "Weerawan", telNo: "0891278552", gender: "MALE", address: "11223445", company: opendream, interestMethod: Member.InterestMethod.COMPOUND],
+            [id: 2, identificationNumber: "2222222222222", firstname: "Noomz", lastname: "Siriwat", telNo: "0811111111", gender: "MALE", address: "2222222", company: opendream, interestMethod: Member.InterestMethod.NON_COMPOUND]
         ])
 
         transactionService = new TransactionService()
+        policyService = new PolicyService()
         transactionService.sessionUtilService = new SessionUtilService()
+        transactionService.policyService = policyService
         utilService = new UtilService()
         txServiceControl = mockFor(TransactionService)
     }
 
-    def generateFindBy(flag) {
+    def generateFindBy() {
         return { key ->
             if (key == Policy.KEY_CREDIT_LINE) {
                 return [value: "2000.00"]
-            }
-            else {
-                return [value: flag]
             }
         }
     }
@@ -153,7 +152,7 @@ class MemberTests {
 
 
     void testCallWithdraw() {
-        Policy.metaClass.static.findByKey = generateFindBy(Policy.VALUE_NON_COMPOUND)
+        Policy.metaClass.static.findByKey = generateFindBy()
         txServiceControl.demand.withdraw(1..1) { member, amount -> true }
 
         def m1 = Member.get(1)
@@ -164,7 +163,7 @@ class MemberTests {
     }
 
     void testValidWithdraw() {
-        Policy.metaClass.static.findByKey = generateFindBy(Policy.VALUE_NON_COMPOUND)
+        Policy.metaClass.static.findByKey = generateFindBy()
 
         def count = 0
         BalanceTransaction.metaClass.save = { -> ++count }
@@ -197,7 +196,7 @@ class MemberTests {
     }
 
     void testInvalidWithdraw() {
-        Policy.metaClass.static.findByKey = generateFindBy(Policy.VALUE_NON_COMPOUND)
+        Policy.metaClass.static.findByKey = generateFindBy()
 
         def count = 0
         BalanceTransaction.metaClass.save = { -> ++count }
@@ -213,27 +212,28 @@ class MemberTests {
     }
 
     void testCanWithdraw() {
-        Policy.metaClass.static.findByKey = generateFindBy(Policy.VALUE_NON_COMPOUND)
+        Policy.metaClass.static.findByKey = generateFindBy()
         def m1 = Member.get(1)
         assert m1.canWithdraw(100.00) == true
     }
 
     void testCanWithdrawWithExceedBalance() {
-        Policy.metaClass.static.findByKey = generateFindBy(Policy.VALUE_NON_COMPOUND)
+        Policy.metaClass.static.findByKey = generateFindBy()
         def m1 = Member.get(1)
         assert m1.canWithdraw(3000.00) == false
     }
 
     void testCanWithdrawWithNegativeAmount() {
-        Policy.metaClass.static.findByKey = generateFindBy(Policy.VALUE_NON_COMPOUND)
+        Policy.metaClass.static.findByKey = generateFindBy()
         def m1 = Member.get(1)
         assert m1.canWithdraw(-100.00) == false
     }
 
     void testRemainingCreditAmountWithNonCompoundInterest() {
-        Policy.metaClass.static.findByKey = generateFindBy(Policy.VALUE_NON_COMPOUND)
+        Policy.metaClass.static.findByKey = generateFindBy()
 
         def m1 = Member.get(1)
+        m1.interestMethod = Member.InterestMethod.NON_COMPOUND
 
         m1.balance = 100.00
         m1.interest = 10.00
@@ -247,8 +247,7 @@ class MemberTests {
     }
 
     void testRemainingCreditAmountWithCompoundInterest() {
-        Policy.metaClass.static.findByKey = generateFindBy(Policy.VALUE_COMPOUND)
-
+        Policy.metaClass.static.findByKey = generateFindBy()
         def m1 = Member.get(1)
 
         m1.balance = 110.00
@@ -263,7 +262,7 @@ class MemberTests {
     }
 
     void testGetInterest() {
-        Policy.metaClass.static.findByKey = generateFindBy(Policy.VALUE_COMPOUND)
+        Policy.metaClass.static.findByKey = generateFindBy()
         def m1 = Member.get(1)
 
         m1.interest = 10.00
@@ -272,7 +271,7 @@ class MemberTests {
     }
 
     void testGetTotalDebtWithCompoundInterest() {
-        Policy.metaClass.static.findByKey = generateFindBy(Policy.VALUE_COMPOUND)
+        Policy.metaClass.static.findByKey = generateFindBy()
 
         def m1 = Member.get(1)
 
@@ -283,10 +282,11 @@ class MemberTests {
     }
 
     void testGetTotalDebtWithNonCompoundInterest() {
-        Policy.metaClass.static.findByKey = generateFindBy(Policy.VALUE_NON_COMPOUND)
+        Policy.metaClass.static.findByKey = generateFindBy()
 
         def m1 = Member.get(1)
 
+        m1.interestMethod = Member.InterestMethod.NON_COMPOUND
         m1.balance = 100.00
         m1.interest = 10.00
 
@@ -295,7 +295,7 @@ class MemberTests {
 
     void testPayWithRoundup() {
         // policy return NON_COMPOUND
-        Policy.metaClass.static.findByKey = generateFindBy(Policy.VALUE_NON_COMPOUND)
+        Policy.metaClass.static.findByKey = generateFindBy()
 
         // นับจำนวนว่าเกิด balance transaction กี่รายการ
         def count = 0
@@ -305,6 +305,7 @@ class MemberTests {
         m1.transactionService = transactionService
         m1.utilService = utilService
 
+        m1.interestMethod = Member.InterestMethod.NON_COMPOUND
         m1.balance = 100.00
         m1.interest = 10.13
         def bal = m1.pay(110.25)
@@ -314,8 +315,7 @@ class MemberTests {
         assert count == 1
         assert bal.remainder == 0.12
 
-        Policy.metaClass.static.findByKey = generateFindBy(Policy.VALUE_COMPOUND)
-
+        m1.interestMethod = Member.InterestMethod.COMPOUND
         m1.balance = 110.13
         m1.interest = 10.13
         bal = m1.pay(110.25)
@@ -326,9 +326,7 @@ class MemberTests {
         assert bal.remainder == 0.12
 
         /* Balance 200.00 */
-
-        Policy.metaClass.static.findByKey = generateFindBy(Policy.VALUE_NON_COMPOUND)
-
+        m1.interestMethod = Member.InterestMethod.NON_COMPOUND
         m1.balance = 200.00
         m1.interest = 23.49
         bal = m1.pay(223.50)
@@ -338,8 +336,7 @@ class MemberTests {
         assert bal.remainder == 0.01
         assert count == 3
 
-        Policy.metaClass.static.findByKey = generateFindBy(Policy.VALUE_COMPOUND)
-
+        m1.interestMethod = Member.InterestMethod.COMPOUND
         m1.balance = 223.17
         m1.interest = 23.25
         bal = m1.pay(223.25)
@@ -352,7 +349,7 @@ class MemberTests {
 
 
     void testPayWithAllDebt() {
-        Policy.metaClass.static.findByKey = generateFindBy(Policy.VALUE_NON_COMPOUND)
+        Policy.metaClass.static.findByKey = generateFindBy()
 
         def count = 0
         BalanceTransaction.metaClass.save = { -> ++count }
@@ -361,6 +358,7 @@ class MemberTests {
         m1.transactionService = transactionService
         m1.utilService = utilService
 
+        m1.interestMethod = Member.InterestMethod.NON_COMPOUND
         m1.balance = 100.00
         m1.interest = 10.00
         m1.pay(110.00)
@@ -369,8 +367,7 @@ class MemberTests {
         assert m1.interest == 0.00
         assert count == 1
 
-        Policy.metaClass.static.findByKey = generateFindBy(Policy.VALUE_COMPOUND)
-
+        m1.interestMethod = Member.InterestMethod.COMPOUND
         m1.balance = 110.00
         m1.interest = 10.00
         m1.pay(110.00)
@@ -380,9 +377,7 @@ class MemberTests {
         assert count == 2
 
         /* Balance 200.00 */
-
-        Policy.metaClass.static.findByKey = generateFindBy(Policy.VALUE_NON_COMPOUND)
-
+        m1.interestMethod = Member.InterestMethod.NON_COMPOUND
         m1.balance = 200.00
         m1.interest = 23.00
         m1.pay(223.00)
@@ -391,8 +386,7 @@ class MemberTests {
         assert m1.interest == 0.00
         assert count == 3
 
-        Policy.metaClass.static.findByKey = generateFindBy(Policy.VALUE_COMPOUND)
-
+        m1.interestMethod = Member.InterestMethod.COMPOUND
         m1.balance = 223.00
         m1.interest = 23.00
         m1.pay(223.00)
@@ -408,12 +402,12 @@ class MemberTests {
         m1.utilService = utilService
 
 
-        Policy.metaClass.static.findByKey = generateFindBy(Policy.VALUE_NON_COMPOUND)
+        Policy.metaClass.static.findByKey = generateFindBy()
 
         def count = 0
         BalanceTransaction.metaClass.save = { -> ++count }
 
-
+        m1.interestMethod = Member.InterestMethod.NON_COMPOUND
         m1.balance = 100.00
         m1.interest = 10.00
         m1.pay(90.00)
@@ -423,8 +417,7 @@ class MemberTests {
         assert count == 1
 
 
-        Policy.metaClass.static.findByKey = generateFindBy(Policy.VALUE_COMPOUND)
-
+        m1.interestMethod = Member.InterestMethod.COMPOUND
         m1.balance = 110.00
         m1.interest = 10.00
         m1.pay(90.00)
@@ -434,9 +427,7 @@ class MemberTests {
         assert count == 2
 
         /* Balance 200.00 */
-
-        Policy.metaClass.static.findByKey = generateFindBy(Policy.VALUE_NON_COMPOUND)
-
+        m1.interestMethod = Member.InterestMethod.NON_COMPOUND
         m1.balance = 200.00
         m1.interest = 23.00
         m1.pay(123.00)
@@ -445,8 +436,7 @@ class MemberTests {
         assert m1.interest == 0.00
         assert count == 3
 
-        Policy.metaClass.static.findByKey = generateFindBy(Policy.VALUE_COMPOUND)
-
+        m1.interestMethod = Member.InterestMethod.COMPOUND
         m1.balance = 223.00
         m1.interest = 23.00
         m1.pay(223.00)
@@ -462,12 +452,12 @@ class MemberTests {
         m1.utilService = utilService
 
 
-        Policy.metaClass.static.findByKey = generateFindBy(Policy.VALUE_NON_COMPOUND)
+        Policy.metaClass.static.findByKey = generateFindBy()
 
         def count = 0
         BalanceTransaction.metaClass.save = { -> ++count }
 
-
+        m1.interestMethod = Member.InterestMethod.NON_COMPOUND
         m1.balance = 100.00
         m1.interest = 10.00
         m1.pay(10.00)
@@ -476,7 +466,7 @@ class MemberTests {
         assert m1.interest == 0.00
         assert count == 1
 
-        Policy.metaClass.static.findByKey = generateFindBy(Policy.VALUE_COMPOUND)
+        m1.interestMethod = Member.InterestMethod.COMPOUND
         m1.balance = 110.00
         m1.interest = 10.00
         m1.pay(10.00)
@@ -486,9 +476,7 @@ class MemberTests {
         assert count == 2
 
         /* Balance 200.00 */
-
-        Policy.metaClass.static.findByKey = generateFindBy(Policy.VALUE_NON_COMPOUND)
-
+        m1.interestMethod = Member.InterestMethod.NON_COMPOUND
         m1.balance = 200.00
         m1.interest = 23.00
         m1.pay(23.00)
@@ -497,7 +485,7 @@ class MemberTests {
         assert m1.interest == 0.00
         assert count == 3
 
-        Policy.metaClass.static.findByKey = generateFindBy(Policy.VALUE_COMPOUND)
+        m1.interestMethod = Member.InterestMethod.COMPOUND
         m1.balance = 223.00
         m1.interest = 23.00
         m1.pay(23.00)
@@ -513,13 +501,10 @@ class MemberTests {
         m1.transactionService = transactionService
         m1.utilService = utilService
 
-
-        Policy.metaClass.static.findByKey = generateFindBy(Policy.VALUE_NON_COMPOUND)
-
         def count = 0
         BalanceTransaction.metaClass.save = { -> ++count }
 
-
+        m1.interestMethod = Member.InterestMethod.NON_COMPOUND
         m1.balance = 100.00
         m1.interest = 10.00
         m1.pay(3.00)
@@ -528,7 +513,8 @@ class MemberTests {
         assert m1.interest == 7.00
         assert count == 1
 
-        Policy.metaClass.static.findByKey = generateFindBy(Policy.VALUE_COMPOUND)
+        Policy.metaClass.static.findByKey = generateFindBy()
+        m1.interestMethod = Member.InterestMethod.COMPOUND
         m1.balance = 110.00
         m1.interest = 10.00
         m1.pay(3.00)
@@ -538,9 +524,7 @@ class MemberTests {
         assert count == 2
 
         /* Balance 200.00 */
-
-        Policy.metaClass.static.findByKey = generateFindBy(Policy.VALUE_NON_COMPOUND)
-
+        m1.interestMethod = Member.InterestMethod.NON_COMPOUND
         m1.balance = 200.00
         m1.interest = 23.00
         m1.pay(3.00)
@@ -549,8 +533,7 @@ class MemberTests {
         assert m1.interest == 20.00
         assert count == 3
 
-        Policy.metaClass.static.findByKey = generateFindBy(Policy.VALUE_COMPOUND)
-
+        m1.interestMethod = Member.InterestMethod.COMPOUND
         m1.balance = 223.00
         m1.interest = 23.00
         m1.pay(3.00)

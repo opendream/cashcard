@@ -17,13 +17,10 @@ class MemberControllerTests {
     def utilControl
     def sessionUtilControl
 
-    def generateFindBy(flag) {
+    def generateFindBy() {
         return {key ->
             if (Policy.KEY_CREDIT_LINE) {
                 return [value: "2000.00"]
-            }
-            else {
-                return [value: flag]
             }
         }
     }
@@ -31,8 +28,8 @@ class MemberControllerTests {
     @Before
     void setUp() {
         mockDomain(Member, [
-            [id: 1, identificationNumber: "1111111111111", firstname: "Nat", lastname: "Weerawan", telNo: "0891278552", gender: "MALE", address: "11223445"],
-            [id: 2, identificationNumber: "2222222222222", firstname: "Noomz", lastname: "Siriwat", telNo: "0811111111", gender: "MALE", address: "2222222"]
+            [id: 1, identificationNumber: "1111111111111", firstname: "Nat", lastname: "Weerawan", telNo: "0891278552", gender: "MALE", address: "11223445", interestMethod: Member.InterestMethod.COMPOUND],
+            [id: 2, identificationNumber: "2222222222222", firstname: "Noomz", lastname: "Siriwat", telNo: "0811111111", gender: "MALE", address: "2222222", interestMethod: Member.InterestMethod.NON_COMPOUND]
         ])
 
         def m1 = Member.get(1)
@@ -159,7 +156,7 @@ class MemberControllerTests {
     }
 
     void testMemberWithdrawValidUid() {
-        Policy.metaClass.static.findByKey = generateFindBy(Policy.VALUE_COMPOUND)
+        Policy.metaClass.static.findByKey = generateFindBy()
 
         params.amount = '100.00'
         params.id = '1'
@@ -179,7 +176,7 @@ class MemberControllerTests {
     }
 
     void testMemberInvalidWithdrawAmount() {
-        Policy.metaClass.static.findByKey = generateFindBy(Policy.VALUE_COMPOUND)
+        Policy.metaClass.static.findByKey = generateFindBy()
 
         params.amount = '10000'
         params.id = '1'
@@ -198,7 +195,7 @@ class MemberControllerTests {
     }
 
     void testMemberPayment() {
-        Policy.metaClass.static.findByKey = generateFindBy(Policy.VALUE_COMPOUND)
+        Policy.metaClass.static.findByKey = generateFindBy()
 
         utilControl.demand.moneyRoundUp(1..1) { amount -> 200.25 }
         controller.utilService = utilControl.createMock()
