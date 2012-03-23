@@ -163,6 +163,7 @@ class MemberController {
                     amount: it.amount,
                     debit: (it.txType == TransactionType.CREDIT) ? it.amount : 0.00,
                     credit: (it.txType == TransactionType.DEBIT) ? it.amount : 0.00,
+                    balance: it.balance,
                     remark: (it.userCompany != sessionUtilService.company ? it.userCompany.name : ''),
                 ]
             }
