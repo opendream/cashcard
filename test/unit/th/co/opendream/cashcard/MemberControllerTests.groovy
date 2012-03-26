@@ -17,10 +17,13 @@ class MemberControllerTests {
     def utilControl
     def sessionUtilControl
 
-    def generateFindBy() {
+    def generateFindBy(flag) {
         return {key ->
-            if (Policy.KEY_CREDIT_LINE) {
+            if (key == Policy.KEY_CREDIT_LINE) {
                 return [value: "2000.00"]
+            }
+            else {
+                return [value: flag]
             }
         }
     }
@@ -79,6 +82,7 @@ class MemberControllerTests {
     }
 
     void testSaveInvalidMember() {
+        Policy.metaClass.static.findByKey = generateFindBy(Member.InterestMethod.COMPOUND)
     	controller.save()
 
         assert model.memberInstance != null
@@ -86,6 +90,7 @@ class MemberControllerTests {
     }
 
     void testSaveValidMember() {
+        Policy.metaClass.static.findByKey = generateFindBy(Member.InterestMethod.COMPOUND)
     	params.identificationNumber = '1234567890123'
     	params.firstname = "The Stand"
         params.lastname = "500"
@@ -93,6 +98,8 @@ class MemberControllerTests {
         params.telNo = '0891278551'
         params.address = "Opendream"
 
+        sessionUtilControl.demand.getCompany(1..1) { -> Company.get(1) }
+        controller.sessionUtilService = sessionUtilControl.createMock()
         controller.save()
 
         assert Member.count() == 3
