@@ -12,6 +12,7 @@ class Member {
     Date dateCreated
     Date lastUpdated
     InterestMethod interestMethod
+    BigDecimal balanceLimit
 
     Company company
     static hasMany = [balanceTransactions: BalanceTransaction]
@@ -52,6 +53,12 @@ class Member {
 
     static mapping = {
 
+    }
+
+    def beforeValidate() {
+        if (!balanceLimit) {
+            balanceLimit = Policy.valueOfCreditLine()
+        }
     }
 
     BigDecimal getBalance() {

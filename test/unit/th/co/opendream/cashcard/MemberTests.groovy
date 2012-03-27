@@ -8,7 +8,7 @@ import org.junit.*
  * See the API for {@link grails.test.mixin.domain.DomainClassUnitTestMixin} for usage instructions
  */
 @TestFor(Member)
-@Mock ([Member, TransactionService, Company, SessionUtilService, PolicyService])
+@Mock ([Member, TransactionService, Company, SessionUtilService, PolicyService, Policy])
 class MemberTests {
 
     def transactionService, utilService, sessionUtilService, policyService
@@ -19,8 +19,8 @@ class MemberTests {
         def opendream = new Company(name:'opendream', address:'bkk', taxId:'1-2-3-4').save()
 
         mockDomain(Member, [
-            [id: 1, identificationNumber: "1111111111111", firstname: "Nat", lastname: "Weerawan", telNo: "0891278552", gender: "MALE", address: "11223445", company: opendream, interestMethod: Member.InterestMethod.COMPOUND],
-            [id: 2, identificationNumber: "2222222222222", firstname: "Noomz", lastname: "Siriwat", telNo: "0811111111", gender: "MALE", address: "2222222", company: opendream, interestMethod: Member.InterestMethod.NON_COMPOUND]
+            [id: 1, identificationNumber: "1111111111111", firstname: "Nat", lastname: "Weerawan", telNo: "0891278552", gender: "MALE", address: "11223445", company: opendream, interestMethod: Member.InterestMethod.COMPOUND, balanceLimit: 2000.00],
+            [id: 2, identificationNumber: "2222222222222", firstname: "Noomz", lastname: "Siriwat", telNo: "0811111111", gender: "MALE", address: "2222222", company: opendream, interestMethod: Member.InterestMethod.NON_COMPOUND, balanceLimit: 2000.00]
         ])
 
         transactionService = new TransactionService()
@@ -29,12 +29,13 @@ class MemberTests {
         transactionService.policyService = policyService
         utilService = new UtilService()
         txServiceControl = mockFor(TransactionService)
+        Policy.metaClass.static.findByKey = generateFindBy()
     }
 
     def generateFindBy() {
         return { key ->
             if (key == Policy.KEY_CREDIT_LINE) {
-                return [value: "2000.00"]
+                return [value: 2000.00]
             }
         }
     }
@@ -43,7 +44,7 @@ class MemberTests {
         def defaultProps = ["validationSkipMap", "gormPersistentEntity", "properties","id",
                             "gormDynamicFinders", "all", "attached", "class", "constraints", "version",
                             "validationErrorsMap", "errors", "mapping", "metaClass", "count"]
-        def memberProps = ['identificationNumber', 'firstname', 'lastname', 'dateCreated', 'lastUpdated', 'gender', 'telNo', 'address', 'balance']
+        def memberProps = ['identificationNumber', 'firstname', 'lastname', 'dateCreated', 'lastUpdated', 'gender', 'telNo', 'address', 'balance', 'company', 'interestMethod', 'balanceLimit']
 
         def instanceProperties = Member.metaClass.properties*.name
 
@@ -541,5 +542,13 @@ class MemberTests {
         assert m1.balance == 220.00
         assert m1.interest == 20.00
         assert count == 4
+    }
+
+    void testBeforeValidate() {
+        def m1 = new Member()
+        m1.validate()
+        assert m1.balanceLimit == 2000.00
+        def m2 = new Member(balanceLimit: 1000.00)
+        assert m2.balanceLimit == 1000.00
     }
 }
