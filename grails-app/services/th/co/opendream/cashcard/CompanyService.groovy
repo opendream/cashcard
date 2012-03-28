@@ -10,8 +10,8 @@ class CompanyService {
         	new Policy(key: Policy.KEY_CREDIT_LINE, value: 2000).save()
         	new Policy(key: Policy.KEY_INTEREST_METHOD, value: Policy.VALUE_NON_COMPOUND).save()
         	new Policy(key: Policy.KEY_INTEREST_RATE_LIMIT, value: '18.00').save()
-        	
-        	new InterestRate(startDate:new Date(), rate:9.00).save()           
-        } 
+
+        	new InterestRate(startDate:new Date(), rate:9.00).save()
+        }
     }
 }

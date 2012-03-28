@@ -19,8 +19,8 @@ class ReportControllerTests {
     void setUp() {
         def opendream = new Company(name:'opendream', address:'bkk', taxId:'1-2-3-4').save()
         mockDomain(Member, [
-            [id: 1, identificationNumber: "1111111111111", firstname: "Nat", lastname: "Weerawan", telNo: "0891278552", gender: "MALE", address: "11223445", company: opendream],
-            [id: 2, identificationNumber: "2222222222222", firstname: "Noomz", lastname: "Siriwat", telNo: "0811111111", gender: "MALE", address: "2222222", company: opendream]
+            [id: 1, identificationNumber: "1111111111111", firstname: "Nat", lastname: "Weerawan", telNo: "0891278552", gender: "MALE", address: "11223445", company: opendream, balanceLimit: 2000.00],
+            [id: 2, identificationNumber: "2222222222222", firstname: "Noomz", lastname: "Siriwat", telNo: "0811111111", gender: "MALE", address: "2222222", company: opendream, balanceLimit: 2000.00]
         ])
 
         today = Calendar.instance

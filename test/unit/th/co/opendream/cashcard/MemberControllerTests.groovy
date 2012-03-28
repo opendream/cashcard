@@ -31,8 +31,8 @@ class MemberControllerTests {
     @Before
     void setUp() {
         mockDomain(Member, [
-            [id: 1, identificationNumber: "1111111111111", firstname: "Nat", lastname: "Weerawan", telNo: "0891278552", gender: "MALE", address: "11223445", interestMethod: Member.InterestMethod.COMPOUND],
-            [id: 2, identificationNumber: "2222222222222", firstname: "Noomz", lastname: "Siriwat", telNo: "0811111111", gender: "MALE", address: "2222222", interestMethod: Member.InterestMethod.NON_COMPOUND]
+            [id: 1, identificationNumber: "1111111111111", firstname: "Nat", lastname: "Weerawan", telNo: "0891278552", gender: "MALE", address: "11223445", interestMethod: Member.InterestMethod.COMPOUND, balanceLimit: 2000.00],
+            [id: 2, identificationNumber: "2222222222222", firstname: "Noomz", lastname: "Siriwat", telNo: "0811111111", gender: "MALE", address: "2222222", interestMethod: Member.InterestMethod.NON_COMPOUND, balanceLimit: 2000.00]
         ])
 
         def m1 = Member.get(1)
