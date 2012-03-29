@@ -11,26 +11,13 @@ class ApiController {
     def index() { }
 
     def getTransactionHistory() {
-    	println "F"
-    	println params
     	def c
 
-		//schemaService.with(params.companySchema) {
-	    //	c = BalanceTransaction.list()
-		//	render c as JSON
-		//	return
-        def holder = TransactionSynchronizationManager.getResource(sessionFactory)
-        def session = holder.getSession();
-        def conn = session.connection();
-        groovy.sql.Sql sql = new groovy.sql.Sql(conn)
+		schemaService.with(params.companySchema) {
+	    	c = BalanceTransaction.createCriteria()
+            c = c.setCacheable(false).list()
 
-        // TODO: Prevent SQL injection in GString. (include null or empty string)
-        def transactionHistory = []
-        def query = "SELECT * FROM " + params.companySchema + ".transaction"
-        println query
-        sql.eachRow(query) {
-            transactionHistory << it.toRowResult()
+			render c as JSON
         }
-        render transactionHistory as JSON
     }
 }
