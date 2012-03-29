@@ -375,4 +375,15 @@ class MemberControllerTests {
 
         assert tx3.date >= tx2.date && tx2.date >= tx1.date
     }
+
+    void testMemberTransactionAll() {
+        controller.transaction()
+        assert response.redirectUrl == '/error'
+        response.reset()
+
+        params.id = 1
+        controller.transactionAll()
+        assert model.transactionList.size() == 3
+        assert view == '/member/transactionAll'
+    }
 }

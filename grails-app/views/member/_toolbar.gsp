@@ -4,5 +4,6 @@
 		<li><a href="${createLink(controller:'member', action:'payment', params:[id:memberInstance.id])}"><g:message code="member.toolbar.pay"></g:message></a></li>
 		<li><a href="${createLink(controller:'member', action:'withdraw', params:[id:memberInstance.id])}"><g:message code="member.toolbar.withdraw"></g:message></a></li>
 		<li><a href="${createLink(controller:'member', action:'transaction', params:[id:memberInstance.id])}"><g:message code="member.toolbar.viewTransaction"></g:message></a></li>
+		<li><a href="${createLink(controller:'member', action:'transactionAll', params:[id:memberInstance.id])}"><g:message code="member.toolbar.viewAllTransaction"></g:message></a></li>
 	</ul>
 </div>

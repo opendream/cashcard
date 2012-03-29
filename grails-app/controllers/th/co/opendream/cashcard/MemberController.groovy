@@ -3,6 +3,7 @@ package th.co.opendream.cashcard
 import th.co.opendream.cashcard.Member
 import th.co.opendream.cashcard.AccountService
 import th.co.opendream.cashcard.TransactionType
+import groovy.json.JsonSlurper
 
 class MemberController {
     def utilService
@@ -155,7 +156,6 @@ class MemberController {
                     eq('id', memberInstance.id)
                 }
             }
-            println transactionList
             def totalCount = transactionList.totalCount
             transactionList = transactionList.collect {
                 [
@@ -175,5 +175,36 @@ class MemberController {
         }
     }
 
+    def transactionAll() {
+        def memberInstance = Member.get(params.id)
+
+        if (memberInstance) {
+            def link = createLink(controller: 'api', action: 'getTransactionHistory', params: [memberId: memberInstance.id], absolute: true) as String
+            println link
+            def payload = new URL(link).text
+            println payload
+
+            def slurper = new JsonSlurper()
+            def doc = slurper.parseText(payload)
+
+            println(doc)
+            def totalCount = transactionList.totalCount
+            transactionList = transactionList.collect {
+                [
+                    date: it.date,
+                    activity: it.activity,
+                    amount: it.amount,
+                    debit: (it.txType == TransactionType.CREDIT) ? it.amount : 0.00,
+                    credit: (it.txType == TransactionType.DEBIT) ? it.amount : 0.00,
+                    balance: it.balance,
+                    remark: (it.userCompany != sessionUtilService.company ? it.userCompany.name : ''),
+                ]
+            }
+            render(view: 'transaction', model:[transactionList: transactionList, memberInstance: memberInstance, transactionCount: totalCount])
+        }
+        else {
+            redirect(uri: '/error')
+        }
+    }
 }
 
