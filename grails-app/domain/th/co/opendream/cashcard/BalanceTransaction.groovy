@@ -11,6 +11,8 @@ class BalanceTransaction extends Transaction {
     Company userCompany
     Company memberCompany
 
+    static belongsTo = [member: Member]
+
     def beforeValidate() {
         if (! code) {
             if (activity == ActivityType.PAYMENT) {

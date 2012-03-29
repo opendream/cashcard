@@ -11,12 +11,11 @@ class ApiController {
     def index() { }
 
     def getTransactionHistory() {
+        def member = Member.get(params.memberId as Integer)
     	def c
 
-		schemaService.with(params.companySchema) {
-	    	c = BalanceTransaction.createCriteria()
-            c = c.setCacheable(false).list()
-
+		schemaService.with(member.company.getSchema()) {
+	    	c = member.balanceTransactions.sort { it.date }
 			render c as JSON
         }
     }
