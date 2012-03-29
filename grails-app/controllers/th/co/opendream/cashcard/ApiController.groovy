@@ -6,7 +6,6 @@ import grails.util.Environment
 
 class ApiController {
 	def schemaService
-    def sessionFactory
 
     def index() { }
 
