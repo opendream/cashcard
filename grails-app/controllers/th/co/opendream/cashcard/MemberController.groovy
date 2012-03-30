@@ -9,6 +9,7 @@ class MemberController {
     def utilService
     def transactionService
     def sessionUtilService
+    def apiService
 
     def index() { }
 
@@ -179,28 +180,21 @@ class MemberController {
         def memberInstance = Member.get(params.id)
 
         if (memberInstance) {
-            def link = createLink(controller: 'api', action: 'getTransactionHistory', params: [memberId: memberInstance.id], absolute: true) as String
-            println link
-            def payload = new URL(link).text
-            println payload
+            def transactionList = apiService.getMemberTransactionHistory(memberInstance)
 
-            def slurper = new JsonSlurper()
-            def doc = slurper.parseText(payload)
-
-            println(doc)
-            def totalCount = transactionList.totalCount
             transactionList = transactionList.collect {
+                def company = Company.get(it.user_company_id)
                 [
                     date: it.date,
                     activity: it.activity,
                     amount: it.amount,
-                    debit: (it.txType == TransactionType.CREDIT) ? it.amount : 0.00,
-                    credit: (it.txType == TransactionType.DEBIT) ? it.amount : 0.00,
+                    debit: (it.tx_type == 'CREDIT') ? it.amount : 0.00,
+                    credit: (it.tx_type == 'DEBIT') ? it.amount : 0.00,
                     balance: it.balance,
-                    remark: (it.userCompany != sessionUtilService.company ? it.userCompany.name : ''),
+                    remark: (company != company ? company.name : ''),
                 ]
             }
-            render(view: 'transaction', model:[transactionList: transactionList, memberInstance: memberInstance, transactionCount: totalCount])
+            render(view: 'transactionAll', model:[transactionList: transactionList, memberInstance: memberInstance])
         }
         else {
             redirect(uri: '/error')
