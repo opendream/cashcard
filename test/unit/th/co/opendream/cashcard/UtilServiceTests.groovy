@@ -36,22 +36,28 @@ class UtilServiceTests {
             rate: 5.00F
         )
 
-        // FAIL
+        // FAIL if rate.startDate is pass current date
+        Calendar.metaClass.static.getInstance = {
+            use(TimeCategory) {
+                today = today - 1.days
+            }
+            today.toCalendar()
+        }
         assert service.interestRateEditable(existingRate) == false
 
-    	existingRate = new InterestRate(
-            startDate: currentDate,
-            endDate: use(TimeCategory) { currentDate + 10.days },
-            rate: 5.00F
-        )
+        // FAIL if rate.startDate is current date
+        Calendar.metaClass.static.getInstance = {
+            today.toCalendar()
+        }
+        assert service.interestRateEditable(existingRate) == false
 
+        // PASS if rate.startDate is in the future compare to current date
         Calendar.metaClass.static.getInstance = {
         	use(TimeCategory) {
-	        	today = today - 1.days
+	        	today = today + 10.days
 	        }
             today.toCalendar()
         }
-        // PASS
         assert service.interestRateEditable(existingRate) == true
 
     }

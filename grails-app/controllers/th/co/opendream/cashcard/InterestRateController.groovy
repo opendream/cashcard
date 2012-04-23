@@ -5,6 +5,9 @@ import th.co.opendream.cashcard.InterestRate
 
 class InterestRateController {
 
+    // Service
+    def utilService
+
     static allowedMethods = [save: "POST", update: "POST", delete: "POST"]
 
     def index() {
@@ -77,6 +80,12 @@ class InterestRateController {
         def interestRateInstance = InterestRate.get(params.id)
         if (!interestRateInstance) {
 			flash.message = message(code: 'default.not.found.message', args: [message(code: 'interestRate.label', default: 'InterestRate'), params.id])
+            redirect(action: "list")
+            return
+        }
+
+        if (!utilService.interestRateEditable(interestRateInstance)) {
+            flash.message = message(code: 'default.not.deleted.message', args: [message(code: 'interestRate.label', default: 'InterestRate'), params.id])
             redirect(action: "list")
             return
         }

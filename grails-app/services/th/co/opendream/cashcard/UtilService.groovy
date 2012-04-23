@@ -7,6 +7,13 @@ class UtilService {
     }
 
     static def interestRateEditable(InterestRate rate) {
-    	return false
+    	def today = Calendar.instance.time
+
+    	if (today > rate.startDate) {
+    		return true
+    	}
+    	else {
+    		return false
+    	}
     }
 }

@@ -6,8 +6,12 @@ import groovy.time.*
 import static java.util.Calendar.*
 
 @TestFor(InterestRateController)
-@Mock(InterestRate)
+@Mock([InterestRate, UtilService])
 class InterestRateControllerTests {
+
+    // Service.
+    def utilServiceControl
+
     def today
     @Before
     void setUp() {
@@ -225,8 +229,31 @@ class InterestRateControllerTests {
 
         params.id = interestRate.id
 
+        // Delete must fail if not editable.
+        // Prepare service
+        utilServiceControl = mockFor(UtilService)
+        utilServiceControl.demand.interestRateEditable(1..1) { rate ->
+            return false
+        }
+        controller.utilService = utilServiceControl.createMock()
         controller.delete()
 
+        utilServiceControl.verify()
+        assert InterestRate.count() == 1
+        assert response.redirectedUrl == '/interestRate/list'
+
+        response.reset()
+
+        // Delete with valid value.
+        // Prepare service
+        utilServiceControl = mockFor(UtilService)
+        utilServiceControl.demand.interestRateEditable(1..1) { rate ->
+            return true
+        }
+        controller.utilService = utilServiceControl.createMock()
+        controller.delete()
+
+        utilServiceControl.verify()
         assert InterestRate.count() == 0
         assert InterestRate.get(interestRate.id) == null
         assert response.redirectedUrl == '/interestRate/list'
