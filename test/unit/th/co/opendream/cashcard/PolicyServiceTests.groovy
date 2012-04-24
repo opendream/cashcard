@@ -24,6 +24,31 @@ class PolicyServiceTests {
         //
     }
 
+    void testGetPolicyInstance() {
+        def policy = service.getPolicyInstance(company, Policy.KEY_INTEREST_METHOD)
+        assert policy.key == Policy.KEY_INTEREST_METHOD
+        assert policy.value == Policy.VALUE_COMPOUND
+
+        // NON_COMPOUND
+        policy.value = Policy.VALUE_NON_COMPOUND
+        policy.save(flush: true)
+
+        policy = service.getPolicyInstance(company, Policy.KEY_INTEREST_METHOD)
+        assert policy.key == Policy.KEY_INTEREST_METHOD
+        assert policy.value == Policy.VALUE_NON_COMPOUND
+    }
+
+    void testIsCompoundMethod() {
+        assertTrue service.isCompoundMethod(company)
+
+        // NON_COMPOUND
+        def policy = service.getPolicyInstance(company, Policy.KEY_INTEREST_METHOD)
+        policy.value = Policy.VALUE_NON_COMPOUND
+        policy.save(flush: true)
+
+        assertFalse service.isCompoundMethod(company)
+    }
+
     void testGetCompanyPolicyInterestMethod() {
     	assert service.getInterestMethod(company) == Policy.VALUE_COMPOUND
     }
