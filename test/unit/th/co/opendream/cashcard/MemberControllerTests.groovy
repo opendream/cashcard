@@ -16,7 +16,7 @@ class MemberControllerTests {
 
     def utilControl
     def sessionUtilControl
-    def policyServiceControl
+    def policyServiceControl, policyService
 
     def generateFindBy(flag) {
         return {key ->
@@ -170,6 +170,7 @@ class MemberControllerTests {
         params.amount = '100.00'
         params.id = '1'
 
+        Member.metaClass.canWithdraw = { amount -> true }
         controller.withdraw()
 
         assert response.redirectedUrl == '/member/show/1'
@@ -190,6 +191,7 @@ class MemberControllerTests {
         params.amount = '10000'
         params.id = '1'
 
+        Member.metaClass.canWithdraw = { amount -> false }
         controller.withdraw()
 
 
@@ -209,10 +211,8 @@ class MemberControllerTests {
         utilControl.demand.moneyRoundUp(1..1) { amount -> 200.25 }
         controller.utilService = utilControl.createMock()
 
-        print Member.metaClass
-        Member.metaClass.pay = { assert 3==5 }
-
         params.id = '1'
+        Member.metaClass.getTotalDebt = { 200.25 }
         def model = controller.payment()
 
         utilControl.verify()
