@@ -11,7 +11,8 @@ class SchemaService {
         println "schema > ${schema}"
         def queryCreateTables = ""
 
-        if (Environment.current == Environment.DEVELOPMENT) {
+        if (Environment.current == Environment.DEVELOPMENT ||
+            Environment.current == Environment.TEST) {
             queryCreateTables += """
                 DROP SCHEMA IF EXISTS ${schema} CASCADE;
             """
