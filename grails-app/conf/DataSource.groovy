@@ -24,8 +24,12 @@ environments {
     }
     test {
         dataSource {
-            dbCreate = "update"
-            url = "jdbc:h2:mem:testDb;MVCC=TRUE"
+            driverClassName = "org.postgresql.Driver"
+            dialect = net.sf.hibernate.dialect.PostgreSQLDialect
+            dbCreate = "create-drop" 
+            url="jdbc:postgresql://localhost:5432/cashcard_test"
+            username = "postgres"
+            password = "postgres"
         }
     }
     production {
