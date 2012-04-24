@@ -43,6 +43,18 @@ class MemberTests {
         }
     }
 
+    def generateMockPolicyServiceForRemainingAmount(key) {
+
+        def policyServiceControl = mockFor(PolicyService)
+
+        policyServiceControl.demand.getCreditLine { company -> 2000.00 }
+        policyServiceControl.demand.getInterestMethod { company -> key }
+        policyServiceControl.demand.getCreditLine { company -> 2000.00 }
+        policyServiceControl.demand.getInterestMethod { company -> key }
+
+        policyServiceControl.createMock()
+    }
+
     void testProperties() {
         def defaultProps = ["validationSkipMap", "gormPersistentEntity", "properties","id",
                             "gormDynamicFinders", "all", "attached", "class", "constraints", "version",
@@ -170,21 +182,21 @@ class MemberTests {
     void testCanWithdraw() {
         Policy.metaClass.static.findByKey = generateFindBy()
         def m1 = Member.get(1)
-        m1.policyService = policyService
+        m1.policyService = generateMockPolicyServiceForRemainingAmount(Policy.VALUE_NON_COMPOUND)
         assert m1.canWithdraw(100.00) == true
     }
 
     void testCanWithdrawWithExceedBalance() {
         Policy.metaClass.static.findByKey = generateFindBy()
         def m1 = Member.get(1)
-        m1.policyService = policyService
+        m1.policyService = generateMockPolicyServiceForRemainingAmount(Policy.VALUE_NON_COMPOUND)
         assert m1.canWithdraw(3000.00) == false
     }
 
     void testCanWithdrawWithNegativeAmount() {
         Policy.metaClass.static.findByKey = generateFindBy()
         def m1 = Member.get(1)
-        m1.policyService = policyService
+        m1.policyService = generateMockPolicyServiceForRemainingAmount(Policy.VALUE_NON_COMPOUND)
         assert m1.canWithdraw(-100.00) == false
     }
 
@@ -192,10 +204,8 @@ class MemberTests {
         Policy.metaClass.static.findByKey = generateFindBy()
 
         def m1 = Member.get(1)
-        def policyServiceControl = mockFor(PolicyService)
-        policyServiceControl.demand.getInterestMethod(1..2) { company -> Policy.VALUE_NON_COMPOUND }
-        m1.policyService = policyServiceControl.createMock()
-
+        
+        m1.policyService = generateMockPolicyServiceForRemainingAmount(Policy.VALUE_NON_COMPOUND)
 
         m1.balance = 100.00
         m1.interest = 10.00
@@ -211,7 +221,8 @@ class MemberTests {
     void testRemainingCreditAmountWithCompoundInterest() {
         Policy.metaClass.static.findByKey = generateFindBy()
         def m1 = Member.get(1)
-        m1.policyService = policyService
+
+        m1.policyService = generateMockPolicyServiceForRemainingAmount(Policy.VALUE_COMPOUND)
 
         m1.balance = 110.00
         m1.interest = 10.00

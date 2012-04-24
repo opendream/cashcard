@@ -62,7 +62,7 @@ class Member {
      * วงเงินที่ยังยืมได้
      */
     BigDecimal getRemainingFinancialAmount() {
-        def limit = Policy.valueOfCreditLine()
+        def limit = policyService.getCreditLine(this.company)
         return limit - getTotalDebt()
     }
 
