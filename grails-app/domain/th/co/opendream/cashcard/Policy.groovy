@@ -11,10 +11,6 @@ class Policy {
     static String VALUE_COMPOUND = 'CompoundInterest'
     static String VALUE_NON_COMPOUND = 'NonCompoundInterest'
 
-    static constraints = {
-        key(unique: true)
-    }
-
     static String valueOf(key) {
         Policy.findByKey(key)?.value
     }
