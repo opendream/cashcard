@@ -23,6 +23,18 @@ class TransactionServiceTests {
         }
     }
 
+    def generateMockPolicyServiceForRemainingAmount(key) {
+
+        def policyServiceControl = mockFor(PolicyService)
+
+        policyServiceControl.demand.getCreditLine { company -> 2000.00 }
+        policyServiceControl.demand.getInterestMethod { company -> key }
+        policyServiceControl.demand.getCreditLine { company -> 2000.00 }
+        policyServiceControl.demand.getInterestMethod { company -> key }
+
+        policyServiceControl.createMock()
+    }
+
     @Before
     void setUp() {
         def opendream = new Company(name:'opendream', address:'bkk', taxId:'1-2-3-4').save()
@@ -43,8 +55,7 @@ class TransactionServiceTests {
         service.sessionUtilService = sessionUtilControl.createMock()
 
         def m1 = Member.get(1)
-        Policy.metaClass.static.findByKey = generateFindBy(Policy.VALUE_NON_COMPOUND)
-        m1.policyService = service.policyService
+        m1.policyService = generateMockPolicyServiceForRemainingAmount(Policy.VALUE_NON_COMPOUND)
         def tx = service.withdraw(m1, 100.00)
 
         assert tx.class == BalanceTransaction
