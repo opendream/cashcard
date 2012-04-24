@@ -14,4 +14,8 @@ class PolicyService {
     	def policy = getPolicyInstance(company, Policy.KEY_INTEREST_METHOD)
     	policy?.value
     }
+
+    def getCreditLine(Company company) {
+        getPolicyInstance(company, Policy.KEY_CREDIT_LINE)?.value as BigDecimal
+    }
 }

@@ -10,13 +10,18 @@ import org.junit.*
 @Mock([Policy, Company])
 class PolicyServiceTests {
 
-	def company, policy
+	def company
 
 	@Before
 	void setUp() {
 		company = new Company(name:'opendream', address:'bkk', taxId:'1-2-3-4').save()
-        policy = new Policy(key: Policy.KEY_INTEREST_METHOD, value: Policy.VALUE_COMPOUND, company: company)
-        company.addToPolicy(policy)
+
+        def interestMethodPolicy = new Policy(key: Policy.KEY_INTEREST_METHOD, value: Policy.VALUE_COMPOUND, company: company)
+        def creditLinePolicy = new Policy(key: Policy.KEY_CREDIT_LINE, value: "2000.00", company: company)
+
+        company
+            .addToPolicy(interestMethodPolicy)
+            .addToPolicy(creditLinePolicy)
         company.save()
 	}
 
@@ -51,5 +56,9 @@ class PolicyServiceTests {
 
     void testGetCompanyPolicyInterestMethod() {
     	assert service.getInterestMethod(company) == Policy.VALUE_COMPOUND
+    }
+
+    void testGetCompanyPolicyCreditLine() {
+        assert service.getCreditLine(company) == 2000.00
     }
 }
