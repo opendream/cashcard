@@ -10,7 +10,7 @@ import org.junit.*
 @TestFor(TransactionService)
 @Mock([Member, BalanceTransaction, Company, SessionUtilService, PolicyService])
 class TransactionServiceTests {
-    def sessionUtilControl
+    def sessionUtilControl, policyServiceControl
 
     def generateFindBy(flag) {
         return { key ->
@@ -33,6 +33,7 @@ class TransactionServiceTests {
         ])
 
         sessionUtilControl = mockFor(SessionUtilService)
+        policyServiceControl = mockFor(PolicyService)
         service.sessionUtilService = new SessionUtilService()
         service.policyService = new PolicyService()
     }
@@ -43,6 +44,7 @@ class TransactionServiceTests {
 
         def m1 = Member.get(1)
         Policy.metaClass.static.findByKey = generateFindBy(Policy.VALUE_NON_COMPOUND)
+        m1.policyService = service.policyService
         def tx = service.withdraw(m1, 100.00)
 
         assert tx.class == BalanceTransaction
@@ -63,6 +65,7 @@ class TransactionServiceTests {
 
         def m1 = Member.get(1)
         Policy.metaClass.static.findByKey = generateFindBy(Policy.VALUE_NON_COMPOUND)
+        m1.policyService = service.policyService
         shouldFail(RuntimeException) {
             def tx = service.withdraw(m1, 3000.00)
         }
@@ -74,9 +77,10 @@ class TransactionServiceTests {
         service.sessionUtilService = sessionUtilControl.createMock()
 
         def m1 = Member.get(1)
+        policyServiceControl.demand.isCompoundMethod(1..100) { member -> false }
+        service.policyService = policyServiceControl.createMock()
         m1.balance = 100
         m1.interest = 20
-        Policy.metaClass.static.findByKey = generateFindBy(Policy.VALUE_NON_COMPOUND)
         def tx = service.pay(m1, 120.00)
 
         assert tx.class == BalanceTransaction
@@ -101,7 +105,9 @@ class TransactionServiceTests {
         def m1 = Member.get(1)
         m1.balance = 100
         m1.interest = 20.12
-        Policy.metaClass.static.findByKey = generateFindBy(Policy.VALUE_NON_COMPOUND)
+        policyServiceControl.demand.isCompoundMethod(1..100) { member -> false }
+        service.policyService = policyServiceControl.createMock()
+
         def tx = service.pay(m1, 120.25)
 
         assert tx.class == BalanceTransaction

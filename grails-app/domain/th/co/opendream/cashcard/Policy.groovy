@@ -4,6 +4,8 @@ class Policy {
     String key
     String value
 
+    static belongsTo = [company: Company]
+
     static String KEY_CREDIT_LINE = 'CreditLine'
     static String KEY_INTEREST_METHOD = 'InterestMethod'
     static String KEY_INTEREST_RATE_LIMIT = 'InterestRateLimit'

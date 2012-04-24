@@ -19,7 +19,6 @@ class MemberController {
     def save() {
         def memberInstance = new Member(params)
         memberInstance.company = sessionUtilService.company
-        memberInstance.interestMethod = Policy.valueOf(Policy.KEY_INTEREST_METHOD)
 
         if ( memberInstance.save() ) {
           redirect(action: "show", id: memberInstance.id)

@@ -5,6 +5,7 @@ import org.junit.*
 
 
 @TestFor(Policy)
+@Mock(Company)
 class PolicyTests {
 
     void testConstraints() {
@@ -15,21 +16,6 @@ class PolicyTests {
         assert !policy.validate()
         assert "nullable" == policy.errors["key"]
         assert "nullable" == policy.errors["value"]
-    }
-
-    void testFindPolicyValueByKey() {
-        mockDomain(Policy, [
-            [ key: Policy.KEY_INTEREST_METHOD, value: Policy.VALUE_COMPOUND ]
-        ])
-
-        assert Policy.VALUE_COMPOUND == Policy.valueOf(Policy.KEY_INTEREST_METHOD)
-    }
-
-    void testStaticCompoundMethod() {
-        mockDomain(Policy, [
-            [ key: Policy.KEY_INTEREST_METHOD, value: Policy.VALUE_COMPOUND ]
-        ])
-
-        assertTrue Policy.isCompoundMethod()
+        assert "nullable" == policy.errors["company"]
     }
 }

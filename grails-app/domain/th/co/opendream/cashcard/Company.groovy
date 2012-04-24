@@ -14,7 +14,7 @@ class Company {
 
     static transients = ['schema']
 
-    static hasMany = [users:Users, members:Member]
+    static hasMany = [users:Users, members:Member, policy:Policy]
 
     static constraints = {
     	name(blank:false, unique:true)

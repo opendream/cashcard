@@ -16,6 +16,7 @@ class MemberControllerTests {
 
     def utilControl
     def sessionUtilControl
+    def policyServiceControl
 
     def generateFindBy(flag) {
         return {key ->
@@ -53,6 +54,7 @@ class MemberControllerTests {
 
         utilControl = mockFor(UtilService)
         sessionUtilControl = mockFor(SessionUtilService)
+        policyServiceControl = mockFor(PolicyService)
 
         m1.transactionService = [
             'withdraw': { obj, amount ->
@@ -206,6 +208,9 @@ class MemberControllerTests {
 
         utilControl.demand.moneyRoundUp(1..1) { amount -> 200.25 }
         controller.utilService = utilControl.createMock()
+
+        print Member.metaClass
+        Member.metaClass.pay = { assert 3==5 }
 
         params.id = '1'
         def model = controller.payment()

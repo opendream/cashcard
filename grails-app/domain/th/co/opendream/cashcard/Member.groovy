@@ -11,14 +11,13 @@ class Member {
     BigDecimal interest = 0.00
     Date dateCreated
     Date lastUpdated
-    InterestMethod interestMethod
-    BigDecimal balanceLimit
 
     Company company
     static hasMany = [balanceTransactions: BalanceTransaction]
 
     def transactionService
     def utilService
+    def policyService
 
     public enum InterestMethod {
         COMPOUND,
@@ -55,12 +54,6 @@ class Member {
 
     }
 
-    def beforeValidate() {
-        if (!balanceLimit) {
-            balanceLimit = Policy.valueOfCreditLine()
-        }
-    }
-
     BigDecimal getBalance() {
         this.balance
     }
@@ -85,7 +78,7 @@ class Member {
      * หนี้คงค้างสุทธิ
      */
     BigDecimal getTotalDebt() {
-        if (this.interestMethod == InterestMethod.COMPOUND) {
+        if (policyService.getInterestMethod(this.company) == Policy.VALUE_COMPOUND) {
             balance
         }
         else {
