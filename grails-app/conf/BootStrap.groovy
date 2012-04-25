@@ -13,7 +13,7 @@ import th.co.opendream.cashcard.RequestMap
 import groovy.time.*
 import static java.util.Calendar.*
 import grails.util.Environment
-
+import org.codehaus.groovy.grails.commons.ConfigurationHolder as CH
 
 class BootStrap {
     def companyService
@@ -63,6 +63,7 @@ class BootStrap {
         }
 
         createRequestMaps();
+        checkSessionTimeout()
     }
 
     def destroy = {
@@ -86,5 +87,22 @@ class BootStrap {
         new RequestMap(url: '/member/withdraw/**', configAttribute: 'ROLE_COUNTER').save()
         new RequestMap(url: '/interestRate/**', configAttribute: 'ROLE_USER,ROLE_COUNTER').save()
         new RequestMap(url: '/report/**', configAttribute: 'ROLE_USER,ROLE_COUNTER').save()
+    }
+
+    def checkSessionTimeout() {
+        def basePath = System.properties['base.dir']
+        println "basePath ------------------- $basePath"
+        switch (Environment.currentEnvironment) {
+          case Environment.DEVELOPMENT:
+            if (new File("/${basePath}/src/templates/war/web_dev.xml").exists()) {
+                CH.config.base.webXml = "file:${basePath}/src/templates/war/web_dev.xml"
+            }
+            break;
+          default:
+            if (new File("/${basePath}/src/templates/war/web_prod.xml").exists()) {
+                CH.config.base.webXml = "file:${basePath}/src/templates/war/web.xml"
+            }
+            break;
+        }
     }
 }
