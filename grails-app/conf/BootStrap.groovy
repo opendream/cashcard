@@ -91,7 +91,6 @@ class BootStrap {
 
     def checkSessionTimeout() {
         def basePath = System.properties['base.dir']
-        println "basePath ------------------- $basePath"
         switch (Environment.currentEnvironment) {
           case Environment.DEVELOPMENT:
             if (new File("/${basePath}/src/templates/war/web_dev.xml").exists()) {
