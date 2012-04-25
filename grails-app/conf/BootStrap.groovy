@@ -24,7 +24,7 @@ class BootStrap {
 
             def opendream = new Company(name:'opendream', address:'bkk', taxId:'1-2-3-4')
             def policy1 = new Policy(key: Policy.KEY_CREDIT_LINE, value: "2000.00", company: opendream)
-            def policy2 = new Policy(key: Policy.KEY_INTEREST_METHOD, value: Policy.VALUE_NON_COMPOUND)
+            def policy2 = new Policy(key: Policy.KEY_INTEREST_METHOD, value: Policy.VALUE_COMPOUND)
             def policy3 = new Policy(key: Policy.KEY_INTEREST_RATE_LIMIT, value: '18.00')
 
             opendream
@@ -41,14 +41,14 @@ class BootStrap {
                 .addToPolicy(policy5)
                 .addToPolicy(policy6)
 
-            def user = new Users(username:'admin', password:'password', 
+            def user = new Users(username:'admin', password:'password',
                                 , enabled:true, accountExpired:false, accountLocked:false, passwordExpired:false)
 
         	def m1 = new Member(identificationNumber:"1159900100015", firstname:"Nat", lastname: "Weerawan", telNo: "111111111", gender: "MALE", address: "Opendream")
         	def m2 = new Member(identificationNumber: "1234567891234", firstname: "Noomz", lastname: "Siriwat", telNo: "111111111", gender: "MALE", address: "Opendream2")
 
             opendream.addToUsers(user)
-            opendream.addToMembers(m1)     
+            opendream.addToMembers(m1)
             companyService.save(opendream)
 
             opendream2.addToMembers(m2)
@@ -59,7 +59,7 @@ class BootStrap {
             def roleUser = new Role(authority:'ROLE_USER').save(failOnError: true)
             new UsersRole(user:user, role:roleAdmin).save(failOnError: true)
             new UsersRole(user:user, role:roleCounter).save(failOnError: true)
-            new UsersRole(user:user, role:roleUser).save(failOnError: true) 
+            new UsersRole(user:user, role:roleUser).save(failOnError: true)
         }
 
         createRequestMaps();

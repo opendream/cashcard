@@ -56,7 +56,7 @@ class TransactionService {
             interest_pay = 0.00
 
         if (outstanding >= member.interest) {
-            if (policyService.isCompoundMethod(member)) {
+            if (policyService.isCompoundMethod(member.company)) {
                 // do nothing
             } else {
                 outstanding -= member.interest
@@ -65,7 +65,7 @@ class TransactionService {
             member.interest = 0.00
         } else {
             interest_pay = outstanding
-            if (policyService.isCompoundMethod(member)) {
+            if (policyService.isCompoundMethod(member.company)) {
                 // do nothing
                 member.interest -= outstanding
             } else {
