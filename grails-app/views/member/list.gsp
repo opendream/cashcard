@@ -65,7 +65,7 @@
 								<td><a href="${createLink(controller:'member', action:'show', params:[id: member.id])}">${member.identificationNumber}</a></td>
 								<td>${member.firstname} ${member.lastname}</td>
 								<td>${member.telNo}</td>
-								<td>${member.gender}</td>
+								<td>${message(code: 'member.label.'+member?.gender.toString().toLowerCase(), default: member?.gender.toString())}</td>
 								<td>${member.address}</td>
 								<td><g:message code="member.label.status.${member.status}"></g:message></td>
 							</tr>
