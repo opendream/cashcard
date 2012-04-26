@@ -4,18 +4,20 @@ class UserProfileController {
 
 	def springSecurityService
 
-    def index() { }
+    def index() {
+    	redirect action: 'show'
+    }
 
     def show() {
     	def userId = springSecurityService.principal.id
     	def model = Users.get(userId)
-    	model
+    	[user:model]
     }
 
     def edit() {
     	def userId = springSecurityService.principal.id
     	def model = Users.get(userId)
-    	model
+    	[user:model]
     }
 
     def update() {

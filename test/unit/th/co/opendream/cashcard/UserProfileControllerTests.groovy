@@ -48,16 +48,21 @@ class UserProfileControllerTests {
         controller.springSecurityService = springSecurityService          
 	}
 
+	void testIndex() {
+		controller.index()
+		assert response.redirectedUrl == '/userProfile/show'
+	}
+
     void testShow() {
        def model = controller.show()
-       assert model != null
-       assert model.id == springSecurityService.principal.id       
+       assert model.user != null
+       assert model.user.id == springSecurityService.principal.id       
     }
 
     void testEdit() {
        def model = controller.show()
-       assert model != null
-       assert model.id == springSecurityService.principal.id
+       assert model.user != null
+       assert model.user.id == springSecurityService.principal.id
     }
 
     void testUpdate() {
