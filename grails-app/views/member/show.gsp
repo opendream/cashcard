@@ -16,6 +16,7 @@
                 </g:if>
                 <g:render template="toolbar" />
 
+                <h3>ข้อมูลสมาชิก</h3>
                 <table class="table table-striped table-bordered">
                     <tr>
                         <td><strong><g:message code="member.label.firstName"></g:message></strong></div>
@@ -57,7 +58,10 @@
                             <g:else>-</g:else>
                         </td>
                     </tr>
+                </table>
 
+                <h3>สถานะการเงิน</h3>
+                <table class="table table-striped table-bordered">
                     <tr>
                         <td><strong><g:message code="member.label.creditLine"></g:message></strong></td>
                         <td>
