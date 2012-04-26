@@ -43,7 +43,7 @@ class UserController extends grails.plugins.springsecurity.ui.UserController {
 		user.properties = params
 		if (params.password && !params.password.equals(oldPassword)) {
 			String salt = saltSource instanceof NullSaltSource ? null : params.username
-			user."$passwordFieldName" = springSecurityUiService.encodePassword(params.password, salt)
+			//user."$passwordFieldName" = springSecurityUiService.encodePassword(params.password, salt)
 		}
 
 
