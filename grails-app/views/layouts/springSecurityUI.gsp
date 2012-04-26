@@ -74,6 +74,7 @@ the explicit tags above and edit those, not the taglib code.
 		<div>
 
 			<ul class="jd_menu jd_menu_slate">
+				<li class="accessible"><a href="${createLink(controller:'member', action:'verifyCard')}"><g:message code="project.name"></g:message></a></li>
 				<li><a class="accessible"><g:message code="spring.security.ui.menu.users"/></a>
 					<ul>
 						<li><g:link controller="user" action='search'><g:message code="spring.security.ui.search"/></g:link></li>
