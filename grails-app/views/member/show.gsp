@@ -91,12 +91,12 @@
                     </tr>
                 </table>
                 <div class="form-actions">
-                    <g:link class="btn" action="edit" id="${memberInstance.id}">${message(code: 'default.button.edit.label', default: 'Edit')}</g:link>
+                    <g:link class="btn" action="edit" id="${memberInstance.id}">แก้ไขข้อมูลสมาชิก</g:link>
 
                     <g:form style="display:inline;" method="post" action="disable">
                         <g:hiddenField name="id" value="${memberInstance?.id}" />
                         <g:hiddenField name="version" value="${memberInstance?.version}" />
-                        <a class="btn" href="#disable">${message(code: 'default.button.disable.label', default: 'Disable')}</a>
+                        <a class="btn" href="#disable">ยกเลิกสมาชิก</a>
                     </g:form>
                 </div>
 
