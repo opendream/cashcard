@@ -194,10 +194,9 @@
                 <li><a href="${createLink(controller:'report', action:'dailySummary')}">${message(code: 'main.menu.dailySummary', default: 'สรุปประจำวัน')}</a></li>
               </ul>
             </li>
-            <li ><a><com:name/></a></li>
             <li class="dropdown">
               <sec:ifLoggedIn>
-              <a href='#' class="dropdown-toggle" data-toggle="dropdown"><sec:username/><b class="caret"></b></a>
+              <a href='#' class="dropdown-toggle" data-toggle="dropdown"><i class="icon-user icon-white"></i> <sec:username/><b class="caret"></b></a>
               <ul class="dropdown-menu">
                 <li><a href="${createLink(controller:'userProfile')}">${message(code:'cashcard.userprofile.label', default: 'User Profile')}</a></li>
                 <li class="divider"></li>
