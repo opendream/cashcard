@@ -201,6 +201,10 @@
               <sec:ifLoggedIn>
               <a href='#' class="dropdown-toggle" data-toggle="dropdown"><sec:username/><b class="caret"></b></a>
               <ul class="dropdown-menu">
+                <sec:ifAnyGranted roles="ROLE_ADMIN">
+                  <li><a href="${createLink(controller:'user', action:'search')}">${message(code:'cashcard.setting.label', default: 'Setting')}</a></li>
+                  <li class="divider"></li>
+                </sec:ifAnyGranted>                
                 <li>
                 <g:link controller='logout'>${message(code:'cashcard.logout.label', default: 'Logout')}</g:link>
                 </li>
