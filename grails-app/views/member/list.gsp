@@ -47,32 +47,35 @@
 			</g:form>
 		</div>
 
-	  <div class="container">
-			<table class="table table-striped table-bordered table-condensed">
-				<thead>
-					<tr>
-						<th><g:message code="member.label.identificationNumber"></g:message></th>
-						<th><g:message code="member.label.name"></g:message></th>
-						<th><g:message code="member.label.telNo"></g:message></th>
-						<th><g:message code="member.label.address"></g:message></th>
-					</tr>
-				</thead>
-				<tbody>
-					<g:each var="member" in ="${memberList}">
+		<div class="container">
+				<table class="table table-striped table-bordered table-condensed">
+					<thead>
 						<tr>
-							<td><a href="${createLink(controller:'member', action:'show', params:[id: member.id])}">${member.identificationNumber}</a></td>
-							<td>${member.firstname} ${member.lastname}</td>
-							<td>${member.telNo}</td>
-							<td>${member.address}</td>
+							<th><g:message code="member.label.identificationNumber"></g:message></th>
+							<th><g:message code="member.label.name"></g:message></th>
+							<th><g:message code="member.label.telNo"></g:message></th>
+							<th><g:message code="member.label.gender"></g:message></th>
+							<th><g:message code="member.label.address"></g:message></th>
+							<th><g:message code="member.label.status"></g:message></th>
 						</tr>
-					</g:each>
-				</tbody>
-			</table>
+					</thead>
+					<tbody>
+						<g:each var="member" in ="${memberList}">
+							<tr>
+								<td><a href="${createLink(controller:'member', action:'show', params:[id: member.id])}">${member.identificationNumber}</a></td>
+								<td>${member.firstname} ${member.lastname}</td>
+								<td>${member.telNo}</td>
+								<td>${message(code: 'member.label.'+member?.gender.toString().toLowerCase(), default: member?.gender.toString())}</td>
+								<td>${member.address}</td>
+								<td><g:message code="member.label.status.${member.status}"></g:message></td>
+							</tr>
+						</g:each>
+					</tbody>
+				</table>
 
-			<div class="pagination">
-				<cashcard:paginate controller="member" action="list" total="${memberCount}" />
-			</div>
-	  </div>
-
+				<div class="pagination">
+					<cashcard:paginate controller="member" action="list" total="${memberCount}" />
+				</div>
+		</div>
 	</body>
 </html>

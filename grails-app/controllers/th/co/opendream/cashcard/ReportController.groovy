@@ -1,6 +1,6 @@
 package th.co.opendream.cashcard
 
-
+import th.co.opendream.cashcard.ActivityType
 import th.co.opendream.cashcard.TransferType
 
 import groovy.time.*
@@ -74,6 +74,72 @@ class ReportController {
             code: 'รวมเงิน',
             credit: scredit,
             debit: sdebit
+        ]
+
+        [
+            results: results,
+            startDate: range.startDate,
+            endDate: range.endDate
+        ]
+    }
+
+    def dailySummary() {
+        def range = getRange(params)
+        def results = BalanceTransaction.createCriteria().list {
+            between('date', range.startDate, range.endDate)
+            eq('userCompany', sessionUtilService.company)
+            order('date')
+            member {
+                order('firstname')
+                order('lastname')
+            }
+        }.collect {
+            if (it.activity == ActivityType.WITHDRAW) {
+                [
+                    date: it.date,
+                    memberID: it.member.id,
+                    memberIDCard: it.member.identificationNumber,
+                    member: it.member,
+                    withdraw: it.net,
+                    pay: null,
+                    interest: null,
+                    remainder: null
+                ]
+            }
+            else {
+                [
+                    date: it.date,
+                    memberID: it.member.id,
+                    memberIDCard: it.member.identificationNumber,
+                    member: it.member,
+                    withdraw: null,
+                    pay: it.balance_pay,
+                    interest: it.interest_pay,
+                    remainder: it.remainder
+                ]
+            }
+        }
+
+        def swithdraw = 0.00
+        def spay = 0.00
+        def sinterest = 0.00
+        def sremainder = 0.00
+        
+        results.each {
+            swithdraw  += it.withdraw ? it.withdraw : 0.00
+            spay       += it.pay ? it.pay : 0.00
+            sinterest  += it.interest ? it.interest : 0.00
+            sremainder += it.remainder ? it.remainder : 0.00
+        }
+        results << [
+            date: null,
+            memberID: null,
+            memberIDCard: null,
+            member: null,
+            withdraw: swithdraw,
+            pay: spay,
+            interest: sinterest,
+            remainder: sremainder
         ]
 
         [
