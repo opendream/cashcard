@@ -9,13 +9,15 @@ class UtilService {
     static def interestRateEditable(InterestRate rate) {
     	def today = Calendar.instance.time
 
-        println today.class
-        println rate.startDate.class
     	if (today > rate.startDate) {
     		return false
     	}
     	else {
     		return true
     	}
+    }
+
+    static def verifyThaiIDCard(id) {
+
     }
 }
