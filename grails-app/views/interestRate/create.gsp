@@ -19,11 +19,9 @@
 				<div class="message alert alert-success" role="status">${flash.message}</div>
 			</g:if>
 			<g:hasErrors bean="${interestRateInstance}">
-			<ul class="errors" role="alert alert alert-error">
-				<g:eachError bean="${interestRateInstance}" var="error">
-					<li <g:if test="${error in org.springframework.validation.FieldError}">data-field-id="${error.field}"</g:if>><g:message error="${error}"/></li>
-				</g:eachError>
-			</ul>
+				<div id="errors" class="alert alert-error">
+		          <g:renderErrors bean="${interestRateInstance}" as="list"></g:renderErrors>
+			    </div><!-- /errors -->
 			</g:hasErrors>
 			<div class="container" >
 				<g:form action="save" class="form-horizontal">

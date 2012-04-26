@@ -1,110 +1,113 @@
 <html>
-	<head>
-		<meta name="layout" content="main">
-		<title>${"${memberInstance.firstname} ${memberInstance.lastname}"}</title>
-	</head>
-	<body>
-		<div class="container">
-			<header class="page-header">
-				<h1>${"${memberInstance.firstname} ${memberInstance.lastname}"}</h1>
-			</header>
-		</div>
+    <head>
+        <meta name="layout" content="main">
+        <title>${"${memberInstance.firstname} ${memberInstance.lastname}"}</title>
+    </head>
+    <body>
+        <div class="container">
+            <header class="page-header">
+                <h1>${"${memberInstance.firstname} ${memberInstance.lastname}"}</h1>
+            </header>
+        </div>
 
-		<div class="container">
-				<g:if test="${flash.message}">
-					<div class="message alert alert-success" role="status">${flash.message}</div>
-				</g:if>
-				<g:render template="toolbar" />
+        <div class="container">
+                <g:if test="${flash.message}">
+                    <div class="message alert alert-success" role="status">${flash.message}</div>
+                </g:if>
+                <g:render template="toolbar" />
 
-				<div class="row">
-					<div class="control-label span2"><strong><g:message code="member.label.identificationNumber"></g:message></strong></div>
-					<div class="offset2">
-						${memberInstance.identificationNumber}
-					</div>
-				</div>
+                <table class="table table-striped table-bordered">
+                    <tr>
+                        <td><strong><g:message code="member.label.firstName"></g:message></strong></div>
+                        <td>
+                            ${memberInstance?.firstname}
+                        </td>
+                    </tr>
 
-				<div class="row">
-					<div class="control-label span2"><strong><g:message code="member.label.firstName"></g:message></strong></div>
-					<div class="offset2">
-						${memberInstance?.firstname} ${memberInstance?.lastname}
-					</div>
-				</div>
+                    <tr>
+                        <td><strong><g:message code="member.label.lastName"></g:message></strong></td>
+                        <td>
+                            ${memberInstance?.lastname}
+                        </td>
+                    </tr>
 
-				<div class="row">
-					<div class="control-label span2"><strong><g:message code="member.label.gender"></g:message></strong></div>
-					<div class="offset2">
-						${memberInstance?.gender == th.co.opendream.cashcard.Member.Gender.MALE ? 'ชาย' : 'หญิง'}
-					</div>
-				</div>
+                    <tr>
+                        <td><strong><g:message code="member.label.telNo"></g:message></strong></td>
+                        <td>
+                            <g:if test="${memberInstance.telNo}">
+                                ${memberInstance.telNo}
+                            </g:if>
+                            <g:else>-</g:else>
+                        </td>
+                    </tr>
 
-				<div class="row">
-					<div class="control-label span2"><strong><g:message code="member.label.telNo"></g:message></strong></div>
-					<div class="offset2">
-						<g:if test="${memberInstance.telNo}">
-							${memberInstance.telNo}
-						</g:if>
-						<g:else>-</g:else>
-					</div>
-				</div>
+                    <tr>
+                        <td><strong><g:message code="member.label.gender"></g:message></strong></td>
+                        <td>
+                            ${message(code: 'member.label.'+memberInstance?.gender.toString().toLowerCase(), default: memberInstance?.gender.toString())}
+                        </td>
+                    </tr>
 
-				
-				<div class="row">
-					<div class="control-label span2"><strong><g:message code="member.label.address"></g:message></strong></div>
-					<div class="offset2">
-						<g:if test="${memberInstance.address}">
-							${memberInstance.address}
-						</g:if>
-						<g:else>-</g:else>
-					</div>
-				</div>
+                    <tr>
+                        <td><strong><g:message code="member.label.address"></g:message></strong></td>
+                        <td>
+                            <g:if test="${memberInstance.address}">
+                                ${memberInstance.address}
+                            </g:if>
+                            <g:else>-</g:else>
+                        </td>
+                    </tr>
 
+                    <tr>
+                        <td><strong><g:message code="member.label.creditLine"></g:message></strong></td>
+                        <td>
+                            <g:formatNumber number="${memberInstance?.getRemainingFinancialAmount()}" type="currency" currencyCode="THB" />
+                        </td>
+                    </tr>
 
-				<hr/>
+                    <tr>
+                        <td><strong><g:message code="member.label.balance"></g:message></strong></td>
+                        <td>
+                            <g:formatNumber number="${memberInstance?.balance}" type="currency" currencyCode="THB" />
+                        </td>
+                    </tr>
 
-				<div class="row">
-					<div class="control-label span2"><strong>สมาชิกของ</strong></div>
-					<div class="offset2">
-						<g:if test="${isOrigCompany}">
-						<span style="color:red">
-						</g:if>
-						${memberInstance?.company?.name}
-						<g:if test="${isOrigCompany}">
-						<span style="color:red">
-						</g:if>
+                    <tr>
+                        <td><strong><g:message code="member.label.interest"></g:message></strong></td>
+                        <td>
+                            <g:formatNumber number="${memberInstance?.getInterest()}" type="currency" currencyCode="THB" />
+                        </td>
+                    </tr>
 
-					</div>
-				</div>
+                    <tr>
+                        <td><strong><g:message code="member.label.totalDebt"></g:message></strong></td>
+                        <td>
+                            <g:formatNumber number="${memberInstance?.getTotalDebt()}" type="currency" currencyCode="THB" />
+                        </td>
+                    </tr>
+                </table>
+                <div class="form-actions">
+                    <g:link class="btn" action="edit" id="${memberInstance.id}">${message(code: 'default.button.edit.label', default: 'Edit')}</g:link>
 
-				<hr/>
+                    <g:form style="display:inline;" method="post" action="disable">
+                        <g:hiddenField name="id" value="${memberInstance?.id}" />
+                        <g:hiddenField name="version" value="${memberInstance?.version}" />
+                        <a class="btn" href="#disable">${message(code: 'default.button.disable.label', default: 'Disable')}</a>
+                    </g:form>
+                </div>
 
-				<div class="row">
-					<div class="control-label span2"><strong><g:message code="member.label.creditLine"></g:message></strong></div>
-					<div class="span1" style="text-align:right">
-						<g:formatNumber number="${memberInstance?.getRemainingFinancialAmount()}" format="#,##0.00" />
-					</div>
-				</div>
+            </div>
 
-				<div class="row">
-					<div class="control-label span2"><strong><g:message code="member.label.balance"></g:message></strong></div>
-					<div class="span1" style="text-align:right">
-						<g:formatNumber number="${memberInstance?.balance}" format="#,##0.00" />
-					</div>
-				</div>
+            <script type="text/javascript">
+                jQuery(function() {
+                    $('a[href="#disable"]').click(function(e) {
+                        e.preventDefault();
+                        if (confirm('${message(code: 'default.button.disable.confirm.message', default: 'Are you sure?')}')) {
+                            $(this).parent('form').submit();
+                        }
+                    });
+                });
+            </script>
 
-				<div class="row">
-					<div class="control-label span2"><strong><g:message code="member.label.interest"></g:message></strong></div>
-					<div class="span1" style="text-align:right">
-						<g:formatNumber number="${memberInstance?.getInterest()}" format="#,##0.00" />
-					</div>
-				</div>
-
-				<div class="row">
-					<div class="control-label span2"><strong><g:message code="member.label.totalDebt"></g:message></strong></div>
-					<div class="span1" style="text-align:right">
-						<g:formatNumber number="${memberInstance?.getTotalDebt()}" format="#,##0.00" />
-					</div>
-				</div>
-
-			</div>
-		</body>
+        </body>
 </html>
