@@ -1,3 +1,5 @@
+<%@ page import="th.co.opendream.cashcard.Member" %>
+
 <html>
     <head>
         <meta name="layout" content="main">
@@ -93,11 +95,21 @@
                 <div class="form-actions">
                     <g:link class="btn" action="edit" id="${memberInstance.id}">แก้ไขข้อมูลสมาชิก</g:link>
 
-                    <g:form style="display:inline;" method="post" action="disable">
-                        <g:hiddenField name="id" value="${memberInstance?.id}" />
-                        <g:hiddenField name="version" value="${memberInstance?.version}" />
-                        <a class="btn" href="#disable">ยกเลิกสมาชิก</a>
-                    </g:form>
+                    <g:if test="${memberInstance?.status == Member.Status.ACTIVE}">
+                        <g:form style="display:inline;" method="post" action="disable">
+                            <g:hiddenField name="id" value="${memberInstance?.id}" />
+                            <g:hiddenField name="version" value="${memberInstance?.version}" />
+                            <a class="btn" href="#disable">จำหน่ายสมาชิก</a>
+                        </g:form>
+                    </g:if>
+
+                    <g:if test="${memberInstance?.status == Member.Status.DELETED}">
+                        <g:form style="display:inline;" method="post" action="enable">
+                            <g:hiddenField name="id" value="${memberInstance?.id}" />
+                            <g:hiddenField name="version" value="${memberInstance?.version}" />
+                            <a class="btn" href="#enable">คืนสิทธิสมาชิก</a>
+                        </g:form>
+                    </g:if>
                 </div>
 
             </div>
@@ -105,6 +117,13 @@
             <script type="text/javascript">
                 jQuery(function() {
                     $('a[href="#disable"]').click(function(e) {
+                        e.preventDefault();
+                        if (confirm('${message(code: 'default.button.disable.confirm.message', default: 'Are you sure?')}')) {
+                            $(this).parent('form').submit();
+                        }
+                    });
+
+                    $('a[href="#enable"]').click(function(e) {
                         e.preventDefault();
                         if (confirm('${message(code: 'default.button.disable.confirm.message', default: 'Are you sure?')}')) {
                             $(this).parent('form').submit();

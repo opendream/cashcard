@@ -247,5 +247,28 @@ class MemberController {
             return
         }
     }
+
+    def enable() {
+        def memberInstance = Member.get(params.id)
+        if (!memberInstance) {
+            flash.message = message(code: 'default.not.found.message', args: [message(code: 'memberInstance.label', default: 'Member'), params.id])
+            redirect(action: "list")
+            return
+        }
+
+        memberInstance.status = Member.Status.ACTIVE
+        if (memberService.update(memberInstance)) {
+            flash.message = message(code: "member.update.success", default: "Update success.")
+            redirect(action: "list")
+            return
+        } else {
+            flash.message = message(code: "member.update.failed", default: "Update Failed.")
+            memberInstance.errors.rejectValue("status", "member.enable.fail",
+                    [message(code: 'member.label', default: 'Member')] as Object[],
+                    "Enable failed.")
+            render(view: "edit", model: [memberInstance: memberInstance])
+            return
+        }
+    }
 }
 
