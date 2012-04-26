@@ -14,6 +14,7 @@ class MemberService {
 			address: member.address,
 			balance: member.balance,
 			member: member.save(),
+			status: member.status,
     	]
 
     	new MemberHistory(properties).save()

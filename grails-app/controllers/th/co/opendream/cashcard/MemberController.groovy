@@ -8,6 +8,7 @@ class MemberController {
     def utilService
     def transactionService
     def sessionUtilService
+    def memberService
 
     def index() { }
 
@@ -191,7 +192,7 @@ class MemberController {
         def memberInstance = Member.get(params.id)
 
         if (memberInstance) {
-            render(view: 'edit', id: memberInstance.id)
+            render(view: 'edit', model: [memberInstance: memberInstance])
         }
         else {
             redirect(uri: '/error')
@@ -202,11 +203,48 @@ class MemberController {
         def memberInstance = Member.get(params.id)
 
         if (memberInstance) {
+            if (memberInstance.version > params.version.toLong()) {
+                memberInstance.errors.rejectValue("version", "default.optimistic.locking.failure",
+                    [message(code: 'member.label', default: 'Member')] as Object[],
+                    "Another user has updated this Member while you were editing")
+                render(view: "edit", model: [memberInstance: memberInstance])
+                return
+            }
+
+            memberInstance.properties = params
+            if (!memberService.update(memberInstance)) {
+                render(view: "edit", model: [memberInstance: memberInstance])
+                return
+            }
+
             flash.message = message(code: "member.update.success", default: "Update success.")
-            render(view: 'show', id: memberInstance.id)
+            redirect(action: 'show', id: memberInstance.id)
         }
         else {
             redirect(uri: '/error')
+        }
+    }
+
+    def disable() {
+        def memberInstance = Member.get(params.id)
+        if (!memberInstance) {
+            flash.message = message(code: 'default.not.found.message', args: [message(code: 'memberInstance.label', default: 'Member'), params.id])
+            redirect(action: "list")
+            return
+        }
+
+        memberInstance.status = Member.Status.DELETED
+        if (memberService.update(memberInstance)) {
+            flash.message = message(code: "member.update.success", default: "Update success.")
+            redirect(action: "list")
+            return
+        } else {
+            flash.message = message(code: "member.update.failed", default: "Update Failed.")
+            memberInstance.errors.rejectValue("status", "member.disable.fail",
+                    [message(code: 'member.label', default: 'Member')] as Object[],
+                    "Disable failed.")
+            render(view: "edit", model: [memberInstance: memberInstance])
+            return
         }
     }
 }
