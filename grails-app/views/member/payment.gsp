@@ -53,14 +53,14 @@
     		<div class="control-group ${flash.error? 'error' : ''}">
           <label for="amount" class="control-label">จำนวนเงินที่จะชำระ</label>
           <div class="controls">
-              <g:field type="text" id="amount" name="amount" pattern="\\d*(\\.\\d\\d)?" required="" value="" />
+              <g:field type="text" id="amount" name="amount" pattern="\\d*(\\.\\d\\d)?" required="" value="${amount}" />
           </div>
         </div>
 
         <div class="control-group ${flash.error? 'error' : ''}">
           <label for="net" class="control-label"><g:message code="cashcard.recieve.amount"></g:message></label>
           <div class="controls">
-              <g:field type="text" id="net" name="net" pattern="\\d*(\\.\\d\\d)?" required="" value="" />
+              <g:field type="text" id="net" name="net" pattern="\\d*(\\.\\d\\d)?" required="" value="${net}" />
           </div>
         </div>
 

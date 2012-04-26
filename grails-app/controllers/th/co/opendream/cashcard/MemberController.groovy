@@ -120,17 +120,30 @@ class MemberController {
     def pay() {
         def memberInstance = Member.get(params.id)
         if (memberInstance && params.amount) {
-            memberInstance.pay(params.amount.toBigDecimal())
             def change = params.net?.toBigDecimal() - params.amount?.toBigDecimal()
 
-
-            if (!change) {
-                flash.message = "Pay success."
+            if (change < 0.00) {
+                flash.error = "ไม่สามารถทำรายการได้"
+                render (action: 'payment', id: memberInstance)
+                render(view: 'payment', model:
+                    [
+                        memberInstance: memberInstance,
+                        roundUpDebt: utilService.moneyRoundUp(memberInstance.getTotalDebt()),
+                        debt: memberInstance.getTotalDebt(),
+                        net: params.net,
+                        amount: params.amount
+                    ])
             }
             else {
-                flash.message = "Change is ${change}"
+                memberInstance.pay(params.amount.toBigDecimal())
+                if (!change) {
+                    flash.message = "Pay success."
+                }
+                else {
+                    flash.message = "Change is ${change}"
+                }
+                redirect(action: "show", id: memberInstance.id)
             }
-            redirect(action: "show", id: memberInstance.id)
         }
         else if (!params.amount) {
             flash.message = "Invalid amount."
