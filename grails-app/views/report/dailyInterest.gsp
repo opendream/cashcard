@@ -58,7 +58,7 @@
                     <tr class="${(i % 2) == 0 ? 'even' : 'odd'}">
                         <td class="id">${i+1}</td>
                         <td class="string"><g:formatDate format="dd/MM/yyyy HH:mm" date="${interest.date}" /></td>
-                        <td class="string">${interest.member}</td>
+                        <td class="string"><a href="${createLink(controller:'member', action:'show', params:[id: interest.member.id])}">${interest.member}</a></td>
                         <td class="number"><g:formatNumber type="number" number="${interest.balanceForward}" maxFractionDigits="2" minFractionDigits="2" /></td>
                         <td class="number"><g:formatNumber type="number" number="${interest.interestForward}" maxFractionDigits="2" minFractionDigits="2" /></td>
                         <td class="number"><g:formatNumber type="number" number="${interest.fee}" maxFractionDigits="2" minFractionDigits="2" /></td>

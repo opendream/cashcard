@@ -53,7 +53,7 @@
                     <tr class="${(i % 2) == 0 ? 'even' : 'odd'}">
                         <td class="id">${tx.code != 'รวมเงิน' ? i+1 : ''}</td>
                         <td class="date"><g:formatDate format="dd/MM/yyyy HH:mm" date="${tx.date}" /></td>
-                        <td class="string">${tx.member}</td>
+                        <td class="string"><a href="${createLink(controller:'member', action:'show', params:[id: tx.memberID])}">${tx.member}</a></td>
                         <td class="date">${tx.code}</td>
                         <td class="number"><g:formatNumber type="number" number="${tx.debit}" maxFractionDigits="2" minFractionDigits="2" /></td>
                         <td class="number"><g:formatNumber type="number" number="${tx.credit}" maxFractionDigits="2" minFractionDigits="2" /></td>

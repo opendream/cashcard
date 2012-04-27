@@ -16,10 +16,11 @@ class ReportController {
     def index() { }
 
     def balance() {
-        def results = Member.findAllByCompanyAndBalanceGreaterThan(sessionUtilService.company, 0.00, [order: 'firstname']).collect {
+        def results = Member.findAllByCompanyAndBalanceGreaterThan(sessionUtilService.company, 0.00, [sort: 'firstname', order: 'asc']).collect {
             [name: "${it.firstname} ${it.lastname}",
              balance: it.balance,
-             interest: it.interest
+             interest: it.interest,
+             memberID: it.id
             ]
         }
         [results: results]
@@ -27,12 +28,10 @@ class ReportController {
 
     def dailyInterest() {
         def range = getRange(params)
-        def results = InterestTransaction.createCriteria().list {
+        def results = InterestTransaction.createCriteria().list(sort: 'date', order: 'asc') {
             between('date', range.startDate, range.endDate)
             member {
                 eq('company', sessionUtilService.company)
-                order('firstname')
-                order('lastname')
             }
         }
         [
@@ -44,17 +43,13 @@ class ReportController {
 
     def dailyTransaction() {
         def range = getRange(params)
-        def results = BalanceTransaction.createCriteria().list {
+        def results = BalanceTransaction.createCriteria().list(sort: 'date', order: 'asc') {
             between('date', range.startDate, range.endDate)
             eq('userCompany', sessionUtilService.company)
-            order('date')
-            member {
-                order('firstname')
-                order('lastname')
-            }
         }.collect {
             [
                 date: it.date,
+                memberID: it.member.id,
                 member: it.member,
                 code: it.code,
                 amount: it.amount,
@@ -85,14 +80,9 @@ class ReportController {
 
     def dailySummary() {
         def range = getRange(params)
-        def results = BalanceTransaction.createCriteria().list {
+        def results = BalanceTransaction.createCriteria().list(sort: 'date', order: 'asc') {
             between('date', range.startDate, range.endDate)
             eq('userCompany', sessionUtilService.company)
-            order('date')
-            member {
-                order('firstname')
-                order('lastname')
-            }
         }.collect {
             if (it.activity == ActivityType.WITHDRAW) {
                 [

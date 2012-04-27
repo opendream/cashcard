@@ -34,6 +34,7 @@
                 <g:each in="${results}" var="tx" status="i">
                     <tr class="${(i % 2) == 0 ? 'even' : 'odd'}">
                         <td class="id">${i+1}</td>
+                        <td class="string"><a href="${createLink(controller:'member', action:'show', params:[id: tx.memberID])}">${tx.name}</a></td>
                         <td class="string">${tx.name}</td>
                         <td class="number"><g:formatNumber type="number" number="${tx.balance}" maxFractionDigits="2" minFractionDigits="2" /></td>
                         <td class="number"><g:formatNumber type="number" number="${tx.interest}" maxFractionDigits="2" minFractionDigits="2" /></td>
