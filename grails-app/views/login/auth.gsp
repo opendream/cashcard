@@ -1,7 +1,7 @@
 <!doctype html>
-<html lang="en">
-<r:require modules="bootstrap"/>
 
+<r:require modules="bootstrap"/>
+<html lang="en" class="no-js">
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
@@ -15,9 +15,8 @@
     <![endif]-->
 
     <!-- Le styles -->
-
-	  <link href="${resource(dir:'css',file:'bootstrap.css')}" rel="stylesheet">
-
+    <r:layoutResources />
+    
     <style type="text/css">
       /* Override some defaults */
       html, body {
