@@ -32,8 +32,13 @@ class MemberController {
     def show() {
         if (params.id) {
             def memberInstance = Member.get(params.id)
-            def isOrigCompany = memberInstance.company != sessionUtilService.company
-            render(view:'show', model:[memberInstance: memberInstance, isOrigCompany: isOrigCompany])
+            if (memberInstance) {
+                def isOrigCompany = memberInstance.company != sessionUtilService.company
+                render(view:'show', model:[memberInstance: memberInstance, isOrigCompany: isOrigCompany])
+            }
+            else {
+                redirect(uri: '/error')
+            }
         }
         else {
             redirect(uri: '/error')
