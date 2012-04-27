@@ -87,6 +87,7 @@ class BootStrap {
         new RequestMap(url: '/member/withdraw/**', configAttribute: 'ROLE_COUNTER').save()
         new RequestMap(url: '/interestRate/**', configAttribute: 'ROLE_USER,ROLE_COUNTER').save()
         new RequestMap(url: '/report/**', configAttribute: 'ROLE_USER,ROLE_COUNTER').save()
+        new RequestMap(url: '/console/**', configAttribute: 'ROLE_ADMIN').save()
     }
 
     def checkSessionTimeout() {
