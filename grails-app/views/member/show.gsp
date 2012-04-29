@@ -21,6 +21,13 @@
                 <h3>ข้อมูลสมาชิก</h3>
                 <table class="table table-striped table-bordered">
                     <tr>
+                        <td><strong><g:message code="member.label.identificationNumber"></g:message></strong></div>
+                        <td>
+                            ${memberInstance?.identificationNumber}
+                        </td>
+                    </tr>
+
+                    <tr>
                         <td><strong><g:message code="member.label.firstName"></g:message></strong></div>
                         <td>
                             ${memberInstance?.firstname}
