@@ -7,7 +7,7 @@ class CompanyService {
     	company.save(failOnError: true)
     	schemaService.create(company.schema)
     	schemaService.with(company.schema) {
-        	new InterestRate(startDate:new Date(), rate:9.00).save()           
+        	new InterestRate(startDate:new Date(), rate:18.00).save()           
         } 
     }
 }
