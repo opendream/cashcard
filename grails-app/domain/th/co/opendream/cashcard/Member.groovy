@@ -82,7 +82,8 @@ class Member {
      */
     BigDecimal getRemainingFinancialAmount() {
         def limit = policyService.getCreditLine(this.company)
-        return limit - getTotalDebt()
+        def remainingCredit = limit - getTotalDebt()
+        return remainingCredit < 0.00 ? 0.00 : remainingCredit
     }
 
     void withdraw(BigDecimal amount) {
