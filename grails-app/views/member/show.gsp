@@ -94,22 +94,6 @@
                 </table>
                 <div class="form-actions">
                     <g:link class="btn" action="edit" id="${memberInstance.id}">แก้ไขข้อมูลสมาชิก</g:link>
-
-                    <g:if test="${memberInstance?.status == Member.Status.ACTIVE}">
-                        <g:form style="display:inline;" method="post" action="disable">
-                            <g:hiddenField name="id" value="${memberInstance?.id}" />
-                            <g:hiddenField name="version" value="${memberInstance?.version}" />
-                            <a class="btn" href="#disable">จำหน่ายสมาชิก</a>
-                        </g:form>
-                    </g:if>
-
-                    <g:if test="${memberInstance?.status == Member.Status.DELETED}">
-                        <g:form style="display:inline;" method="post" action="enable">
-                            <g:hiddenField name="id" value="${memberInstance?.id}" />
-                            <g:hiddenField name="version" value="${memberInstance?.version}" />
-                            <a class="btn" href="#enable">คืนสิทธิสมาชิก</a>
-                        </g:form>
-                    </g:if>
                 </div>
 
             </div>
