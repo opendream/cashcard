@@ -189,7 +189,6 @@ class MemberController {
                     eq('id', memberInstance.id)
                 }
             }
-            println transactionList
             def totalCount = transactionList.totalCount
             transactionList = transactionList.collect {
                 [
