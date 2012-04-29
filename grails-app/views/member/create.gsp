@@ -70,9 +70,9 @@
       </g:form>
 
       <script>
-        $('button[type="submit"]').click(function (e) {
-          $(this).attr('disabled', 'disabled');
-        });
+        // $('button[type="submit"]').submit(function (e) {
+        //   $(this).attr('disabled', 'disabled');
+        // });
       </script>
     </div>
 
