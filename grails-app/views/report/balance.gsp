@@ -26,15 +26,20 @@
                     <tr>
                        <th class="id">#</th>
                        <th class="string">${message(code: 'report.dailyinterest.table.member', default: 'Member')}</th>
-                       <th class="number">เงินกู้</th>
+                       <th class="number">เงินต้น</th>
                        <th class="number">ดอกเบี้ย</th>
                     </tr>
                 </thead>
                 <tbody>
                 <g:each in="${results}" var="tx" status="i">
                     <tr class="${(i % 2) == 0 ? 'even' : 'odd'}">
-                        <td class="id">${i+1}</td>
-                        <td class="string"><a href="${createLink(controller:'member', action:'show', params:[id: tx.memberID])}">${tx.name}</a></td>
+                        <td class="id">${tx.memberID ? i+1 : ''}</td>
+                        <g:if test="${tx.memberID}">
+                            <td class="string"><a href="${createLink(controller:'member', action:'show', params:[id: tx.memberID])}">${tx.name}</a></td>
+                        </g:if>
+                        <g:if test="${!tx.memberID}">
+                            <td class="number">รวม</td>
+                        </g:if>
                         <td class="number"><g:formatNumber type="number" number="${tx.balance}" maxFractionDigits="2" minFractionDigits="2" /></td>
                         <td class="number"><g:formatNumber type="number" number="${tx.interest}" maxFractionDigits="2" minFractionDigits="2" /></td>
                     </tr>

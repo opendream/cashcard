@@ -18,11 +18,26 @@ class ReportController {
     def balance() {
         def results = Member.findAllByCompanyAndBalanceGreaterThan(sessionUtilService.company, 0.00, [sort: 'firstname', order: 'asc']).collect {
             [name: "${it.firstname} ${it.lastname}",
-             balance: it.balance,
+             balance: it.getRealBalance(),
              interest: it.interest,
              memberID: it.id
             ]
         }
+
+        // Total
+        def sbalance = 0.00
+        def sinterest = 0.00
+        results.each {
+            sbalance += it.balance
+            sinterest += it.interest
+        }
+        results << [
+            name: null,
+            balance: sbalance,
+            interest: sinterest,
+            memberID: null
+        ]
+
         [results: results]
     }
 

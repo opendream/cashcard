@@ -23,7 +23,7 @@
 
         <!-- -->
         <div class="control-group">
-          <label class="control-label"><strong>เงินต้น</strong></label>
+          <label class="control-label"><strong>เงินต้นค้างชำระ</strong></label>
           <div class="offset2">
             <g:formatNumber number="${memberInstance?.getRealBalance()}" format="#,##0.00" />
           </div>
@@ -45,13 +45,13 @@
         <!-- -->
 
         <div class="control-group">
-          <label class="control-label"><strong>จำนวนเงิน</strong></label>
+          <label class="control-label"><strong>คิดเป็นเงินที่ต้องจ่าย (ปัดเศษแล้ว)</strong></label>
           <div class="offset2" style="padding-top:5px">
             ${roundUpDebt}
           </div>
         </div>
     		<div class="control-group ${flash.error? 'error' : ''}">
-          <label for="amount" class="control-label">จำนวนเงินที่จะชำระ</label>
+          <label for="amount" class="control-label">จำนวนเงินที่จะชำระ<br />ในครั้งนี้</label>
           <div class="controls">
               <g:field type="text" id="amount" name="amount" pattern="\\d*(\\.\\d\\d)?" required="" value="${amount}" />
           </div>
@@ -61,6 +61,7 @@
           <label for="net" class="control-label"><g:message code="cashcard.recieve.amount"></g:message></label>
           <div class="controls">
               <g:field type="text" id="net" name="net" pattern="\\d*(\\.\\d\\d)?" required="" value="${net}" />
+              <p class="help-block">ระบบจะคำนวณเงินทอนให้</p>
           </div>
         </div>
 

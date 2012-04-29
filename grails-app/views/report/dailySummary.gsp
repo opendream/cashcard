@@ -61,7 +61,12 @@
                     <tr class="${(i % 2) == 0 ? 'even' : 'odd'}">
                         <td class="date"><g:formatDate format="dd/MM/yyyy HH:mm" date="${tx.date}" /></td>
                         <td class="number"><a href="${createLink(controller:'member', action:'show', params:[id: tx.memberID])}">${tx.memberIDCard}</a></td>
-                        <td class="id">${tx.date != null ? tx.member : 'รวม'}</td>
+                        <g:if test="${tx.date != null}">
+                            <td class="string">${tx.member}</td>
+                        </g:if>
+                        <g:if test="${tx.date == null}">
+                            <td class="number">รวม</td>
+                        </g:if>
                         <td class="number"><g:formatNumber type="number" number="${tx.withdraw}" maxFractionDigits="2" minFractionDigits="2" /></td>
                         <td class="number"><g:formatNumber type="number" number="${tx.pay}" maxFractionDigits="2" minFractionDigits="2" /></td>
                         <td class="number"><g:formatNumber type="number" number="${tx.interest}" maxFractionDigits="2" minFractionDigits="2" /></td>
