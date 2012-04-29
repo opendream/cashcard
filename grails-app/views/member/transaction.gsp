@@ -31,7 +31,7 @@
                         <th class="string"> ${message(code: 'transaction.activityType', default: 'Activity Type')}</th>
                         <th class="number"> เดบิต</th>
                         <th class="number"> เครดิต</th>
-                        <th class="nubmer"> ยอดคงเหลือ</th>
+                        <th class="number"> คงค้างชำระ</th>
                         <th class="string">หมายเหตุ</th>
                     </tr>
                 </thead>
