@@ -27,12 +27,10 @@ class ReportController {
 
     def dailyInterest() {
         def range = getRange(params)
-        def results = InterestTransaction.createCriteria().list {
+        def results = InterestTransaction.createCriteria().list(sort: 'date', order: 'asc') {
             between('date', range.startDate, range.endDate)
             member {
                 eq('company', sessionUtilService.company)
-                order('firstname')
-                order('lastname')
             }
         }
         [
