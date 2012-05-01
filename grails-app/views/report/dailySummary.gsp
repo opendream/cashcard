@@ -17,7 +17,7 @@
         </div>
 
         <div class="control-group">
-            <form id="dailyInterest" action="${createLink (action:'dailyTransaction')}">
+            <form id="dailySummary" action="${createLink (action:'dailySummary')}">
             <div class="container">
                 <label for="startDate" class="control-label">
                 ระหว่างวันที่

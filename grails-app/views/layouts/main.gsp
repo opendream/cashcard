@@ -158,11 +158,11 @@
           margin-right: 20px;
       }
 
-      #dailyInterest label {
+      #dailyInterest label, #dailySummary label {
           display: inline;
       }
 
-      #dailyInterest .btn-primary {
+      #dailyInterest .btn-primary, #dailySummary .btn-primary {
           margin-bottom: 10px;
       }
 
