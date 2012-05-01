@@ -42,14 +42,9 @@ class ReportController {
 
     def dailyTransaction() {
         def range = getRange(params)
-        def results = BalanceTransaction.createCriteria().list {
+        def results = BalanceTransaction.createCriteria().list(sort: 'date', order: 'asc') {
             between('date', range.startDate, range.endDate)
             eq('userCompany', sessionUtilService.company)
-            order('date')
-            member {
-                order('firstname')
-                order('lastname')
-            }
         }.collect {
             [
                 date: it.date,
@@ -83,14 +78,9 @@ class ReportController {
 
     def dailySummary() {
         def range = getRange(params)
-        def results = BalanceTransaction.createCriteria().list {
+        def results = BalanceTransaction.createCriteria().list(sort: 'date', order: 'asc') {
             between('date', range.startDate, range.endDate)
             eq('userCompany', sessionUtilService.company)
-            order('date')
-            member {
-                order('firstname')
-                order('lastname')
-            }
         }.collect {
             if (it.activity == ActivityType.WITHDRAW) {
                 [
