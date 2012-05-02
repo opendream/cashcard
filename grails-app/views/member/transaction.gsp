@@ -49,9 +49,6 @@
                 </tbody>
             </table>
             </div>
-            <div class="pagination">
-                <g:paginate total="${transactionCount}" />
-            </div>
         </div>
     </body>
 
