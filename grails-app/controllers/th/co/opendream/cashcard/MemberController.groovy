@@ -138,23 +138,33 @@ class MemberController {
     def pay() {
         def memberInstance = Member.get(params.id)
         withForm {
-            if (memberInstance && params.amount) {
-                def change = params.net?.toBigDecimal() - params.amount?.toBigDecimal()
+            def amount = params.amount?.toBigDecimal(),
+                net = params.net?.toBigDecimal()
 
-                if (change < 0.00) {
-                    flash.error = "ไม่สามารถทำรายการได้ กรุณาตรวจสอบจำนวนเงิน"
+            if (memberInstance && amount) {
+                def isOverpay = amount > utilService.moneyRoundUp(memberInstance.getTotalDebt())
+                def change = net - amount
+
+                if (change < 0.00 || isOverpay) {
+                    if (isOverpay) {
+                        flash.error = "ไม่สามารถทำรายการได้ เนื่องจาก เงินที่ต้องการชำระ มากกว่า เงินที่ค้างจ่าย"
+                    }
+                    else {
+                        flash.error = "ไม่สามารถทำรายการได้ กรุณาตรวจสอบจำนวนเงิน"
+                    }
+                    
                     render (action: 'payment', id: memberInstance)
                     render(view: 'payment', model:
                         [
                             memberInstance: memberInstance,
                             roundUpDebt: utilService.moneyRoundUp(memberInstance.getTotalDebt()),
                             debt: memberInstance.getTotalDebt(),
-                            net: params.net,
-                            amount: params.amount
+                            net: net,
+                            amount: amount
                         ])
                 }
                 else {
-                    memberInstance.pay(params.amount.toBigDecimal())
+                    memberInstance.pay(amount)
                     if (!change) {
                         flash.message = "รับชำระเงินจำนวน ${params.amount} บาทเรียบร้อย"
                     }
@@ -164,7 +174,7 @@ class MemberController {
                     redirect(action: "show", id: memberInstance.id)
                 }
             }
-            else if (!params.amount) {
+            else if (!amount) {
                 flash.error = "จำนวนเงินไม่ถูกต้อง"
                 redirect(action: "payment", id: memberInstance.id)
             }
