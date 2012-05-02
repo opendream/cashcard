@@ -62,10 +62,9 @@ class TransactionService {
             interest_rounded = member.interest.setScale(2, BigDecimal.ROUND_HALF_UP)
             interest_rounding_profit = interest_rounded - member.interest
 
+            outstanding -= interest_rounded
             if (policyService.isCompoundMethod(member.company)) {
-                // do nothing
-            } else {
-                outstanding -= interest_rounded
+                member.balance -= interest_rounded
             }
             interest_pay = interest_rounded
             member.interest = 0.00
