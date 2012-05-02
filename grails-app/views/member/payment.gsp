@@ -53,14 +53,14 @@
     		<div class="control-group ${flash.error? 'error' : ''}">
           <label for="amount" class="control-label">จำนวนเงินที่จะชำระ<br />ในครั้งนี้</label>
           <div class="controls">
-              <g:field type="text" id="amount" name="amount" pattern="\\d*(\\.\\d\\d)?" required="" value="${amount}" />
+              <g:field type="text" id="amount" name="amount" pattern="\\d*(\\.(00|25|50|75))?" required="" value="${amount}" />
           </div>
         </div>
 
         <div class="control-group ${flash.error? 'error' : ''}">
           <label for="net" class="control-label"><g:message code="cashcard.recieve.amount"></g:message></label>
           <div class="controls">
-              <g:field type="text" id="net" name="net" pattern="\\d*(\\.\\d\\d)?" required="" value="${net}" />
+              <g:field type="text" id="net" name="net" pattern="\\d*(\\.(00|25|50|75))?" required="" value="${net}" />
               <p class="help-block">ระบบจะคำนวณเงินทอนให้</p>
           </div>
         </div>
