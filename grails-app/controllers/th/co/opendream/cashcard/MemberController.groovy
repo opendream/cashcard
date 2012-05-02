@@ -156,7 +156,7 @@ class MemberController {
                 else {
                     memberInstance.pay(params.amount.toBigDecimal())
                     if (!change) {
-                        flash.message = "รับชำระเงินเรียบร้อย"
+                        flash.message = "รับชำระเงินจำนวน ${params.amount} บาทเรียบร้อย"
                     }
                     else {
                         flash.message = "ต้องทอนเงินจำนวน ${change} บาท"
