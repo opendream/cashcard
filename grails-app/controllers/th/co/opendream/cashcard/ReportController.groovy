@@ -48,6 +48,7 @@ class ReportController {
         }.collect {
             [
                 date: it.date,
+                memberID: it.member.id,
                 member: it.member,
                 code: it.code,
                 amount: it.amount,
