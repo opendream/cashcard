@@ -181,7 +181,6 @@
 								<li><a href="${createLink(controller:'member', action:'create')}">${message(code: 'main.menu.register', default: 'Register')}</a></li>
 								<li><a href="${createLink(controller:'member', action:'verifyCard')}">${message(code: 'main.menu.verifyCard', default: 'Verify Card')}</a></li>
 								<li><a href="${createLink(controller:'member', action:'list')}">${message(code: 'main.menu.listMember', default: 'List')}</a></li>
-                <li><a href="${createLink(controller:'memberHistory', action:'list')}">${message(code: 'main.menu.memberHistory', default: 'History')}</a></li>
 							</ul>
             </li>
             <li><a href="${createLink(controller:'interestRate', action:'list')}">${message(code: 'main.menu.interestRate', default: 'Interest Rate')}</a></li>
