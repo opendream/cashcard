@@ -72,7 +72,7 @@ class MemberController {
             redirect(action: "show", id: memberInstance.id)
         }
         else if (cardId != null && cardId != '') {
-            flash.error = "${cardId} not found"
+            flash.error = "ไม่พบหมายเลขสมาชิก ${cardId}"
             render(view: 'verifyCard')
         }
         else {
@@ -93,7 +93,7 @@ class MemberController {
                 redirect(action: "show", id: memberInstance.id)
             }
             else {
-                flash.error = "Can't withdraw. Invalid amount"
+                flash.error = "ไม่สามารถให้กู้เงินได้ เนื่องจากเกินวงเกินกู้"
                 render(view: 'withdraw', model: [memberInstance: memberInstance])
             }
         }
@@ -138,16 +138,16 @@ class MemberController {
             else {
                 memberInstance.pay(params.amount.toBigDecimal())
                 if (!change) {
-                    flash.message = "Pay success."
+                    flash.message = "รับชำระเงินเรียบร้อย"
                 }
                 else {
-                    flash.message = "Change is ${change}"
+                    flash.message = "ต้องทอนเงินจำนวน ${change} บาท"
                 }
                 redirect(action: "show", id: memberInstance.id)
             }
         }
         else if (!params.amount) {
-            flash.message = "Invalid amount."
+            flash.error = "จำนวนเงินไม่ถูกต้อง"
             redirect(action: "payment", id: memberInstance.id)
         }
         else {
