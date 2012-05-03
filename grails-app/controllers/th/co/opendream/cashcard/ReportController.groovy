@@ -16,7 +16,7 @@ class ReportController {
     def index() { }
 
     def balance() {
-        def results = Member.findAllByCompanyAndBalanceGreaterThan(sessionUtilService.company, 0.00, [order: 'firstname']).collect {
+        def results = Member.findAllByCompanyAndBalanceGreaterThan(sessionUtilService.company, 0.00, [sort: 'firstname', order: 'asc']).collect {
             [name: "${it.firstname} ${it.lastname}",
              balance: it.balance,
              interest: it.interest,
