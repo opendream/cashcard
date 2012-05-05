@@ -21,6 +21,9 @@ class ScheduleService {
                 accounts.each { ac ->
                     println ac
                     def tx = interestService.calculate(now, ac.balance, rate, rateLimit)
+                    tx.balanceForward = member.balance
+                    tx.interestForward = member.interest
+
                     def amount = tx.interest + tx.fee
 
                     // update member's accumulated interest and compound new balance
