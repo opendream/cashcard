@@ -39,7 +39,7 @@ class UtilServiceTests {
         // FAIL if rate.startDate is pass current date
         Calendar.metaClass.static.getInstance = {
             use(TimeCategory) {
-                today = today - 1.days
+                today = today + 10.days
             }
             today.toCalendar()
         }
@@ -54,7 +54,7 @@ class UtilServiceTests {
         // PASS if rate.startDate is in the future compare to current date
         Calendar.metaClass.static.getInstance = {
         	use(TimeCategory) {
-	        	today = today + 10.days
+	        	today = today - 10.days
 	        }
             today.toCalendar()
         }
