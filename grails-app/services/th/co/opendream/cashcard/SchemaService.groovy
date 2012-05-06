@@ -47,6 +47,8 @@ class SchemaService {
               net numeric(19,2),
               remainder numeric(19,2),
               balance numeric(19,2),
+              balance_forward numeric(19,2),
+              interest_forward numeric(19,2),
               balance_pay numeric(19,2),
               interest_pay numeric(19,2),
               fee numeric(19,2),

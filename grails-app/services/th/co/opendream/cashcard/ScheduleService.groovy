@@ -18,23 +18,28 @@ class ScheduleService {
 
                 def accounts = accountService.getBalanceList(company)
 
+                // return map
+                // key -> accountId
+                // value ->
+                def existInterest = interestService.getInterestTransaction(now)
+
                 accounts.each { ac ->
-                    println ac
-                    def tx = interestService.calculate(now, ac.balance, rate, rateLimit)
-                    tx.balanceForward = member.balance
-                    tx.interestForward = member.interest
+                    if (!accounts[ac.accountId]) {
+                        def tx = interestService.calculate(now, ac.balance, rate, rateLimit)
+                        tx.balanceForward = ac.member.balance
+                        tx.interestForward = ac.member.interest
 
-                    def amount = tx.interest + tx.fee
+                        def amount = tx.interest + tx.fee
 
-                    // update member's accumulated interest and compound new balance
-                    def member = interestService.update(ac.accountId, amount)
+                        // update member's accumulated interest and compound new balance
+                        def member = interestService.update(ac.member, amount)
 
-                    tx.amount = amount
-                    tx.txType = TransactionType.CREDIT
-                    tx.member = member
-                    tx.date = new Date()
-
-                    tx.save()
+                        tx.amount = amount
+                        tx.txType = TransactionType.CREDIT
+                        tx.member = member
+                        tx.date = new Date()
+                        tx.save()
+                    }
                 }
             }
         }
