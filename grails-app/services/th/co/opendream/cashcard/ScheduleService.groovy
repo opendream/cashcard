@@ -24,7 +24,7 @@ class ScheduleService {
                 def existInterest = interestService.getInterestTransaction(now)
 
                 accounts.each { ac ->
-                    if (!accounts[ac.accountId]) {
+                    if (!existInterest[ac.accountId]) {
                         def tx = interestService.calculate(now, ac.balance, rate, rateLimit)
                         tx.balanceForward = ac.member.balance
                         tx.interestForward = ac.member.interest

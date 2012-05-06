@@ -11,7 +11,7 @@
 		</div>
 
     <g:render template="toolbar" />
-    
+
     <g:if test="${flash.error}">
         <div id="errors" class="alert alert-error">
           ${flash.error}
@@ -20,8 +20,32 @@
 	  <div class="container">
       <g:form action="pay" class="form-horizontal">
         <g:hiddenField name="id" value="${memberInstance?.id}" />
+
+        <!-- -->
         <div class="control-group">
-          <label class="control-label"><strong><g:message code="member.label.totalDebt"></g:message></strong></label>
+          <label class="control-label"><strong>เงินต้น</strong></label>
+          <div class="offset2">
+            <g:formatNumber number="${memberInstance?.getRealBalance()}" format="#,##0.00" />
+          </div>
+        </div>
+
+        <div class="control-group">
+          <label class="control-label"><strong>ดอกเบี้ย</strong></label>
+          <div class="offset2">
+            <g:formatNumber number="${memberInstance?.getInterest()}" format="#,##0.00" />
+          </div>
+        </div>
+
+        <div class="control-group">
+          <label class="control-label"><strong>รวมยอดคงค้าง</strong></label>
+          <div class="offset2">
+            <g:formatNumber number="${memberInstance?.getTotalDebt()}" format="#,##0.00" />
+          </div>
+        </div>
+        <!-- -->
+
+        <div class="control-group">
+          <label class="control-label"><strong>จำนวนเงิน</strong></label>
           <div class="offset2" style="padding-top:5px">
             ${roundUpDebt}
           </div>

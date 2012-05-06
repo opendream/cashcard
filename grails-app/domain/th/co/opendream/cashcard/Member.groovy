@@ -55,7 +55,16 @@ class Member {
     }
 
     BigDecimal getBalance() {
-        this.balance
+        balance
+    }
+
+    BigDecimal getRealBalance() {
+        if (policyService.getInterestMethod(this.company) == Policy.VALUE_COMPOUND) {
+            balance - interest
+        }
+        else {
+            balance
+        }
     }
 
     /**
