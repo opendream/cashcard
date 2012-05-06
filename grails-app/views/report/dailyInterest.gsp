@@ -44,6 +44,7 @@
                 <thead>
                     <tr>
                         <th class="id">${message(code: 'report.dailyinterest.table.id', default: '#')}</th>
+                        <th class="date">${message(code: 'report.dailyinterest.table.date', default: 'Date')}</th>
                         <th class="string">${message(code: 'report.dailyinterest.table.member', default: 'Member')}</th>
                         <th class="number">${message(code: 'report.dailyinterest.table.balance', default: 'Balance')}</th>
                         <th class="number">${message(code: 'report.dailyinterest.table.accumulatedInterest', default: 'Accumulated Interest')}</th>
@@ -56,12 +57,13 @@
                 <g:each in="${interestList}" status="i" var="interest">
                     <tr class="${(i % 2) == 0 ? 'even' : 'odd'}">
                         <td class="id">${i+1}</td>
+                        <td class="string"><g:formatDate format="dd/MM/yyyy HH:mm" date="${interest.date}" /></td>
                         <td class="string">${interest.member}</td>
                         <td class="number"><g:formatNumber type="number" number="${interest.balanceForward}" maxFractionDigits="2" minFractionDigits="2" /></td>
                         <td class="number"><g:formatNumber type="number" number="${interest.interestForward}" maxFractionDigits="2" minFractionDigits="2" /></td>
                         <td class="number"><g:formatNumber type="number" number="${interest.fee}" maxFractionDigits="2" minFractionDigits="2" /></td>
                         <td class="number"><g:formatNumber type="number" number="${interest.interest}" maxFractionDigits="2" minFractionDigits="2" /></td>
-                        <td class="number"><g:formatNumber type="number" number="${interest.amount}" maxFractionDigits="2" minFractionDigits="2" /></td>
+                        <td class="number"><g:formatNumber type="number" number="${interest.amount + interest.interestForward}" maxFractionDigits="2" minFractionDigits="2" /></td>
 
                     </tr>
                 </g:each>
