@@ -150,6 +150,10 @@
                 border-radius: 0 0 4px 4px;
       }
 
+      select#startDate_day {
+          width: 50px;
+      }
+
       select#startDate_year {
           margin-right: 20px;
       }
