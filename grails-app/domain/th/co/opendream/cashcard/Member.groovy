@@ -7,8 +7,8 @@ class Member {
     Gender gender
     String address
     String telNo
-    BigDecimal balance = 0.00
-    BigDecimal interest = 0.00
+    BigDecimal balance = 0.000000
+    BigDecimal interest = 0.000000
     Date dateCreated
     Date lastUpdated
 
@@ -51,7 +51,8 @@ class Member {
     }
 
     static mapping = {
-
+        balance sqlType: "numeric(19,6)"
+        interest sqlType: "numeric(19,6)"
     }
 
     BigDecimal getBalance() {

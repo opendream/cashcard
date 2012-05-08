@@ -51,7 +51,7 @@
           </div>
         </div>
     		<div class="control-group ${flash.error? 'error' : ''}">
-          <label for="amount" class="control-label"><g:message code="cashcard.pay.amount"></g:message></label>
+          <label for="amount" class="control-label">จำนวนเงินที่จะชำระ</label>
           <div class="controls">
               <g:field type="text" id="amount" name="amount" pattern="\\d*(\\.\\d\\d)?" required="" value="" />
           </div>

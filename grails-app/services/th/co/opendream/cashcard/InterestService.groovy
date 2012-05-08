@@ -31,11 +31,11 @@ class InterestService {
         def interest = (rate * balance / 100.00) / yearDivider
 
         // always return decimal with 2 digits
-        interest = interest.setScale(2, BigDecimal.ROUND_HALF_UP)
+        interest = interest.setScale(6, BigDecimal.ROUND_HALF_UP)
 
         if (feeRate > 0.00) {
             fee = (interest * feeRate) / rate
-            fee = fee.setScale(2, BigDecimal.ROUND_HALF_UP)
+            fee = fee.setScale(6, BigDecimal.ROUND_HALF_UP)
         }
 
         interest -= fee
