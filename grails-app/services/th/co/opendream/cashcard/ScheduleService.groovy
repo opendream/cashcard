@@ -7,8 +7,7 @@ class ScheduleService {
     def accountService
     def schemaService
 
-    def updateInterest() {
-        def now = new Date()
+    def updateInterest(now = new Date()) {
         Company.findAll().each { company ->
             def schema = 'c' + company.id
             schemaService.with(schema) {
