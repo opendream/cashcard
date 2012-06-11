@@ -27,7 +27,8 @@ class BalanceTransaction extends Transaction {
         memberCompany nullable: true
         transferType nullable: true
         remainder validator: { val, obj ->
-            (val == obj.amount - obj.net) ? null : "RemainderAmountNotEqual"
+            true
+            //(val == obj.amount - obj.net) ? null : "RemainderAmountNotEqual"
         }
     }
 
