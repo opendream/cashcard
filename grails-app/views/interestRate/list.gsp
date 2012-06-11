@@ -18,7 +18,9 @@
             </header>
         </div>
 
-        <g:render template="toolbar" />
+        <sec:ifAnyGranted roles="ROLE_ADMIN">
+            <g:render template="toolbar" />
+        </sec:ifAnyGranted>
 
         <div id="list-interestRate" class="content scaffold-list" role="main">
             <g:if test="${flash.message}">
@@ -32,7 +34,9 @@
                         <th class="date"> ${message(code: 'interestRate.rate.label', default: 'Rate (%)')}</th>
                         <th class="date"> ${message(code: 'interestRate.dateCreated.label', default: 'Date Created')}</th>
                         <th class="date"> ${message(code: 'interestRate.lastUpdated.label', default: 'Last Updated')}</th>
-                        <th class="date" colspan="2"> ${message(code: 'default.button.action.label', default: 'Action')}</th>
+                        <sec:ifAnyGranted roles="ROLE_ADMIN">
+                            <th class="date" colspan="2"> ${message(code: 'default.button.action.label', default: 'Action')}</th>
+                        </sec:ifAnyGranted>
                     </tr>
                 </thead>
                 <tbody>
@@ -42,16 +46,18 @@
                         <td class="date"><g:formatNumber type="number" number="${interestRateInstance.rate}" maxFractionDigits="2" minFractionDigits="2" /></td>
                         <td class="date"><g:formatDate format="dd/MM/yyyy HH:mm" date="${interestRateInstance.dateCreated}" /></td>
                         <td class="date"><g:formatDate format="dd/MM/yyyy HH:mm" date="${interestRateInstance.lastUpdated}" /></td>
-                        <td class="action">
-                            <g:link action="edit" id="${interestRateInstance.id}">${message(code: 'default.button.edit.label', default: 'Edit')}</g:link>
-                        </td>
-                        <td class="action">
-                            <g:form method="post" action="delete">
-                                <g:hiddenField name="id" value="${interestRateInstance?.id}" />
-                                <g:hiddenField name="version" value="${interestRateInstance?.version}" />
-                                <a href="#delete">${message(code: 'default.button.delete.label', default: 'Delete')}</a>
-                            </g:form>
-                        </td>
+                        <sec:ifAnyGranted roles="ROLE_ADMIN">
+                            <td class="action">
+                                <g:link action="edit" id="${interestRateInstance.id}">${message(code: 'default.button.edit.label', default: 'Edit')}</g:link>
+                            </td>
+                            <td class="action">
+                                <g:form method="post" action="delete">
+                                    <g:hiddenField name="id" value="${interestRateInstance?.id}" />
+                                    <g:hiddenField name="version" value="${interestRateInstance?.version}" />
+                                    <a href="#delete">${message(code: 'default.button.delete.label', default: 'Delete')}</a>
+                                </g:form>
+                            </td>
+                        </sec:ifAnyGranted>
                     </tr>
                 </g:each>
                 </tbody>
