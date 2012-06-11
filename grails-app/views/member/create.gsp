@@ -16,7 +16,7 @@
       </div><!-- /errors -->
     </g:hasErrors>
     <div class="container" >
-      <g:form action="save" class="form-horizontal">
+      <g:form action="save" class="form-horizontal" useToken="true">
         <div class="control-group ${hasErrors(bean: memberInstance, field: 'identificationNumber', 'error')}">
           <label for="id-number" class="control-label">${message(code: 'member.label.identificationNumber', default: 'Identification Number')}</label>
           <div class="controls">
@@ -68,6 +68,12 @@
           <button class="btn btn-primary" type="submit"><i class="icon-ok icon-white"></i> ${message(code: 'member.label.register', default: 'Register')}</button>
         </div>
       </g:form>
+
+      <script>
+        $('button[type="submit"]').click(function (e) {
+          $(this).attr('disabled', 'disabled');
+        });
+      </script>
     </div>
 
   </body>

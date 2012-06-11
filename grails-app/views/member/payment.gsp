@@ -18,7 +18,7 @@
         </div><!-- /errors -->
     </g:if>
 	  <div class="container">
-      <g:form action="pay" class="form-horizontal">
+      <g:form action="pay" class="form-horizontal" useToken="true">
         <g:hiddenField name="id" value="${memberInstance?.id}" />
 
         <!-- -->

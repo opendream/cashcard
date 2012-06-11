@@ -24,7 +24,7 @@
 			    </div><!-- /errors -->
 			</g:hasErrors>
 			<div class="container" >
-				<g:form action="save" class="form-horizontal">
+				<g:form action="save" class="form-horizontal" useToken="true">
 					<g:render template="form"/>
 						<div class="form-actions">
 							<button class="btn btn-primary" type="submit"><i class="icon-ok icon-white"></i> ${message(code: 'default.button.create.label', default: 'Create')}</button>

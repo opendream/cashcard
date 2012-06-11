@@ -18,7 +18,7 @@
         </div><!-- /errors -->
     </g:if>
 	  <div class="container">
-      <g:form action="withdraw" class="form-horizontal">
+      <g:form action="withdraw" class="form-horizontal" useToken="true">
         <g:hiddenField name="id" value="${memberInstance?.id}" />
 
         <div class="control-group ${flash.error? 'error' : ''}">

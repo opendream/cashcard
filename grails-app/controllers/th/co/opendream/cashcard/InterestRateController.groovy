@@ -26,13 +26,17 @@ class InterestRateController {
 
     def save() {
         def interestRateInstance = new InterestRate(params)
-        if (!interestRateInstance.save(flush: true)) {
-            render(view: "create", model: [interestRateInstance: interestRateInstance])
-            return
-        }
+        withForm {
+            if (!interestRateInstance.save(flush: true)) {
+                render(view: "create", model: [interestRateInstance: interestRateInstance])
+                return
+            }
 
-		flash.message = message(code: 'th.co.opendream.cashcard.InterestRate.created.message', args: [message(code: 'interestRate.label', default: 'InterestRate'), interestRateInstance.id])
-        redirect action: "list"
+            flash.message = message(code: 'th.co.opendream.cashcard.InterestRate.created.message', args: [message(code: 'interestRate.label', default: 'InterestRate'), interestRateInstance.id])
+            redirect action: "list"
+        }.invalidToken {
+            render(view: "create", model: [interestRateInstance: interestRateInstance])
+        }
     }
 
     def edit() {

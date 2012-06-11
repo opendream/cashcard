@@ -16,7 +16,7 @@
       </div><!-- /errors -->
     </g:hasErrors>
     <div class="container" >
-      <g:form action="update" class="form-horizontal">
+      <g:form action="update" class="form-horizontal" useToken="true">
 
         <g:hiddenField name="id" value="${memberInstance?.id}" />
         <g:hiddenField name="version" value="${memberInstance?.version}" />

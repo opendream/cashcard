@@ -18,16 +18,18 @@ class MemberController {
     }
 
     def save() {
-        def memberInstance = new Member(params)
-        memberInstance.company = sessionUtilService.company
+        withForm {
+            def memberInstance = new Member(params)
+            memberInstance.company = sessionUtilService.company
 
-        if ( memberInstance.save() ) {
-          flash.message = "ลงทะเบียนสมาชิกเรียบร้อยแล้ว"
-          redirect(action: "show", id: memberInstance.id)
-        }
-        else {
-          println memberInstance.errors
-          render(view:'create', model:[memberInstance: memberInstance])
+            if ( memberInstance.save() ) {
+              flash.message = "ลงทะเบียนสมาชิกเรียบร้อยแล้ว"
+              redirect(action: "show", id: memberInstance.id)
+            }
+            else {
+              println memberInstance.errors
+              render(view:'create', model:[memberInstance: memberInstance])
+            }
         }
     }
 
@@ -92,16 +94,23 @@ class MemberController {
         flash.error = null
         def amount = params.amount?.replace(',', '')?.toBigDecimal()
         if (memberInstance) {
-            if (!params.amount) {
-                render(view: 'withdraw', model: [memberInstance: memberInstance])
+            if (params.amount) {
+                withForm {
+                    // Do nothing.
+                    if (memberInstance.canWithdraw(amount)) {
+                        memberInstance.withdraw(amount)
+                        flash.message = "กู้เงินจำนวน ${amount} บาท เรียบร้อย"
+                        redirect(action: "show", id: memberInstance.id)
+                    }
+                    else {
+                        flash.error = "ไม่สามารถให้กู้เงินได้ เนื่องจากเกินวงเกินกู้"
+                        render(view: 'withdraw', model: [memberInstance: memberInstance])
+                    }
+                }.invalidToken {
+                    redirect(action: "show", id: memberInstance.id)
+                }
             }
-            else if (memberInstance.canWithdraw(amount)) {
-                memberInstance.withdraw(amount)
-                flash.message = "กู้เงินจำนวน ${amount} บาท เรียบร้อย"
-                redirect(action: "show", id: memberInstance.id)
-            }
-            else {
-                flash.error = "ไม่สามารถให้กู้เงินได้ เนื่องจากเกินวงเกินกู้"
+            else if (!params.amount) {
                 render(view: 'withdraw', model: [memberInstance: memberInstance])
             }
         }
@@ -128,38 +137,42 @@ class MemberController {
 
     def pay() {
         def memberInstance = Member.get(params.id)
-        if (memberInstance && params.amount) {
-            def change = params.net?.toBigDecimal() - params.amount?.toBigDecimal()
+        withForm {
+            if (memberInstance && params.amount) {
+                def change = params.net?.toBigDecimal() - params.amount?.toBigDecimal()
 
-            if (change < 0.00) {
-                flash.error = "ไม่สามารถทำรายการได้ กรุณาตรวจสอบจำนวนเงิน"
-                render (action: 'payment', id: memberInstance)
-                render(view: 'payment', model:
-                    [
-                        memberInstance: memberInstance,
-                        roundUpDebt: utilService.moneyRoundUp(memberInstance.getTotalDebt()),
-                        debt: memberInstance.getTotalDebt(),
-                        net: params.net,
-                        amount: params.amount
-                    ])
-            }
-            else {
-                memberInstance.pay(params.amount.toBigDecimal())
-                if (!change) {
-                    flash.message = "รับชำระเงินเรียบร้อย"
+                if (change < 0.00) {
+                    flash.error = "ไม่สามารถทำรายการได้ กรุณาตรวจสอบจำนวนเงิน"
+                    render (action: 'payment', id: memberInstance)
+                    render(view: 'payment', model:
+                        [
+                            memberInstance: memberInstance,
+                            roundUpDebt: utilService.moneyRoundUp(memberInstance.getTotalDebt()),
+                            debt: memberInstance.getTotalDebt(),
+                            net: params.net,
+                            amount: params.amount
+                        ])
                 }
                 else {
-                    flash.message = "ต้องทอนเงินจำนวน ${change} บาท"
+                    memberInstance.pay(params.amount.toBigDecimal())
+                    if (!change) {
+                        flash.message = "รับชำระเงินเรียบร้อย"
+                    }
+                    else {
+                        flash.message = "ต้องทอนเงินจำนวน ${change} บาท"
+                    }
+                    redirect(action: "show", id: memberInstance.id)
                 }
-                redirect(action: "show", id: memberInstance.id)
             }
-        }
-        else if (!params.amount) {
-            flash.error = "จำนวนเงินไม่ถูกต้อง"
-            redirect(action: "payment", id: memberInstance.id)
-        }
-        else {
-            redirect(uri: '/error')
+            else if (!params.amount) {
+                flash.error = "จำนวนเงินไม่ถูกต้อง"
+                redirect(action: "payment", id: memberInstance.id)
+            }
+            else {
+                redirect(uri: '/error')
+            }
+        }.invalidToken {
+            redirect(action: 'show', id: memberInstance.id)
         }
     }
 
@@ -198,12 +211,15 @@ class MemberController {
 
     def edit() {
         def memberInstance = Member.get(params.id)
-
-        if (memberInstance) {
+        withForm {
+            if (memberInstance) {
+                render(view: 'edit', model: [memberInstance: memberInstance])
+            }
+            else {
+                redirect(uri: '/error')
+            } 
+        }.invalidToken {
             render(view: 'edit', model: [memberInstance: memberInstance])
-        }
-        else {
-            redirect(uri: '/error')
         }
     }
 
