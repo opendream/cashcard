@@ -1,8 +1,10 @@
+<%@ page import="th.co.opendream.cashcard.Policy" %>
+
 <html>
 
 <head>
 	<meta name='layout' content='springSecurityUI'/>
-	<g:set var="entityName" value="${message(code: 'company.label', default: 'Company')}"/>
+	<g:set var="entityName" value="${message(code: 'cashcard.cooperative.label', default: 'Cooperative')}"/>
 	<title><g:message code="default.create.label" args="[entityName]"/></title>
 </head>
 
@@ -10,7 +12,7 @@
 
 <div class="body">
 
-	<s2ui:form width='100%' height='250' elementId='formContainer'
+	<s2ui:form width='100%' height='350' elementId='formContainer'
 	           titleCode='default.create.label' titleCodeArgs='[entityName]'>
 
 	<g:form action="save" name='companyCreateForm'>
@@ -29,7 +31,37 @@
 
 					<s2ui:textFieldRow name='taxId' labelCode='company.taxId.label' bean="${conpany}"
 					                   size='50' labelCodeDefault='Tax ID' value="${company?.taxId}"/>
-
+					<tr class="prop">
+						<td class="name" valign="top">
+							<label for="policyKeyInterestMethod"><g:message code="company.policyKeyInterestMethod.label" default="Key Interest Method" /></label>
+						</td>
+						<td class="value " valign="top">
+							
+							<g:select name="policyKeyInterestMethod" value="${policyKeyInterestMethod}" optionKey="id" optionValue="key"
+							from="${[[id:Policy.VALUE_COMPOUND, key:message(code: 'policy.CompoundInterest.label', default: 'Compound Interest')], 
+							[id:Policy.VALUE_NON_COMPOUND, key:message(code: 'policy.NonCompoundInterest.label', default: 'Non Compound Interest')]]}" 
+							 />				
+						</td>
+					</tr>
+					
+					<tr class="prop">
+						<td class="name" valign="top">
+							<label for="policyKeyInterestRateLimit"><g:message code="company.policyKeyInterestRateLimit.label" default="Key Interest Rate Limit" /></label>
+						</td>
+						<td class="value " valign="top">
+							<input id="policyKeyInterestRateLimit" type="text" size="25" value="${policyKeyInterestRateLimit}" name="policyKeyInterestRateLimit">
+						</td>
+					</tr>
+					
+					<tr class="prop">
+						<td class="name" valign="top">
+							<label for="policyKeyCreditLine"><g:message code="company.policyKeyCreditLine.label" default="Key Credit Line" /></label>
+						</td>
+						<td class="value " valign="top">
+							<input id="policyKeyCreditLine" type="text" size="25" value="${policyKeyCreditLine}" name="policyKeyCreditLine">
+						</td>
+					</tr>
+					
 					<tr><td>&nbsp;</td></tr>
 
 					<tr class="prop">
