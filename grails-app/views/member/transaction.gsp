@@ -29,9 +29,9 @@
                     <tr>
                         <th class="date"> ${message(code: 'cashcard.date', default: 'Date')}</th>
                         <th class="string"> ${message(code: 'transaction.activityType', default: 'Activity Type')}</th>
-                        <th class="number"> Debit</th>
-                        <th class="number"> Credit</th>
-                        <th class="nubmer"> ${message(code: 'member.transaction.balance', default: 'Balance')}</th>
+                        <th class="number"> เดบิต</th>
+                        <th class="number"> เครดิต</th>
+                        <th class="nubmer"> ยอดคงเหลือ</th>
                         <th class="string">หมายเหตุ</th>
                     </tr>
                 </thead>

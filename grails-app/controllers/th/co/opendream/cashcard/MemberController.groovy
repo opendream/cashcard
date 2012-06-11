@@ -22,9 +22,11 @@ class MemberController {
         memberInstance.company = sessionUtilService.company
 
         if ( memberInstance.save() ) {
+          flash.message = "ลงทะเบียนสมาชิกเรียบร้อยแล้ว"
           redirect(action: "show", id: memberInstance.id)
         }
         else {
+          println memberInstance.errors
           render(view:'create', model:[memberInstance: memberInstance])
         }
     }
@@ -77,7 +79,7 @@ class MemberController {
             redirect(action: "show", id: memberInstance.id)
         }
         else if (cardId != null && cardId != '') {
-            flash.error = "ไม่พบหมายเลขสมาชิก ${cardId}"
+            flash.error = "ไม่พบสมาชิกที่มีหมายเลขบัตรประชาชน ${cardId}, ต้องการลงทะเบียนสมาชิกใหม่? โปรดไปที่ " + link(controller: "member", action: "create") { "ลงทะเบียน" }
             render(view: 'verifyCard')
         }
         else {
@@ -95,6 +97,7 @@ class MemberController {
             }
             else if (memberInstance.canWithdraw(amount)) {
                 memberInstance.withdraw(amount)
+                flash.message = "กู้เงินจำนวน ${amount} บาท เรียบร้อย"
                 redirect(action: "show", id: memberInstance.id)
             }
             else {
@@ -129,7 +132,7 @@ class MemberController {
             def change = params.net?.toBigDecimal() - params.amount?.toBigDecimal()
 
             if (change < 0.00) {
-                flash.error = "ไม่สามารถทำรายการได้"
+                flash.error = "ไม่สามารถทำรายการได้ กรุณาตรวจสอบจำนวนเงิน"
                 render (action: 'payment', id: memberInstance)
                 render(view: 'payment', model:
                     [
@@ -240,8 +243,8 @@ class MemberController {
 
         memberInstance.status = Member.Status.DELETED
         if (memberService.update(memberInstance)) {
-            flash.message = message(code: "member.update.success", default: "Update success.")
-            redirect(action: "list")
+            flash.message = "จำหน่ายสมาชิกเรียบร้อย"
+            redirect(action: "show", id: memberInstance.id)
             return
         } else {
             flash.message = message(code: "member.update.failed", default: "Update Failed.")
@@ -263,8 +266,8 @@ class MemberController {
 
         memberInstance.status = Member.Status.ACTIVE
         if (memberService.update(memberInstance)) {
-            flash.message = message(code: "member.update.success", default: "Update success.")
-            redirect(action: "list")
+            flash.message = "คืนสิทธิสมาชิกเรียบร้อย"
+            redirect(action: "show", id: memberInstance.id)
             return
         } else {
             flash.message = message(code: "member.update.failed", default: "Update Failed.")

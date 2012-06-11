@@ -10,6 +10,11 @@
 			</header>
 		</div>
 
+    <g:if test="${flash.error}">
+        <div id="errors" class="alert alert-error">
+          ${flash.error}
+        </div><!-- /errors -->
+    </g:if>
 	  <div class="container">
       <g:form action="verifyCard" class="form-horizontal">
 

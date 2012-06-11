@@ -118,14 +118,14 @@
                 jQuery(function() {
                     $('a[href="#disable"]').click(function(e) {
                         e.preventDefault();
-                        if (confirm('${message(code: 'default.button.disable.confirm.message', default: 'Are you sure?')}')) {
+                        if (confirm('${message(code: 'default.button.confirm.message', default: 'Are you sure?')}')) {
                             $(this).parent('form').submit();
                         }
                     });
 
                     $('a[href="#enable"]').click(function(e) {
                         e.preventDefault();
-                        if (confirm('${message(code: 'default.button.disable.confirm.message', default: 'Are you sure?')}')) {
+                        if (confirm('${message(code: 'default.button.confirm.message', default: 'Are you sure?')}')) {
                             $(this).parent('form').submit();
                         }
                     });
