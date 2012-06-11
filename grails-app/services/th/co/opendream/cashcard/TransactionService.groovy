@@ -2,7 +2,8 @@ package th.co.opendream.cashcard
 
 class TransactionService {
     def sessionUtilService,
-        policyService
+        policyService,
+        utilService
 
     def withdraw(Member member, amount) {
         if (amount <= 0) {
@@ -53,15 +54,20 @@ class TransactionService {
     def pay(Member member, amount) {
         def outstanding = amount,
             balance_pay = 0.00,
-            interest_pay = 0.00
+            interest_pay = 0.00,
+            interest_rounded = 0.00,
+            interest_rounding_profit = 0.00
 
         if (outstanding >= member.interest) {
+            interest_rounded = member.interest.setScale(2, BigDecimal.ROUND_HALF_UP)
+            interest_rounding_profit = interest_rounded - member.interest
+
             if (policyService.isCompoundMethod(member.company)) {
                 // do nothing
             } else {
-                outstanding -= member.interest
+                outstanding -= interest_rounded
             }
-            interest_pay = member.interest
+            interest_pay = interest_rounded
             member.interest = 0.00
         } else {
             interest_pay = outstanding
@@ -84,6 +90,10 @@ class TransactionService {
         }
 
         def net = amount - outstanding
+        def remainder = outstanding + interest_rounding_profit
+        if (remainder < 0.01) {
+            remainder = 0.00
+        }
         def balance = new BalanceTransaction(
             amount: amount,
             date: new Date(),
@@ -91,13 +101,13 @@ class TransactionService {
             member: member,
             activity: ActivityType.PAYMENT,
             net: net,
-            remainder: outstanding,
+            remainder: remainder,
             userCompany: sessionUtilService.company,
             memberCompany: member.company,
             balance: member.balance,
             balance_pay: balance_pay,
             interest_pay: interest_pay
-            )
+        )
         if(sessionUtilService.company!=member.company) {
             balance.transferType = TransferType.SENT
         }
